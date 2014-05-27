@@ -1,6 +1,8 @@
 /**
  * Magpie
  * 
+ * https://github.com/csetea/magpiejs
+ * 
  * Version: 0.1
  * 
  * The MIT License (MIT) Copyright (c) 2014 Andras Csete
