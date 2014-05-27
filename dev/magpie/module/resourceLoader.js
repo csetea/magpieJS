@@ -36,6 +36,7 @@ define(
 				return Mark.up(resource, l);
 			}
 
+			
 			var resolveLocale = function(callback) {
 				$
 						.browserLanguage(function(langCode, language,
@@ -153,6 +154,8 @@ define(
 										this.defaultLocale);
 					}
 				}
+				
+				this.resolveLocale = config.resolveLocale?config.resolveLocale:resolveLocale;
 
 				log.d('parsed config', this);
 			};
@@ -191,7 +194,7 @@ define(
 						load();
 					}
 
-					resolveLocale(function(locale) {
+					c.resolveLocale(function(locale) {
 						log.t('load', 'resolvedLocale', locale);
 						for (resource in c.resources) {
 							loadResource(loader, resource, locale);
