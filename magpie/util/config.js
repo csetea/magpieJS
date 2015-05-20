@@ -1,3 +1,6 @@
+/**
+ * @license MIT 
+ */
 define([], function() {
 
 	return function config(module, defaultConfig) {

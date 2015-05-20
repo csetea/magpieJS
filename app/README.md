@@ -1,0 +1,1 @@
+Default name space for application related resources.

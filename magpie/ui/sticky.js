@@ -1,3 +1,6 @@
+/**
+ * @license MIT 
+ */
 define(
 		[ 'log!sticky', 'magpie/view/inject', 'domReady!', 'css!./sticky' ], //
 		function(log, inject) {

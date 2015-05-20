@@ -2,13 +2,16 @@
  * @doc m-source.md
  * @license MIT
  */
+/** TODO
+ * [ ] configuration || element attribute - tabReplace
+ * */
 define([ 'log!m-source','magpie/view/inject', 'highlightDir/highlight.min', 'css!highlightDir/default.min.css'], //
 		function(log, inject, hljs) {
 	
 	
 	hljs.configure({
 		useBR: 'innerText' in document.createElement('code')
-//		,tabReplace: '  '
+		,tabReplace: '  '
 	});
 
 	function createSourceBoxBasedOnHref(el, href, callback) {

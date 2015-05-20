@@ -2,23 +2,9 @@
  * @doc inject.md
  * @license MIT
  */
+// TODO move in dom ?
 define([ 'module', 'log!inject' ], function(module, log) {
 	
-	//TODO?
-//	var attachTemplate = function(el, template) {
-//		// if (typeof template === undefined) {
-//		// template = null;
-//		// }
-//		if (jq) {
-//			log.trace('set content to template with configured provider')
-//			jq(el).html(template)
-//		} else {
-//			log.trace('set content to template with document.template')
-//			var temp = document.createElement('template');
-//			temp.innerHTML = template;
-//			el.appendChild(temp.content)
-//		}
-//	}
 
 	function injectHTMLElement(el, htmlElement, append){
 		log.trace('inject HTMLElement')
@@ -59,6 +45,20 @@ define([ 'module', 'log!inject' ], function(module, log) {
 		}
 		
 
+	}
+	
+	inject.css = function(css){
+			var head = document.head || document.getElementsByTagName('head')[0];
+			
+			var style = document.createElement('style');
+			style.type = 'text/css';
+			if (style.styleSheet) {
+				style.styleSheet.cssText = css;
+			} else {
+				style.appendChild(document.createTextNode(css));
+			}
+
+			injectHTMLElement(head,style,true);
 	}
 	
 	return inject; 

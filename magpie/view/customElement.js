@@ -23,7 +23,28 @@ define([ 'module','require', 'log!customElement', 'magpie/view/inject','domReady
 //	     
 //	}());
 //	
+	
+	
 
+//	function inject(el, html, append){
+//		var temp = document.createElement('template');
+//		temp.innerHTML = html;
+////		injectHTMLElement(el, temp.content, append);
+//		var clone = document.importNode(temp.content, true);
+//		
+//		if (!append){
+//			while (el.firstChild) {
+//				el.removeChild(el.firstChild);
+//			}
+//		}
+//		var shadow = el.createShadowRoot();
+////		var template = document.querySelector('#nameTagTemplate');
+////		var clone = document.importNode(template.content, true);
+////		el._shadow=shadow;
+//		shadow.appendChild(clone);
+////		el.appendChild(clone)
+////		el.appendChild(htmlElement)
+//	}
 	
 
 	// TODO doc config options
@@ -188,7 +209,11 @@ define([ 'module','require', 'log!customElement', 'magpie/view/inject','domReady
 					proto['createdCallback']= function(){
 						log.trace('create default createdCallback impl. to inject template into custom element')
 						inject(this, this.template, this.append)
-							
+						
+//						if (this.bind instanceof Function){
+//							this.bind(this);
+//						}
+						
 						if (this.created instanceof Function){
 							this.created(this);
 						}
@@ -227,6 +252,8 @@ define([ 'module','require', 'log!customElement', 'magpie/view/inject','domReady
 	function registerElement(customElementDef, proto, extend, onload){
 		log('proto',proto)
 		log(customElementDef.tag)
+		
+		proto.m_customElementDef=customElementDef;
 
 		//
 		// Valid customElement definition 

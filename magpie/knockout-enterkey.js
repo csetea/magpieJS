@@ -1,3 +1,6 @@
+/**
+ * @license MIT 
+ */
 define([ 'knockout' ],
 		function(ko) {
 			ko.bindingHandlers.enterkey = {
