@@ -1,9 +1,0 @@
-/*  .stickyon, */
-[data-m-ui-sticky="on"] {
-	position: fixed;
-	top: 0;
-	color: gray;
-	width: 100%;
-	margin-right: auto;
-	margin-left: auto;
-}
