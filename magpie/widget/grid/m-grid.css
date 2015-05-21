@@ -1,0 +1,213 @@
+
+m-grid-item {
+	text-align: left;
+}
+
+m-grid {
+	position: relative;
+	
+	display: inline-block;
+	display: box;
+	box-orient: horizontal;
+	/* OLD - iOS 6-, Safari 3.1-6 */
+	display: -webkit-box;
+	/* OLD - Firefox 19- (buggy but mostly works) */
+	display: -moz-box;
+	/* TWEENER - IE 10 */
+	display: -ms-flexbox;
+	/* NEW - Chrome */
+	display: -webkit-flex;
+	/* NEW, Spec - Opera 12.1, Firefox 20+ */
+	display: flex;
+	
+	width: 100%;
+	-moz-box-direction: normal;
+	-webkit-box-direction: normal;
+	-webkit-box-orient: horizontal;
+	-moz-box-orient: horizontal;
+	-ms-flex-direction: row;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	flex-wrap: wrap;
+	-webkit-flex-flow: row wrap;
+	-ms-flex-flow: row wrap;
+	
+	
+	/* 	z-index: 0; */
+}
+
+/* http://elikirk.com/flexbox-css-cross-browser-issues/ */
+m-grid[vertical] {
+	-webkit-box-orient: vertical;
+	-moz-box-orient: vertical;
+	-ms-flex-direction: column;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+
+/* 	flex-wrap: wrap-reverse;	 */
+/* 	flex-wrap: nowrap; */
+/* 	-webkit-flex-flow: column nowrap; */
+/* 	-ms-flex-flow: column nowrap; */
+	
+	/*     overflow: visible; */
+	height: 100%;
+}
+
+/* vertical grid should be nowrap by default*/
+m-grid[scroll],
+m-grid[nowrap],
+m-grid[vertical]{
+	flex-wrap: nowrap;
+}
+
+
+
+m-grid[vertical]>m-grid-item {
+	width: 100%;
+}
+
+m-grid>img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+m-grid-item {
+
+	position: relative;
+	display: inline-block;
+/* 	display: inline; */
+/* 	display:block; */
+	/* OLD - iOS 6-, Safari 3.1-6 */
+/* 	-webkit-box-flex: 1; */
+	/* OLD - Firefox 19- */
+/* 	-moz-box-flex: 1; */
+	/* For old syntax, otherwise collapses. */
+	/*Chrome */
+/* 	-webkit-flex: 1; */
+	/* IE 10 */
+/* 	-ms-flex: 1; */
+	/* NEW, Spesc - Opera 12.1, Firefox 20+ */
+/* 	flex: 1; */
+/* 	flex: 1 1 1; */
+	vertical-align: top;
+	/* width: 100%; */
+	/**Support border*/
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	/* width: 20%;*/
+
+	/* 	z-index: 1; */
+}
+
+/* item alignment [[*/
+/* align-self: auto | flex-start | flex-end | center | baseline | stretch; */
+/**default*/
+m-grid-item,
+m-grid-item[align="100"]{
+	align-self: auto;
+}
+
+m-grid-item[align="top"],
+m-grid-item[align="start"]{
+	align-self: flex-start;
+}
+m-grid-item[align="bottom"],
+m-grid-item[align="end"]{
+	align-self: flex-end;
+}
+m-grid-item[align="middle"],
+m-grid-item[align="center"]{
+	align-self: center;
+}
+m-grid-item[align="baseline"]{
+	align-self: baseline;
+}
+
+m-grid-item[align="stretch"]{
+	align-self: baseline;
+}
+/* item alignment ]]*/
+
+/* grid alignment [[*/
+/* ??? */
+/*   justify-content: flex-start | flex-end | center | space-between | space-around; */
+m-grid,
+m-grid[align="auto"]{
+	align-items: auto;
+}
+/* m-grid[align="top"], */
+m-grid[align="start"]{
+	align-items: flex-start;
+}
+/* m-grid[align="bottom"], */
+m-grid[align="end"]{
+	align-items: flex-end;
+}
+m-grid[align="middle"],
+m-grid[align="center"]{
+	align-items: center;
+}
+m-grid[align="baseline"]{
+	align-items: baseline;
+}
+
+m-grid[align="stretch"]{
+	align-items: baseline;
+}
+/* grid alignment ]]*/
+
+/* grid space between content - content alignment [[*/
+/* ??? */
+/*   justify-content: flex-start | flex-end | center | space-between | space-around; */
+/* m-grid, */
+m-grid[justify="start"]{
+	justify-content: flex-start;
+}
+m-grid[justify="end"]{
+	justify-content: flex-end;
+}
+m-grid[justify="center"]{
+	justify-content: center;
+}
+m-grid[justify="between"]{
+	justify-content: space-between;
+}
+m-grid[justify="*"],
+m-grid[justify="around"]{
+	justify-content: space-around;
+}
+
+/* grid space between content - content alignment ]]*/
+
+/* reverse */
+m-grid[reverse]{
+	flex-direction: row-reverse;
+}
+m-grid[vertical][reverse]{
+	flex-direction: column-reverse;
+}
+
+
+
+
+/* -webkit-box-ordinal-group: 2;   OLD - iOS 6-, Safari 3.1-6 */
+/*   -moz-box-ordinal-group: 2;      OLD - Firefox 19- */
+/*   -ms-flex-order: 2;              TWEENER - IE 10 */
+/*   -webkit-order: 2;               NEW - Chrome */
+/*   order: 2;                       NEW, Spec - Opera 12.1, Firefox 20+ */
+/*  -ms-flex: 1; 0 */
+
+/* Browser Support */
+
+/* If you do all this weaving, you can get: */
+/* http://css-tricks.com/using-flexbox/ */
+/* Chrome any */
+/* Firefox any */
+/* Safari any */
+/* Opera 12.1+ */
+/* IE 10+ */
+/* iOS any */
+/* Android any */

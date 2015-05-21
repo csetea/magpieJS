@@ -1,7 +1,10 @@
-// Startup magpie server 
+// Startup magpie server
+// TODO add domainPath?deploymentsPath? to configuration
+// to doc: full stack multiple domain 
+// web application framework
 define([
 // magpie and requirejs modules
-'log!magpie/server/web', 'magpie/util/config', 'module', 'require' //
+'log!magpie/server/appServer', 'magpie/util/config', 'module', 'require' //
 // node modules
 , 'express', 'serve-static', 'http', 'fs' ], //
 function(
@@ -66,10 +69,12 @@ log, config, module, r //
 				//
 				// map stack
 				//
-				define(domain.packageName + '/m_domain', domain);
+				
+				// define virtual package for domain that holes the domain details 
+				define(domain.packageName + '/domain', domain);
 				var map = {};
 				map[domain.packageName] = {
-					'm_domain' : domain.packageName + '/m_domain'
+					'domain' : domain.packageName + '/domain'
 				}
 				require.config({
 					map : map
@@ -77,6 +82,14 @@ log, config, module, r //
 
 				fs.stat(path + '/server/main.js', function(err, stats) {
 					if (stats && stats.isFile()) {
+						var router = express.Router();
+						app.use(domain.url,router);
+						
+						//TODO rename to use? or rethink calback paramteres
+						domain.extend=function(callback){
+							callback(router,server)
+						}
+						
 						domain.hasServerExtensionBundle = true;
 						log('load server extension for domain:',
 								domain.deployDirectory)

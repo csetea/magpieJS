@@ -3,7 +3,7 @@ require.config({
 	paths : {
 
 		// shortening the path of magpie modules
-		idgenerator : 'magpie/idgenerator',
+		idgenerator : 'magpie/util/idgenerator',
 		
 			
 	},

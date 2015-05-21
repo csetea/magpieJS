@@ -1,0 +1,46 @@
+*{
+	position: relative;
+}
+
+/* attribute selectors [[*/
+/* it is the preferred way instead of class selectors ...*/
+[m-align]{
+	position: absolute;
+}
+
+[m-align~="left"]{
+	left:0;
+}
+[m-align~="right"]{
+	right:0;
+}
+[m-align~="top"]{
+	top:0;
+}
+[m-align~="bottom"]{
+	bottom:0;
+}
+
+/* attribute selectors ]]*/
+
+/* class selectors [[*/
+.m-left,
+.m-right,
+.m-top,
+.m-bottom{
+	position: absolute;
+}
+
+.m-left{
+	left:0;
+}
+.m-right{
+	right:0;
+}
+.m-top{
+	top:0;
+}
+.m-bottom{
+	bottom:0;
+}
+/* class selectors ]]*/

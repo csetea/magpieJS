@@ -1,5 +1,6 @@
+//TODO convert to customElement or not?
 define(
-		[ 'log!sticky', 'magpie/view/inject', 'domReady!', 'css!./sticky' ], //
+		[ 'log!sticky', 'magpie/dom/inject', 'domReady!', 'css!./sticky' ], //
 		function(log, inject) {
 			var forEach = Array.prototype.forEach;
 

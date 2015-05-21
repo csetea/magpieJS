@@ -2,13 +2,18 @@
  * @doc m-source.md
  * @license MIT
  */
-define([ 'log!m-source','magpie/view/inject', 'highlightDir/highlight.min', 'css!highlightDir/default.min.css'], //
+/** TODO
+ * [ ] configuration || element attribute - tabReplace
+ * */
+define([ 'log!m-source','magpie/dom/inject', 'highlightDir/highlight.min', 'css!highlightDir/default.min.css'], //
 		function(log, inject, hljs) {
 	
+	//TODO doc of preregistration trick: 
+	require(['magpie/html5/customElement!magpie/widget/m-source']);
 	
 	hljs.configure({
 		useBR: 'innerText' in document.createElement('code')
-//		,tabReplace: '  '
+		,tabReplace: '  '
 	});
 
 	function createSourceBoxBasedOnHref(el, href, callback) {

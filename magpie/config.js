@@ -1,22 +1,17 @@
 require.config({
-	
+
 	paths : {
-		
-		magpie:'/dist/magpie',
+
+		magpie : '/dist/magpie',
 
 		// shortening the path of magpie modules
-		resource : 'magpie/resource',
-		template : 'magpie/template',
-		idgenerator : 'magpie/idgenerator',
-		
-		examples: 'magpie-examples',
-		
-		viewProxy : 'magpie/view/viewProxy',
-		customElement: 'magpie/view/customElement',
+		template : 'magpie/resource/template',
+		idgenerator : 'magpie/util/idgenerator',
 
-		polyfillWebComponentsBaseDir: '/dist/polymer/webcomponentsjs-0.5.1-1',
+		examples : 'magpie-examples',
 
-			
+		customElement : 'magpie/html5/customElement'
+
 	},
 
 	packages : [ {
@@ -26,12 +21,19 @@ require.config({
 		name : 'log',
 		location : '/dist/magpie/log',
 		main : 'log'
-	}, 
-//	{
-//		name : 'view',
-//		location : 'magpie/view',
-//		main : 'viewProxy'
-//	} 
+	}, {
+		name : 'magpie/widget/grid',
+		location : '/dist/magpie/widget/grid',
+		main : 'main'
+	}, {
+		name : 'magpie/resource/properties',
+		location : '/dist/magpie/resource/properties',
+		main : 'main'
+	}, {
+		name : 'magpie/html5/customElement',
+		location : '/dist/magpie/html5/customElement',
+		main : 'main'
+	}
 	],
 
 	config : {
@@ -44,10 +46,10 @@ require.config({
 			}
 		},
 
-		idgenerator : {
+		'magpie/util/idgenerator' : {
 		// pattern: 'xxxxx'
 		},
-		resource : {
+		'magpie/resource/properties' : {
 			defaultLocale : 'en',
 			supportedLocales : [ 'en', 'de', 'hu' ],
 			resourceDir : 'resources',
@@ -55,125 +57,33 @@ require.config({
 				msg : 'messages_{{langCode}}.properties',
 				img : 'images.properties'
 			}
-		/*
-		 * Customize locale resolve logic resolveLocale : function(callback) {
-		 * callback('en'); }
-		 */
-		// alwaysLoadDefault: true
 		},
-
-		viewProxy : {
-			el : '#viewContainer',
-			/**
-			 * redirect to view <br>
-			 * viewNotFound : 'view/beach/404'
-			 */
-			/**
-			 * redirect with function <br>
-			 * viewNotFound : function(){}
-			 */
-//			viewNotFound : 'viewProxy!app/view/beach/404'
-			viewNotFound : 'viewProxy!magpie/view/view_X/404'
+		
+		
+		'magpie/html5/customElement/main':{
+			templateLoaderPlugin: 'text',
+			strictDefinition: false,
 		},
-
-		'log/log4javascriptLogger' : {
-			appender : undefined,
-			setupLogger : function(logName, logger, log4javascript,
-					defaultLayout) {
-				// log.removeAllAppenders();
-				if (!this.appender) {
-					log4javascript.setDocumentReady();
-					this.appender = new log4javascript.InPageAppender();
-					this.appender.setLayout(defaultLayout);
-
-				}
-				logger.addAppender(this.appender);
-			}
-		},
-
-		'log/log' : {
-			 'log' : {
-			 level : 'error'
-			 },
-
-			root : {
-				level: 'info'
-//				logger: './log4javascriptLogger'
-			},
-
-			
-			viewProxy : {
-				// level: ['DEBUG', 'INFO']
-				level : 'trace'
-			},
-			
-			'm-view' : {
-				level: 'trace'
-			},
-
-			inject : {
-				level: 'debug'
-			},
-
-			customElement : {
-				level: 'trace'
-			}
-			
+		'magpie/html5/customElement/_registerElement':{
+//			provider: '/dist/polymer/webcomponentsjs-0.5.1-1/webcomponents.min.js'
+			provider: '/dist/document-register-element/document-register-element.js'
 		}
 
 	},
-
-	callback : function() {
-		//
-		// Setup Mark.up
-		//
-//		require([ 'mark' ], function(Mark) {
-//			Mark.undefinedResult = function(tag) {
-//				for (p in r) {
-//					var index = tag.indexOf(p + '.')
-//					if (index == 2) {
-//						var porpertyInResourceProperty = tag.substring(index,
-//								tag.length - 2);
-//						var value = r[p][porpertyInResourceProperty];
-//						if (typeof value === "string") {
-//							return value;
-//						}
-//					}
-//				}
-//				return tag;
-//			}
-//		});
-
-		//
-		// Start router
-		//
-//		require([ 'router', 'log!router', 'viewProxy' ], function(router, log) {
-//			router.registerRoutes({
-//				b : {
-//					path : "/404",
-//					moduleId : 'viewProxy!app/view/beach/404'
-//				},
-////				mview : {
-////					path : "/m-view",
-////					moduleId : 'viewProxy!customElement!magpie/view/m-view'
-////				},
-//				//
-//				// beach : {
-//				// path : '/beach',
-//				// moduleId : 'view/beach/beach'
-//				// }
-//				// ,
-//				dynamicViewResolvationLoopback : {
-//					path : '*',
-//					moduleId : undefined
-//				}
-//			});
-//			router.init();
-//			log.trace('inited')
-//
-//		});
+	
+	shim:{
+		'/dist/document-register-element/document-register-element.js':{
+			deps:['/dist/document-register-element/dom4.js'],
+			init: function{
+				
+			}
+		}
 	},
 
-//	deps : [ 'app/config.app' ]
-	
+	callback : function() {
+
+	},
+
+	deps : [ 'magpie/config.log' ]
+
 });

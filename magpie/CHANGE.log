@@ -1,0 +1,28 @@
+0.2 -> 0.3
+removed modules:
+[-]  magpie/view/viewProxy
+few modules renamed and/or moved in new name space:
+[*] magpie/util/base64 -> magpie/crypt/base64 
+[*] magpie/idgenerator -> magpie/util/idgenerator 
+[*] magpie/view/customElement -> magpie/html5/customElement package
+[*] magpie/view/grid -> magpie/widget/grid
+[*] magpie/view/m-source -> magpie/widget/m-source
+[*] magpie/view/m-view -> magpie/widget/m-inject (+ added customElement casting mechanism)
+[*] magpie/view/404 -> magpie/widget/404 (converted to customElement)
+[*] magpie/view/router -> magpie/dom/router
+[*] magpie/knockout-enterkey -> magpie/extend/knockout/enterkey
+[*] magpie/resource -> magpie/resource/properties package
+[*] magpie/resourceLoader -> magpie/resource/properties package
+[*] magpie/template -> magpie/resource/template
+[*] magpie/ui/page100 -> magpie/dom/page100
+[*] magpie/ui/mediaQueries -> magpie/dom/mediaQueries
+[*] magpie/ui/visibility -> magpie/dom/visibility
+[*] magpie/ui/align -> magpie/dom/align
+[*] magpie/ui/sticky -> magpie/dom/sticky
+
+  
+[?] magpie/ui/XXX -> ???
+  
+appServer
+[+] magpie/server/appServer
+[*] magpie/widget/m-view 

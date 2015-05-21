@@ -1,0 +1,1 @@
+Namespace for extending 3rd libraries with common tasks.

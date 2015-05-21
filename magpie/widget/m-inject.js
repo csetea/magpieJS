@@ -1,24 +1,31 @@
 /**
- * @doc m-view.md
+ * @doc m-inject.md
  * @license MIT
  */
-define([ 'module', 'log!m-view','magpie/view/inject'], //
+define([ 'module', 'log!m-inject','magpie/dom/inject'], //
 		function(module, log, inject) {
+	
+	require(['magpie/html5/customElement!magpie/widget/m-inject']);
 
-	// createViewObjectBasedOnHref ???? -> use the viewProxy?
 	function createViewObjectBasedOnHref(el, href, callback) {
-
-		//TODO
-		require([href], function(href){
-			//FIXME ??? use viewProxy?
-			inject(el,href)
+		require([href], function(hrefObject){
+			
+			if (typeof hrefObject === 'string'|| //
+					hrefObject instanceof HTMLElement ||//
+					hrefObject instanceof Function){
+				inject(el,hrefObject)	
+			}else if (hrefObject instanceof Object){
+				log.debug('try to load as customElement: '+ href);
+				require(['magpie/html5/customElement!'+href], function(ce){
+					inject(el,ce);
+				});
+			}
 		});
-		
 		
 	}
 
 	return {
-		tag : 'm-view',
+		tag : 'm-inject',
 
 		createdCallback : function() {
 			log('callback', this)
