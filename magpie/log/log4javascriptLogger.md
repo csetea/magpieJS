@@ -39,7 +39,7 @@ require.config({
 	},
 	
 	config:{
-		'log/log':{
+		'magpie/log/log':{
 			root:{
 				// use the log4javascript as basic logger
 				logger: 'log/log4javascriptLogger'
@@ -74,7 +74,7 @@ require.config({
 	....
  
 	config:{
-		'log/log':{
+		'magpie/log/log':{
 			root:{
 				// use the log4javascript as basic logger
 				logger: 'log/log4javascriptLogger'

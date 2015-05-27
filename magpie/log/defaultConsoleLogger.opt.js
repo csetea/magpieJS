@@ -1,4 +1,8 @@
-// @opt {hash: 'prod'}
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
+ // @opt {hash: 'prod'}
 
 						switch (messages.length) {
 						case 0:

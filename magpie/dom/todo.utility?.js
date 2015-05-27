@@ -1,4 +1,9 @@
-//
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
+
+ //
 			// TODO out source in a utility module, check: 
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
 // use it to polifill ...
@@ -8,8 +13,7 @@
 			//
 
 			Element.prototype.hasClass = function(className) {
-				return new RegExp(' ' + className + ' ').test(' '
-						+ this.className + ' ');
+				return new RegExp(' ' + className + ' ').test(' ' + this.className + ' ');
 			};
 
 			Element.prototype.addClass = function(className) {
@@ -20,8 +24,7 @@
 			};
 
 			Element.prototype.removeClass = function(className) {
-				var newClass = ' ' + this.className.replace(/[\t\r\n]/g, ' ')
-						+ ' ';
+				var newClass = ' ' + this.className.replace(/[\t\r\n]/g, ' ') + ' ';
 				if (this.hasClass(className)) {
 					while (newClass.indexOf(' ' + className + ' ') >= 0) {
 						newClass = newClass.replace(' ' + className + ' ', ' ');
@@ -32,8 +35,7 @@
 			};
 
 			Element.prototype.toggleClass = function(className) {
-				var newClass = ' ' + this.className.replace(/[\t\r\n]/g, " ")
-						+ ' ';
+				var newClass = ' ' + this.className.replace(/[\t\r\n]/g, " ") + ' ';
 				if (this.hasClass(className)) {
 					while (newClass.indexOf(" " + className + " ") >= 0) {
 						newClass = newClass.replace(" " + className + " ", " ");

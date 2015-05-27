@@ -1,84 +1,67 @@
+require._magpieUlrPathPrefix = '/';
 require.config({
 
 	paths : {
 
-		magpie : '/dist/magpie',
+		magpie : require._magpieUlrPathPrefix + 'magpie',
 
-		// shortening the path of magpie modules
-		template : 'magpie/resource/template',
-		idgenerator : 'magpie/util/idgenerator',
-
-		examples : 'magpie-examples',
-
-		customElement : 'magpie/html5/customElement'
+		domReady : require._magpieUlrPathPrefix + 'lib/require/domReady',
+		text : require._magpieUlrPathPrefix + 'lib/require/text',
+		css : require._magpieUlrPathPrefix + 'lib/require/require-css/css',
+		less : require._magpieUlrPathPrefix + 'magpie/dom/less',
 
 	},
 
 	packages : [ {
-		location : '/dist/magpie',
+		location : require._magpieUlrPathPrefix + 'magpie',
 		name : 'magpie'
 	}, {
-		name : 'log',
-		location : '/dist/magpie/log',
-		main : 'log'
+		name : 'magpie/log',
+		location : require._magpieUlrPathPrefix + 'magpie/log',
 	}, {
-		name : 'magpie/widget/grid',
-		location : '/dist/magpie/widget/grid',
+		name : 'magpie/html5/widget/grid',
+		location : require._magpieUlrPathPrefix + 'magpie/html5/widget/grid',
 		main : 'main'
 	}, {
 		name : 'magpie/resource/properties',
-		location : '/dist/magpie/resource/properties',
+		location : require._magpieUlrPathPrefix + 'magpie/resource/properties',
 		main : 'main'
 	}, {
 		name : 'magpie/html5/customElement',
-		location : '/dist/magpie/html5/customElement',
+		location : require._magpieUlrPathPrefix + 'magpie/html5/customElement',
 		main : 'main'
 	}
 	],
 
 	config : {
-
-		template : {
-			preProcessing : function(text, callbackWithTextParamter) {
-				require([ 'resource', 'mark' ], function(r, Mark) {
-					callbackWithTextParamter(Mark.up(text, r))
-				});
-			}
-		},
-
-		'magpie/util/idgenerator' : {
-		// pattern: 'xxxxx'
-		},
-		'magpie/resource/properties' : {
-			defaultLocale : 'en',
-			supportedLocales : [ 'en', 'de', 'hu' ],
-			resourceDir : 'resources',
-			resources : {
-				msg : 'messages_{{langCode}}.properties',
-				img : 'images.properties'
+		
+		'magpie/html5/customElement/provider/WebReflection/document-register-element':{
+			path:{
+				ie8:	require._magpieUlrPathPrefix  + "lib/WebReflection/ie8.js",
+				dom4:	require._magpieUlrPathPrefix + "lib/WebReflection/dom4.js",
+				'dre-ie8-upfront-fix': 		require._magpieUlrPathPrefix + "lib/WebReflection/dre-ie8-upfront-fix.js",
+				'document-register-element': require._magpieUlrPathPrefix + "lib/WebReflection/document-register-element.js",
+				'es5-shim': 	require._magpieUlrPathPrefix + "lib/WebReflection/es5-shim.min.js",
+				'es5-sham':  	require._magpieUlrPathPrefix + "lib/WebReflection/es5-sham.min.js"
 			}
 		},
 		
+		'magpie/html5/customElement/_registerElement':{
+//			provider: require._magpieUlrPathPrefix + 'lib/polymer/webcomponentsjs-0.5.1-1/webcomponents-lite.min.js'
+			provider: 'magpie/html5/customElement/provider/WebReflection/document-register-element'
+		},
 		
 		'magpie/html5/customElement/main':{
 			templateLoaderPlugin: 'text',
 			strictDefinition: false,
 		},
-		'magpie/html5/customElement/_registerElement':{
-//			provider: '/dist/polymer/webcomponentsjs-0.5.1-1/webcomponents.min.js'
-			provider: '/dist/document-register-element/document-register-element.js'
+		'magpie/dom/less':{
+			lessJsPath:require._magpieUlrPathPrefix + 'lib/less/less.min.js'
 		}
 
 	},
 	
-	shim:{
-		'/dist/document-register-element/document-register-element.js':{
-			deps:['/dist/document-register-element/dom4.js'],
-			init: function{
-				
-			}
-		}
-	},
+	
 
 	callback : function() {
 

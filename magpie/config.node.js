@@ -1,31 +1,19 @@
 require.config({
 
 	paths : {
-
-		// shortening the path of magpie modules
-		idgenerator : 'magpie/util/idgenerator',
-		
-			
+		log:'magpie/log'
 	},
 
 	packages : [ {
 		location : 'magpie',
 		name : 'magpie'
 	}, {
-		name : 'log',
-		location : 'magpie/log',
-		main : 'log'
+		name : 'magpie/log',
+		location : 'magpie/log'
 	}, 
 	],
 
 	config : {
-
-		idgenerator : {
-		// pattern: 'xxxxx'
-		}
-
-		
-
 	},
 
 	callback : function() {

@@ -1,9 +1,10 @@
-/***
- * @doc defaultConsoleLogger.md
- * @license MIT 
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
  */
 define([], function( ) {
 
+	/*jshint supernew: true */
 	return new function DefaultConsoleLogger() {
 
 		this.version = '1.0';
@@ -38,13 +39,14 @@ define([], function( ) {
 			// for readability and small size
 
 			var loggerObject = 'console';
-			var evalConsoleLog = loggerObject
-					+ "[logFn](date, level, logEvent.logName, '-'"
+			var evalConsoleLog = loggerObject + "[logFn](date, level, logEvent.logName, '-'";
 			for (var i = 0; i < messages.length; i++) {
 				evalConsoleLog += ', messages[' + i + ']';
 			}
 			evalConsoleLog += " , '-', logEvent.callerLine);";
+			/* jshint ignore:start */
 			eval(evalConsoleLog);
+			/* jshint ignore:end */
 
 			// Why is using the JavaScript eval function a bad idea?
 			// 1 Improper use of eval opens up code for injection

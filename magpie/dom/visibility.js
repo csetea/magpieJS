@@ -1,4 +1,8 @@
-define([ 'log!visibility', 'magpie/dom/mediaQueries' ], function(log, mediaQueries) {
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
+define([ 'magpie/log!visibility', 'magpie/dom/mediaQueries' ], function(log, mediaQueries) {
 
 	var prefix='.m-';
 	mediaQueries.screens.each(function(screen) {
@@ -20,7 +24,7 @@ define([ 'log!visibility', 'magpie/dom/mediaQueries' ], function(log, mediaQueri
 			hiddenList.push(prefix+'hide-for-'+smallerScreen.name+'-and-up');
 			hiddenList.push(prefix+'show-for-'+smallerScreen.name);
 			hiddenList.push(prefix+'show-for-'+smallerScreen.name+'-and-down');
-		})
+		});
 		screen.eachLarger(function(largerScreen){
 			visibleList.push(prefix+'show-for-'+largerScreen.name+'-and-down');
 			visibleList.push(prefix+'hide-for-'+largerScreen.name);
@@ -28,13 +32,13 @@ define([ 'log!visibility', 'magpie/dom/mediaQueries' ], function(log, mediaQueri
 			hiddenList.push(prefix+'hide-for-'+largerScreen.name+'-and-down');
 			hiddenList.push(prefix+'show-for-'+largerScreen.name);
 			hiddenList.push(prefix+'show-for-'+largerScreen.name+'-and-up');
-		})
+		});
 
 		
 		screen.addCssRuleAfterEach(//
-				'/* Visibility Classes */'
-				,visibleList+'{display: inherit !important;}'//
-				,hiddenList+'{display: none !important;}');		
+				'/* Visibility Classes */',
+				visibleList+'{display: inherit !important;}',//
+				hiddenList+'{display: none !important;}');		
 	});
 	
 });

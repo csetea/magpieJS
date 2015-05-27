@@ -5,10 +5,10 @@ few modules renamed and/or moved in new name space:
 [*] magpie/util/base64 -> magpie/crypt/base64 
 [*] magpie/idgenerator -> magpie/util/idgenerator 
 [*] magpie/view/customElement -> magpie/html5/customElement package
-[*] magpie/view/grid -> magpie/widget/grid
-[*] magpie/view/m-source -> magpie/widget/m-source
-[*] magpie/view/m-view -> magpie/widget/m-inject (+ added customElement casting mechanism)
-[*] magpie/view/404 -> magpie/widget/404 (converted to customElement)
+[*] magpie/view/grid -> magpie/html5/widget/grid
+[*] magpie/view/m-source -> magpie/html5/widget/m-source
+[*] magpie/view/m-view -> magpie/html5/widget/m-inject (+ added customElement casting mechanism)
+[*] magpie/view/404 -> magpie/html5/widget/404 (converted to customElement)
 [*] magpie/view/router -> magpie/dom/router
 [*] magpie/knockout-enterkey -> magpie/extend/knockout/enterkey
 [*] magpie/resource -> magpie/resource/properties package
@@ -18,11 +18,14 @@ few modules renamed and/or moved in new name space:
 [*] magpie/ui/mediaQueries -> magpie/dom/mediaQueries
 [*] magpie/ui/visibility -> magpie/dom/visibility
 [*] magpie/ui/align -> magpie/dom/align
-[*] magpie/ui/sticky -> magpie/dom/sticky
+[*] magpie/ui/sticky -> magpie/dom/sticky 
+[*] magpie/log/log -> magpie/log/main   
 
-  
-[?] magpie/ui/XXX -> ???
-  
-appServer
-[+] magpie/server/appServer
-[*] magpie/widget/m-view 
+[*]update 'log' package
+[*][*] pacakge name from 'log' to -> 'magpie/log'
+[*][*] in log configuration: 'log'-> 'magpie/log/main'
+[*][*] mapgie/util/config: new support deep merge
+
+[+] magpie/server/appServer 
+[+] JSHint validation on JS files
+

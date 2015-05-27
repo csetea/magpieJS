@@ -1,32 +1,9 @@
 /**
- * Magpie ResourceLoader - sub part of Resource, this module makes the dirty job
- * 
- * https://github.com/csetea/magpiejs
- * 
- * Version: 0.1
- * 
- * The MIT License (MIT) Copyright (c) 2014 Andras Csete
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
  */
 define(
-		[ 'jquery', 'jqueryBrowserLanguage', 'log!resourceLoader', 'mark',
+		[ 'jquery', 'jqueryBrowserLanguage', 'magpie/log!resourceLoader', 'mark',
 				'require' ],
 		function($, bl, log, mark, rq) {
 
@@ -34,7 +11,7 @@ define(
 				var l = {};
 				l.lc = l.local = l.langCode = l.localeCode = locale;
 				return Mark.up(resource, l);
-			}
+			};
 
 			
 			var resolveLocale = function(callback) {
@@ -48,16 +25,17 @@ define(
 									resolvedLocale = sl;
 								}
 							}
-							if (resolvedLocale == null) {
+							if (resolvedLocale === null) {
+								/*jshint -W004 */ 
 								for (var i = 0, l = c.supportedLocales.length; i < l; i++) {
 									var sl = c.supportedLocales[i];
-									if (sl.indexOf(langCode) == 0) {
+									if (sl.indexOf(langCode) === 0) {
 										resolvedLocale = sl;
 									}
 								}
 
 							}
-							var locale = resolvedLocale != null ? resolvedLocale
+							var locale = resolvedLocale !== null ? resolvedLocale
 									: c.defaultLocale;
 							callback(locale);
 
@@ -71,7 +49,7 @@ define(
 				var rL = resolveResource(c.resources[resource], locale);
 				var resourceUri = c.resourceDir;
 				// resourceUri=rq.toUrl(resourceUri);
-				log.d('resourceUri', resourceUri)
+				log.d('resourceUri', resourceUri);
 				require(
 						[ 'text!' + resourceUri + '/' + rL ],
 						function(content) {
@@ -111,7 +89,7 @@ define(
 										loader.callback(resource, '');
 									});
 						});
-			}
+			};
 
 			var processProperties = function(text) {
 				var lines = text.split("\n");
@@ -138,9 +116,8 @@ define(
 			var c = {};
 			c.resourceDir = c.resources = c.defaultLocale = c.supportedLocales = undefined;
 			c.init = function(config) {
-				var config = config.config ? config.config.resource ? config.config.resource
-						: {}
-						: {};
+				/*jshint -W004 */ 
+				var config = config.config ? config.config.resource ? config.config.resource : {} : {};
 				this.resourceDir = config.resourceDir ? config.resourceDir
 						: 'www/resources';
 				if (!config.resourceDir) {
@@ -159,8 +136,7 @@ define(
 				}
 				// resolve default locale
 				if (!this.defaultLocale) {
-					if (this.supportedLocales
-							&& this.supportedLocales.length > 0) {
+					if (this.supportedLocales && this.supportedLocales.length > 0) {
 						this.defaultLocale = this.supportedLocales[0];
 						log
 								.w(
@@ -197,7 +173,7 @@ define(
 							this.resources[resource] = processProperties(content);
 							if (contentDefault){
 								var defaultValues = processProperties(contentDefault);
-								for( p in defaultValues){
+								for( var p in defaultValues){
 									if (typeof this.resources[resource][p]==='undefined'){
 										this.resources[resource][p]=defaultValues[p];
 									}
@@ -210,7 +186,7 @@ define(
 						}
 					};
 					var counter = 0;
-					for (resource in c.resources) {
+					for (var resource in c.resources) {
 						loader.resources[resource] = undefined;
 						counter++;
 					}
@@ -218,14 +194,13 @@ define(
 					loader.counter = counter;
 
 					if (!counter) {
-						log
-								.w('empty resource.resources configuration entry !!!')
+						log.w('empty resource.resources configuration entry !!!');
 						load();
 					}
 
 					c.resolveLocale(function(locale) {
 						log.t('load', 'resolvedLocale', locale);
-						for (resource in c.resources) {
+						for (var resource in c.resources) {
 							loadResource(loader, resource, locale);
 						}
 

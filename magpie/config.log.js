@@ -1,46 +1,18 @@
 require.config({
 	config : {
-	
-		'log/log4javascriptLogger' : {
-			appender : undefined,
-			setupLogger : function(logName, logger, log4javascript,
-					defaultLayout) {
-				// log.removeAllAppenders();
-				if (!this.appender) {
-					log4javascript.setDocumentReady();
-					this.appender = new log4javascript.InPageAppender();
-					this.appender.setLayout(defaultLayout);
-
-				}
-				logger.addAppender(this.appender);
-			}
-		},
-
-		'log/log' : {
-			 'log' : {
-			 level : 'error'
-			 },
-
+		'magpie/log/main' : {
 			root : {
-				level: 'info'
-//				logger: './log4javascriptLogger'
+				level : 'info'
 			},
 
-			
-			
-			'm-inject' : {
-				level: 'trace'
+			'magpie/log/log' : {
+				level : 'error'
 			},
-//
-//			magpie/dom/inject : {
-//				level: 'debug'
-//			},
-
-			customElement : {
-				level: 'warn'
+			
+			'magpie/html5/customElement' : {
+				level : 'trace'
 			}
-			
-		}
 
-	}	
+		}
+	}
 });

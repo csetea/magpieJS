@@ -1,6 +1,6 @@
-/***
- * @doc log4javascriptLogger.md
- * @license MIT 
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
  */
 //TODO use the original logEventconfig 
 define(
@@ -25,21 +25,23 @@ define(
 								defaultLayout);
 					} else {
 						console
-								.error('\'setupLogger\' configuration option for module must be function with parameters: logName, logger, log4javascript, defaultLayout')
+								.error('\'setupLogger\' configuration option for module must be function with parameters: logName, logger, log4javascript, defaultLayout');
 					}
 				}
 				return logger;
-			}
+			};
 
+			/*jshint supernew: true */
 			var loggerRepository = new function Log4javascriptLoggerRepository() {
 			}();
 			var getLog4jsLogger = function(logName) {
 				if (!loggerRepository[logName]) {
 					loggerRepository[logName] = loggerFactory(logName);
 				}
-				return loggerRepository[logName]
-			}
+				return loggerRepository[logName];
+			};
 
+			/*jshint supernew: true */
 			return new function Log4javascriptLoggerAdapter() {
 				this.version = '1.0';
 				this.log = function(logEvent) {
@@ -70,24 +72,23 @@ define(
 
 					var messages = logEvent.logEntries;
 
-					var loggerObject = 'getLog4jsLogger("' + logEvent.logName
-							+ '")';
-					var evalConsoleLog = loggerObject + "[logFn]("
+					var loggerObject = 'getLog4jsLogger("' + logEvent.logName + '")';
+					var evalConsoleLog = loggerObject + "[logFn](";
 					for (var i = 0; i < messages.length; i++) {
 						evalConsoleLog += ((i > 0) ? ',' : '');
 						var isString = typeof messages[i] == 'string';
 						if (isString) {
 							evalConsoleLog += ' messages[' + i + ']';
 						} else {
-							evalConsoleLog += 'JSON.stringify( messages[' + i
-									+ '])';
+							evalConsoleLog += 'JSON.stringify( messages[' + i + '])';
 						}
 					}
 					
 					if (logEvent.callerLine) {
-						evalConsoleLog += " , '-', logEvent.callerLine);"
+						evalConsoleLog += " , '-', logEvent.callerLine);";
 					}
 					
+					/*jshint evil: true */
 					eval(evalConsoleLog);
 
 				};

@@ -1,5 +1,9 @@
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
 define(
-		[ 'log!sticky', 'magpie/dom/inject', 'domReady!', 'css!./sticky' ], //
+		[ 'magpie/log!sticky', 'magpie/dom/inject', 'domReady!', 'css!./sticky' ], //
 		function(log, inject) {
 			var forEach = Array.prototype.forEach;
 
@@ -20,32 +24,30 @@ define(
 			//
 			var lastY = 0;
 			function sticky() {
-				var y = (document.documentElement && document.documentElement.scrollTop)
-						|| document.body.scrollTop;
+				var y = (document.documentElement && document.documentElement.scrollTop) ||
+						 document.body.scrollTop;
 
 				forEach.call(document.querySelectorAll('[data-m-ui-sticky]'), function(
 						sticky) {
 
-					sticky._offsetBottom = sticky.parentElement.offsetTop
-							+ sticky.parentElement.offsetHeight;
+					sticky._offsetBottom = sticky.parentElement.offsetTop +
+										   sticky.parentElement.offsetHeight;
 
 					if (y + stickyTop.offsetHeight > sticky.offsetTop) {
-						sticky.setAttribute('data-m-ui-sticky','on')
+						sticky.setAttribute('data-m-ui-sticky','on');
 						if (!sticky._clone) {
 							sticky._clone = sticky.cloneNode(true);
 						}
 					}
 
 					if (lastY >= y) {
-						if (y + stickyTop.offsetHeight < sticky.offsetTop
-								+ sticky.offsetHeight) {
-							sticky.setAttribute('data-m-ui-sticky','off')
+						if (y + stickyTop.offsetHeight < sticky.offsetTop + sticky.offsetHeight) {
+							sticky.setAttribute('data-m-ui-sticky','off');
 						}
 					}
 
-					if (y + stickyTop.offsetHeight >= sticky._offsetBottom
-							- sticky.offsetHeight) {
-						sticky.setAttribute('data-m-ui-sticky','off')
+					if (y + stickyTop.offsetHeight >= sticky._offsetBottom - sticky.offsetHeight) {
+						sticky.setAttribute('data-m-ui-sticky','off');
 					}
 
 				});

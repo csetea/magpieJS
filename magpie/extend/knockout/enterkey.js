@@ -1,3 +1,7 @@
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
 define([ 'knockout' ],
 		function(ko) {
 			ko.bindingHandlers.enterkey = {

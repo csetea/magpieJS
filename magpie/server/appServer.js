@@ -1,66 +1,103 @@
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
+ 
 // Startup magpie server
-// TODO add domainPath?deploymentsPath? to configuration
+// TODO
 // to doc: full stack multiple domain 
 // web application framework
 define([
-// magpie and requirejs modules
-'log!magpie/server/appServer', 'magpie/util/config', 'module', 'require' //
+// magpie modules
+'magpie/log!magpie/server/appServer', 'magpie/util/config', 'module',//
+// requirejs modules
+ 'require', //
 // node modules
-, 'express', 'serve-static', 'http', 'fs' ], //
+ 'express', 'serve-static', 'http', 'fs' ], //
 function(
-// magpie and requirejs modules
-log, config, module, r //
+// magpie modules 
+log, config, module, //
+// requirejs modules
+r, //
 // node modules
-, express, serveStatic, http, fs) {
-
+express, serveStatic, http, fs) {
+	/*jshint -W004 */ 
 	var config = config(module, {
+		homeFolder: r.toUrl('magpie/server/appServer').replace(/\/magpie\/server\/appServer$/, ''),
 		port : 8080,
-		path : '/',
-		webContentDir : r.toUrl('magpie') + '/../web'
+		//path : '/',
+		baseUrl : '/',
+		deploymentPath:['deployments'],
+		serveStatic:['magpie','lib'],
+		_deploymentPathRelativToHomeFolder:true,
+		_serveStaticRelativToHomeFolder:true,
 	});
 
+	//config.
+	
 	//
 	// Start up the web server
 	//
 	if (log.isDebug) {
 		log.debug('start Web Server:', config);
 	} else {
-		log('start Web Server: port', config.port)
+		log('start Web Server: port', config.port);
 	}
 
 	var app = express();
-	var server = http.createServer(app)
+	var server = http.createServer(app);
 	server.listen(config.port);
 
-	var baseUrl = r.toUrl('domain').replace(/\/domain/, '');
+//	var homeFolder = r.toUrl('magpie/server/appServer').replace(/\/magpie\/server\/appServer$/, '');
+//	var baseUrl = r.toUrl('.');
+	log.debug('baseUrl:',config.homeFolder);
 
-	//
-	// distribute magpie
-	//
-	app.use('/dist/magpie', serveStatic(baseUrl + '/magpie'));
 
-	app.use('/dist', serveStatic(baseUrl + '/dist'));
-
+	var deployments = [];
+	config.serveStatic.forEach(function(folder){
+		var deployment = {
+//				"static":{
+				type: "static",
+				deployment: folder,
+				url : config.baseUrl+ folder,//
+				deployDirectory : config._serveStaticRelativToHomeFolder? config.homeFolder+ folder:folder,//
+				packageName : '',//
+				hasServerExtensionBundle : false,//
+				hasWebBundle : false,
+				isStatic: true
+//				}
+			};
+		deployments.push(deployment);
+		if (log.isDebug) {
+			log.debug('serveStatic: \''+ folder+'\'','as deployment:',deployment);
+		} else {
+			log('serveStatic: \''+ folder+'\'');
+		}
+		app.use(deployment.url, serveStatic(deployment.deployDirectory));	
+	});
+	
 	//
 	// load domain
 	//
-	var domainDirUrl = r.toUrl('domain');
 
-	var domains = [];
-
-	function addDomain(sDomain, path) {
-		log('addDomain:', sDomain)
+	
+	function addDeployment(deploymentCandidateRootFolder, path) {
+		log('addDeployment:', deploymentCandidateRootFolder);
 		//
 		// load server extensions for domain
 		//
-		var domain = {
-			deployDirectory : sDomain,//
-			url : '/' + sDomain,//
-			packageName : sDomain,//
+		var deployment = {
+			deployment : deploymentCandidateRootFolder,//
+			deployDirectory : deploymentCandidateRootFolder,//
+			//deployDirectoryPath: path
+			url : '/' + deploymentCandidateRootFolder,//
+			packageName : deploymentCandidateRootFolder,//
 			hasServerExtensionBundle : false,//
-			hasWebBundle : false
-		}
-		domains.push(domain);
+			hasWebBundle : false,
+			isStatic: false
+		};
+		log.debug('addDeployment:', deployment);
+		deployments.push(deployment);
 
 		function startServlet() {
 			fs.stat(path + '/server/config.js', function(err, stats) {
@@ -70,12 +107,15 @@ log, config, module, r //
 				// map stack
 				//
 				
-				// define virtual package for domain that holes the domain details 
-				define(domain.packageName + '/domain', domain);
+				// define virtual package for deployment that holes the deployment details 
+				var virtualPackageForDeployment = deployment.packageName + '/deployment'; 
+				define(virtualPackageForDeployment, deployment);
 				var map = {};
-				map[domain.packageName] = {
-					'domain' : domain.packageName + '/domain'
-				}
+				map[deployment.packageName] = {
+						//TODO doc domain  // to use for extending server e.g.: with websocket 
+						// FIXME rename it???
+					'domain' : virtualPackageForDeployment
+				};
 				require.config({
 					map : map
 				});
@@ -83,44 +123,43 @@ log, config, module, r //
 				fs.stat(path + '/server/main.js', function(err, stats) {
 					if (stats && stats.isFile()) {
 						var router = express.Router();
-						app.use(domain.url,router);
+						app.use(deployment.url,router);
 						
 						//TODO rename to use? or rethink calback paramteres
-						domain.extend=function(callback){
-							callback(router,server)
-						}
+						// OR remove this ability?
+						deployment.extend=function(callback){
+							callback(router,server);
+						};
 						
-						domain.hasServerExtensionBundle = true;
-						log('load server extension for domain:',
-								domain.deployDirectory)
+						deployment.hasServerExtensionBundle = true;
+						log('load server extension for deployment:',
+								deployment.deployDirectory);
 						require.config({
 							packages : [ //
 							{
-								name : domain.packageName,
+								name : deployment.packageName,
 								main : 'main',
-								location : 'domain/' + domain.deployDirectory
-										+ '/server'
+								location :  path + '/server'
 							} //
 							],
 							deps : [ configExists ? //
 							// FIXME review
-							'domain/' + domain.deployDirectory
-									+ '/server/config' : domain.packageName ],
+							 path + '/server/config' : deployment.packageName ],
 							callback : function() {
 								if (configExists) {
-									require([ domain.packageName ])
+									require([ deployment.packageName ]);
 								}
 							}
-						})
+						});
 					}
 					fs.stat(path + '/web', function(err, stats) {
 						if (stats && stats.isDirectory()) {
-							domain.hasWebBundle = true;
-							log('start static server for domain:',
-									domain.deployDirectory)
-							app.use(domain.url, serveStatic(path + '/web'));
+							deployment.hasWebBundle = true;
+							log('start static server for deployment:',
+									deployment.deployDirectory);
+							app.use(deployment.url, serveStatic(path + '/web'));
 						}
-					})
+					});
 
 				});
 
@@ -130,43 +169,52 @@ log, config, module, r //
 		fs.stat(path + '/deploy.js', function(err, stats) {
 			var deployConfigExists = stats && stats.isFile();
 			if (deployConfigExists) {
-				require([ 'domain/' + domain.deployDirectory + '/deploy' ],
+				require([ path + '/deploy' ],
 						function(deploy) {
-							log('deploy:', deploy)
-							for (p in deploy) {
-								domain[p] = deploy[p];
+							log('deploy:', deploy);
+							for (var p in deploy) {
+								deployment[p] = deploy[p];
 							}
-							startServlet(domain);
-						})
+							startServlet(deployment);
+						});
 			} else {
-				startServlet(domain);
+				startServlet(deployment);
 			}
 		});
 
 	}
 
 	// REST server console
-	app.get('/_domains', function(req, resp, next) {
-		resp.send(domains)
+	app.get('/_deployments', function(req, resp, next) {
+		resp.send(deployments);
 		next();
 	});
 
-	// start server instances
-	fs.readdir(domainDirUrl, function(err, files) {
-		files.forEach(function(file) {
-			var path = domainDirUrl + '/' + file;
-			fs.stat(path, function(err, stats) {
-				if (stats && stats.isDirectory()) {
-					addDomain(file, path)
-				}
+	config.deploymentPath.forEach(function(deploymentPathFolder){
+		var deploymentPath = config._deploymentPathRelativToHomeFolder?config.homeFolder + deploymentPathFolder: deploymentPathFolder;
+		if (log.isDebug) {
+			log.debug('process deployment folder:',deploymentPathFolder,'path:',deploymentPath);
+		} else {
+			log('process deployment folder:',deploymentPathFolder);
+		}
+		
+		fs.readdir(deploymentPathFolder, function(err, deploymentCandidateFiles) {
+			deploymentCandidateFiles.forEach(function(deploymentCandidateFile) {
+				var path = deploymentPathFolder + '/' + deploymentCandidateFile;
+				fs.stat(path, function(err, stats) {
+					if (stats && stats.isDirectory()) {
+						addDeployment(deploymentCandidateFile, path);
+					}
+				});
 			});
-		})
+		});
+		
 	});
 
 	return {
 		config : config,
 		httpServer : server,
 		app : app
-	}
+	};
 
 });

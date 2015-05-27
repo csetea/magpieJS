@@ -1,7 +1,8 @@
 /**
+ * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
-define([ 'log!m-grid-item', './m-grid' ], //
+define([ 'magpie/log!m-grid-item', './m-grid' ], //
 function(log, grid) {
 	var regexpForValueFormatCheck = /^(auto|1|\d{1,2}\/\d{1,2})$/;
 	function checkThsDefinition(attribute, value, item) {
@@ -11,8 +12,8 @@ function(log, grid) {
 					grid.checkThsDefinition(attribute, value, item.parentNode);
 				}
 			} else {
-				log.error('Wrong unit format: ' + attribute + '="' + value + '"'
-						+ ' value should be ' + regexpForValueFormatCheck);
+				log.error('Wrong unit format: ' + attribute + '="' + value + '"' +
+						  ' value should be ' + regexpForValueFormatCheck);
 			}
 		}
 		
@@ -24,15 +25,15 @@ function(log, grid) {
 		createdCallback : function() {
 			for ( var attribute in grid.attributeNameSet) {
 				var value = this.getAttribute(attribute);
-				checkThsDefinition(attribute, value, this)
+				checkThsDefinition(attribute, value, this);
 			}
 		},
 
 		attributeChangedCallback : function(name, previousValue, value) {
 			if (grid.attributeNameSet[name]) {
-				checkThsDefinition(attribute, value, this)
+				checkThsDefinition(attribute, value, this);
 			}
 		}
-	}
+	};
 
-})
+});

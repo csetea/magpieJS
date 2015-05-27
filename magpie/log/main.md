@@ -60,7 +60,7 @@ Will print on console.debug:
 
 ###Logging on named log
 ```javascript
-require([ 'log!silent' ], function(log) {
+require([ 'magpie/log!silent' ], function(log) {
 
 	log.info('Hello Bob!',{age: 101, sex: 'male'});
 		

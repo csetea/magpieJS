@@ -1,19 +1,20 @@
 /**
- * @doc m-source.md
+ * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
+
 /** TODO
  * [ ] configuration || element attribute - tabReplace
  * */
-define([ 'log!m-source','magpie/dom/inject', 'highlightDir/highlight.min', 'css!highlightDir/default.min.css'], //
+define([ 'magpie/log!m-source','magpie/dom/inject', 'highlightDir/highlight.min', 'css!highlightDir/default.min.css'], //
 		function(log, inject, hljs) {
 	
 	//TODO doc of preregistration trick: 
-	require(['magpie/html5/customElement!magpie/widget/m-source']);
+	require(['magpie/html5/customElement!magpie/html5/widget/m-source']);
 	
 	hljs.configure({
-		useBR: 'innerText' in document.createElement('code')
-		,tabReplace: '  '
+		useBR: 'innerText' in document.createElement('code'),
+		tabReplace: '  '
 	});
 
 	function createSourceBoxBasedOnHref(el, href, callback) {
@@ -27,9 +28,9 @@ define([ 'log!m-source','magpie/dom/inject', 'highlightDir/highlight.min', 'css!
 			}else{
 				ce.textContent=source;
 			}
-			pre.appendChild(ce)
+			pre.appendChild(ce);
 			
-			inject(el,pre)
+			inject(el,pre);
 			
 			hljs.highlightBlock(ce);
 		});
@@ -50,6 +51,6 @@ define([ 'log!m-source','magpie/dom/inject', 'highlightDir/highlight.min', 'css!
 			createSourceBoxBasedOnHref(this, href);
 		}
 		
-	}
+	};
 
 });

@@ -1,5 +1,9 @@
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
 // TODO convert to widget ??? -> html5 customElement instead of the old viewProxy defined view object
-define([ 'jquery', 'log!view/404', 'css!./404.css', 'jqueryPlax'], function($, log) {
+define([ 'jquery', 'magpie/log!view/404', 'css!./404.css', 'jqueryPlax'], function($, log) {
 	return {
 
 		attached : function() {

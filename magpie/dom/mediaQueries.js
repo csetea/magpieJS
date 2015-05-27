@@ -1,8 +1,12 @@
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
 // [ ] add unit support to screen size def
 // [ ] add board support? 
-define([ 'log!magpie/dom/mediaQueries', 'module', 'magpie/util/config', 'magpie/dom/inject' ], function(log,
+define([ 'magpie/log!magpie/dom/mediaQueries', 'module', 'magpie/util/config', 'magpie/dom/inject' ], function(log,
 		module, config, inject) {
-
+	/*jshint -W004 */ 
 	var config = config(module, {
 		screens : {
 			s : 35.5,
@@ -25,16 +29,17 @@ define([ 'log!magpie/dom/mediaQueries', 'module', 'magpie/util/config', 'magpie/
 			});
 		}
 		return sizes.sort(function(a, b) {
-			return a.size - b.size
+			return a.size - b.size;
 		});
 	}());
 
 	for (var i = 0; i < screens.length; i++) {
 		var screen = screens[i];
 		screen._orderIndex = i;
-		screen.smaller = i == 0 ? null : screens[i - 1];
+		screen.smaller = i === 0 ? null : screens[i - 1];
 		screen.larger = i + 1 < screens.length ? null : screens[i + 1];
 
+		/*jshint -W083 */
 		screen.eachSmaller = function(callback) {
 			for (var s = 0; s < screen._orderIndex; s++) {
 				callback(screens[s]);
@@ -57,12 +62,12 @@ define([ 'log!magpie/dom/mediaQueries', 'module', 'magpie/util/config', 'magpie/
 			if (callbackSmallerScreen)
 				for (var s = 0; s < i; s++) {
 					var smallerScreen = screens[s];
-					callbackSmallerScreen(screens[s], screen)
+					callbackSmallerScreen(screens[s], screen);
 				}
 			if (callbackLargerScreen)
 				for (var l = i + 1; l < screens.length; l++) {
 					var largerScreen = screens[l];
-					callbackLargerScreen(largerScreen, screen)
+					callbackLargerScreen(largerScreen, screen);
 				}
 			if (callbackScreen)
 				callbackScreen(screen);
@@ -80,36 +85,36 @@ define([ 'log!magpie/dom/mediaQueries', 'module', 'magpie/util/config', 'magpie/
 
 			postProcess.css = [];
 		}
-	}
+	};
 	postProcess.css = [];
 	
 	mediaQueries.screens.each(function(screen) {
 		screen.addCssRule = function(cssRule) {
 			mediaQueries.addCssRule(screen.createCssRuleString(cssRule));
-		}
+		};
 		
 		screen.createCssRuleString = function(cssRule) {
-			var css = '@media only screen '
-				+ (!screen.smaller ? '{' : 'and (min-width: ' + screen.size
-						+ 'em){');
+			var css = '@media only screen ' + //
+					  (!screen.smaller ? '{' : 'and (min-width: ' + screen.size + //
+				'em){');
 			for ( var i in arguments) {
 				css += arguments[i];
 			}
 			css += '}';
 			return css;
-		} 
+		};
 
 		
 		screen.addCssRuleAfterEach = function(cssRule) {
-			var css = '@media only screen '
-					+ (!screen.smaller ? '{' : 'and (min-width: ' + screen.size
-							+ 'em){');
+			var css = '@media only screen ' +
+					  (!screen.smaller ? '{' : 'and (min-width: ' + screen.size +
+					  'em){');
 			for ( var i in arguments) {
 				css += arguments[i];
 			}
 			css += '}';
-			postProcess.css.push(css)
-		}
+			postProcess.css.push(css);
+		};
 	});
 
 	mediaQueries.addCssRule = inject.css;

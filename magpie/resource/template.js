@@ -1,32 +1,16 @@
 /**
- * Magpie Template - template loading
- * 
- * https://github.com/csetea/magpiejs
- * 
- * Version: 0.1
- * 
- * The MIT License (MIT) Copyright (c) 2014 Andras Csete
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
  */
-define([ 'module', 'resource', 'mark', 'log!template' ], function(module, r,
-		Mark, log) {
+//TODO doc config
+//		template : {
+//			preProcessing : function(text, callbackWithTextParamter) {
+//				require([ 'resource', 'mark' ], function(r, Mark) {
+//					callbackWithTextParamter(Mark.up(text, r))
+//				});
+//			}
+//		},
+define([ 'module', 'mapgie/resource/properties', 'mark', 'magpie/log!template' ], function(module, r, Mark, log) {
 
 	var config = module.config();
 
@@ -56,15 +40,14 @@ define([ 'module', 'resource', 'mark', 'log!template' ], function(module, r,
 		}
 		return templates;
 	}
-	;
-
+	
 	/**
 	 * Compiles the template.
 	 */
 	function compile(templateText) {
 		var templates = this.extract(templateText);
 		var mainTemplate = '';
-		for (firstTemplate in templates) {
+		for (var firstTemplate in templates) {
 			mainTemplate = templates[firstTemplate];
 			break;
 		}
@@ -74,7 +57,7 @@ define([ 'module', 'resource', 'mark', 'log!template' ], function(module, r,
 
 	function compileTemplates(templates) {
 		var mainTemplate = '';
-		for (firstTemplate in templates) {
+		for (var firstTemplate in templates) {
 			mainTemplate = templates[firstTemplate];
 			break;
 		}
@@ -85,15 +68,15 @@ define([ 'module', 'resource', 'mark', 'log!template' ], function(module, r,
 	var createTemplateFunction = function(template) {
 		return function Template(context, options) {
 			if (!context) {
-				context = {}
+				context = {};
 			}
 			if (!options) {
-				options = {}
+				options = {};
 			}
 
 			return Mark.up(template, context, options);
-		}
-	}
+		};
+	};
 
 	/** Create template mixin */
 	var createTemplateMixin = function(text) {
@@ -107,7 +90,7 @@ define([ 'module', 'resource', 'mark', 'log!template' ], function(module, r,
 		template._templates = x._templates;
 
 		// create template function for each template
-		for (t in x._templates) {
+		for (var t in x._templates) {
 			template[t] = createTemplateFunction(x._templates[t]);
 		}
 
@@ -124,7 +107,7 @@ define([ 'module', 'resource', 'mark', 'log!template' ], function(module, r,
 			require([ 'text!' + param ], function(text) {
 				var callback = function(ctext) {
 					onload(createTemplateMixin(ctext));
-				}
+				};
 
 				if (config.preProcessing instanceof Function) {
 					config.preProcessing(text, callback);

@@ -1,19 +1,8 @@
-//require.config({
-//	config:{
-//		'log/log' : {
-//			'log' : {
-//				level : 'info'
-//			},
-//		}
-//	}
-//
-//});
-
-/***
- * @doc log.md
- * @license MIT 
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
  */
-	
+
 //TODO in resolveLogConfigValue function on fallback try create parent logger
 // todo fallback config path to pakets locations ...
 // first (if not root) to right config value initialization
@@ -30,24 +19,23 @@ define( ['module', 'require' ],
 		  };
 		}
 	
-			var requireConfig = undefined;
 			
 			
 			//
 			// Configurations
 			//
 			var defaultConfig = {
-				 'log' : {
+				 'magpie/log/log' : {
 					 level : 'error'
 				 },
 					 
 				root : {
 					level: 'info'
 				}
-			}
+			};
 
 			var config = module.config();
-			for (p in defaultConfig) {
+			for (var p in defaultConfig) {
 				if (!config[p]) {
 					config[p] = defaultConfig[p];
 				}
@@ -99,13 +87,13 @@ define( ['module', 'require' ],
 					}
 				}
 				return configSection[property];
-			}
+			};
 			
 			var resolveLogConfig = function(log, property, defaultValue) {
 				log[property]= resolveLogConfigValue(log.logName, property, defaultValue);
 				configLog.debug('resolved '+property+' for '+log.logName + ' value:', log[property]);
 				return log[property];
-			}
+			};
 			
 			//
 			// helper functions [[
@@ -133,15 +121,15 @@ define( ['module', 'require' ],
 				if (typeof configObject === 'string') {
 					require([ configObject ],function(xconfigObject){
 						setPropertyCallback(log, configProperty, propertyInsideConfigObject, xconfigObject, defaultConfigObject);
-					}
-					, function(err){
+					},
+					function(err){
 						configLog.error('Cannot resolve '+configProperty+' module:',configObject, '-try fallback');
 						setPropertyCallback(log, configProperty, propertyInsideConfigObject, undefined, defaultConfigObject);
 					});
 				} else {
 					setPropertyCallback(log, configProperty, propertyInsideConfigObject, configObject, defaultConfigObject);
 				}
-			}
+			};
 			// ]] helper functions
 
 
@@ -186,9 +174,9 @@ define( ['module', 'require' ],
 											level[il] = level[il].toUpperCase();
 											for (var i = 0; i < LoggerLevel.levelRank.length; i++) {
 												var l = LoggerLevel.levelRank[i];
-												log['is'
-														+ l.charAt(0)
-														+ l.substr(1)
+												log['is' +
+														l.charAt(0) +
+														l.substr(1)
 																.toLowerCase()] = l == level[il];
 											}
 										}
@@ -197,10 +185,11 @@ define( ['module', 'require' ],
 									// threshold specified level and up 
 									level = level.toUpperCase();
 									var found = false;
+									/*jshint -W004 */ 
 									for (var i = 0; i < LoggerLevel.levelRank.length; i++) {
 										var l = LoggerLevel.levelRank[i];
-										log['is' + l.charAt(0)
-												+ l.substr(1).toLowerCase()] = found ? true //
+										log['is' + l.charAt(0) +
+												l.substr(1).toLowerCase()] = found ? true //
 												: found = l == level;
 									}
 								}
@@ -230,26 +219,30 @@ define( ['module', 'require' ],
 								: undefined,
 					preventLogging: false
 //					asdfhellothisiscodexDmeow:3
-				}
+				};
 				//
 				// execute filter
 				//
 				var preventLogging=false;
 				if (logMixin.filter){
-					preventLogging = false == logMixin.filter.filter(logEvent);
+					/* jshint ignore:start */
+					preventLogging = (false == logMixin.filter.filter(logEvent));
+					/* jshint ignore:end */
 				}
 				
 				//
 				// call log if loggin is not prevent
 				//
+				/* jshint ignore:start */
 				if (!(preventLogging || logEvent.preventLogging == true)){
 					if (logMixin.logger.log){
 						logMixin.logger.log(logEvent);
 					}else{
 						// TODO on unresolved default logger ...
-						console.warn('prevent logging of logEvent',logEvent)
+						console.warn('prevent logging of logEvent',logEvent);
 					}
 				}
+				/* jshint ignore:end */
 			};
 
 			function createLogMixin(logName, logger, onload) {
@@ -295,7 +288,7 @@ define( ['module', 'require' ],
 			}
 
 			var rootLog = createLogMixin('root');
-			var configLog = createLogMixin('log');
+			var configLog = createLogMixin('magpie/log/log');
 			
 			
 			//

@@ -1,5 +1,9 @@
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
 // TODO check: https://code.google.com/p/crypto-js to include in magpie
-// and use that as basic solution
+// and maybe reuse
 define(
 		[],
 		function() {
@@ -34,7 +38,8 @@ define(
 			function _utf8_decode(utftext) {
 				var string = "";
 				var i = 0;
-				var c = c1 = c2 = 0;
+				
+				var c = 0, c1 = 0, c2 = 0;
 
 				while (i < utftext.length) {
 
@@ -88,10 +93,10 @@ define(
 							enc4 = 64;
 						}
 
-						output = output + _keyStr.charAt(enc1)
-								+ _keyStr.charAt(enc2)
-								+ _keyStr.charAt(enc3)
-								+ _keyStr.charAt(enc4);
+						output = output + _keyStr.charAt(enc1) +
+								_keyStr.charAt(enc2) +
+								_keyStr.charAt(enc3) +
+								_keyStr.charAt(enc4);
 
 					}
 
@@ -135,6 +140,6 @@ define(
 
 				}
 
-			}
+			};
 
-		})
+		});

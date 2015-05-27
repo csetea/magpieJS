@@ -1,60 +1,80 @@
 /**
- * @doc customElement.md
- * @license MIT 
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
  */
-// Module for handling custom element registrations
-define([ 'module','magpie/util/config', 'log!magpie/html5/customElement/_registerElement'], function(module, config, log) {
-
-
+// cares document.registerElement polyfill
+define([ 'module','magpie/util/config', 'magpie/log!magpie/html5/customElement/_registerElement'], function(module, config, log) {
+	
+	/*jshint -W004 */ 
 	var config =config(module,{
-		provider: 'lib/document-register-element/document-register-element'
-	})
+		provider: 'magpie/html5/customElement/provider/WebReflection/document-register-element'
+	});
 		
-	//
-	// Object.create polyfill
-	// (maybe outsource in polyfill/object ???)
-	//
+	
 	if (typeof Object.create != 'function') {
-		  Object.create = (function() {
-		    var Object = function() {};
-		    return function (prototype) {
+	  // Production steps of ECMA-262, Edition 5, 15.2.3.5
+	  // Reference: http://es5.github.io/#x15.2.3.5
+		Object.create = (function() {
+		    // To save on memory, use a shared constructor
+		    function Temp() {}
+		
+		    // make a safe reference to Object.prototype.hasOwnProperty
+		    var hasOwn = Object.prototype.hasOwnProperty;
+		
+		    return function (O) {
+		      // 1. If Type(O) is not Object or Null throw a TypeError exception.
+		      if (typeof O != 'object') {
+		        throw TypeError('Object prototype may only be an Object or null');
+		      }
+		
+		      // 2. Let obj be the result of creating a new object as if by the
+		      //    expression new Object() where Object is the standard built-in
+		      //    constructor with that name
+		      // 3. Set the [[Prototype]] internal property of obj to O.
+		      Temp.prototype = O;
+		      var obj = new Temp();
+		      Temp.prototype = null; // Let's not keep a stray reference to O...
+		
+		      // 4. If the argument Properties is present and not undefined, add
+		      //    own properties to obj as if by calling the standard built-in
+		      //    function Object.defineProperties with arguments obj and
+		      //    Properties.
 		      if (arguments.length > 1) {
-		        throw Error('Second argument not supported');
+		        // Object.defineProperties does ToObject on its first argument.
+		        var Properties = Object(arguments[1]);
+		        for (var prop in Properties) {
+		          if (hasOwn.call(Properties, prop)) {
+		            obj[prop] = Properties[prop];
+		          }
+		        }
 		      }
-		      if (typeof prototype != 'object') {
-		        throw TypeError('Argument must be an object');
-		      }
-		      Object.prototype = prototype;
-		      var result = new Object();
-		      Object.prototype = null;
-		      return result;
+		
+		      // 5. Return obj
+		      return obj;
 		    };
-		  })();
+		})();
 	}
-
+	
 	return {
 		//
 		// loader plugin for customElement definitions
 		//
 		load: function(customElementPath, parentRequire, onload) {
-			
-			if(!document.registerElement){
-
-				log.warn('try to load polyfill for document.registerElement:',config.provider)
-
-				require([config.provider],function(){
-					var timer=setInterval(function(){
-						if (document.registerElement){
-							log.warn('polyfilled: document.registerElement')
-							onload();
-							clearInterval(timer);
-						} 
-					}, 300);
-				});
-			}else{
-				onload();
+				if(!document.registerElement){
+					log.warn('try to load polyfill for document.registerElement:',config.provider);
+					require([config.provider],function(){
+						var timer=setInterval(function(){
+							if (document.registerElement){
+								log.warn('polyfilled: document.registerElement');
+								onload();
+								clearInterval(timer);
+							} 
+						}, 300);
+					});
+				}else{
+					onload();
+				}
 			}
-			}
-		}
-	
+		};
+
 });

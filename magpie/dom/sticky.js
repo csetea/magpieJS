@@ -1,6 +1,10 @@
-//TODO convert to customElement or not?
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
+ //TODO convert to customElement or not?
 define(
-		[ 'log!sticky', 'magpie/dom/inject', 'domReady!', 'css!./sticky' ], //
+		[ 'magpie/log!sticky', 'magpie/dom/inject', 'domReady!', 'css!./sticky' ], //
 		function(log, inject) {
 			var forEach = Array.prototype.forEach;
 
@@ -14,8 +18,8 @@ define(
 
 			
 			function sticky() {
-				var y = (document.documentElement && document.documentElement.scrollTop)
-						|| document.body.scrollTop;
+				var y = (document.documentElement && document.documentElement.scrollTop) ||
+						 document.body.scrollTop;
 
 				
 				forEach.call(document.querySelectorAll('[data-m-ui-sticky="on"]'), function(
@@ -24,13 +28,13 @@ define(
 					if (y < sticky._clone.offsetTop || //
 							y> parent.offsetTop + parent.offsetHeight  - sticky.offsetTop - sticky.offsetHeight //
 							){
-						sticky.setAttribute('data-m-ui-sticky','off')
+						sticky.setAttribute('data-m-ui-sticky','off');
 						if (sticky._clone && sticky._clone.parentElement){
-							sticky.parentElement.removeChild(sticky._clone)
+							sticky.parentElement.removeChild(sticky._clone);
 						}	
 						sticky.style.top='';
 					}
-				})
+				});
 
 				
 				var stickySpacerHeight = 0;
@@ -44,13 +48,13 @@ define(
 //							y< parent.offsetTop + parent.offsetHeight
 							) {
 						if (!sticky._clone){
-							sticky._clone=sticky.cloneNode(true)
-							sticky._clone.removeAttribute('data-m-ui-sticky')
-							sticky._clone.setAttribute('data-m-ui-sticky-clone','')
+							sticky._clone=sticky.cloneNode(true);
+							sticky._clone.removeAttribute('data-m-ui-sticky');
+							sticky._clone.setAttribute('data-m-ui-sticky-clone','');
 						}
-						sticky.setAttribute('data-m-ui-sticky','on')
+						sticky.setAttribute('data-m-ui-sticky','on');
 						if (sticky._clone && !sticky._clone.parentElement){
-							sticky.parentElement.insertBefore(sticky._clone,sticky)
+							sticky.parentElement.insertBefore(sticky._clone,sticky);
 						}
 						
 						sticky.style.top=stickySpacerHeight+'px';

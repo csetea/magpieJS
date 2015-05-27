@@ -1,3 +1,7 @@
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
 define([],{
 	name:'magpieJS',
 	desc: 'AMD module collection packet',

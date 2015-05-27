@@ -1,11 +1,11 @@
 /**
- * @doc m-inject.md
+ * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
-define([ 'module', 'log!m-inject','magpie/dom/inject'], //
+define([ 'module', 'magpie/log!m-inject','magpie/dom/inject'], //
 		function(module, log, inject) {
 	
-	require(['magpie/html5/customElement!magpie/widget/m-inject']);
+	require(['magpie/html5/customElement!magpie/html5/widget/m-inject']);
 
 	function createViewObjectBasedOnHref(el, href, callback) {
 		require([href], function(hrefObject){
@@ -13,7 +13,7 @@ define([ 'module', 'log!m-inject','magpie/dom/inject'], //
 			if (typeof hrefObject === 'string'|| //
 					hrefObject instanceof HTMLElement ||//
 					hrefObject instanceof Function){
-				inject(el,hrefObject)	
+				inject(el,hrefObject);	
 			}else if (hrefObject instanceof Object){
 				log.debug('try to load as customElement: '+ href);
 				require(['magpie/html5/customElement!'+href], function(ce){
@@ -28,7 +28,7 @@ define([ 'module', 'log!m-inject','magpie/dom/inject'], //
 		tag : 'm-inject',
 
 		createdCallback : function() {
-			log('callback', this)
+			log('callback', this);
 			var href = this.getAttribute('href');
 			createViewObjectBasedOnHref(this, href);
 		},
@@ -60,6 +60,6 @@ define([ 'module', 'log!m-inject','magpie/dom/inject'], //
 		}
 		
 		
-	}
+	};
 
 });

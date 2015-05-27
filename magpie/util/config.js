@@ -1,13 +1,26 @@
+/**
+ * @URL https://github.com/csetea/magpieJS
+ * @license MIT
+ */
 define([], function() {
-
-	return function config(module, defaultConfig) {
-		var config = module.config();
-		for (p in defaultConfig) {
-			if (!config[p]) {
-				config[p] = defaultConfig[p];
+	
+	
+	function mergeObject(source, reference){
+		
+		for (var p in reference) {
+			if ( typeof source[p] === "undefined") {
+				source[p] = reference[p];
+			}else if (reference[p]!== null && typeof reference[p] === "object" ){
+				mergeObject(source[p], reference[p]);
 			}
 		}
 		
-		return config;
 	}
-})
+
+	return function config(module, defaultConfig) {
+		/*jshint -W004 */ 
+		var config = module.config();
+		mergeObject(config, defaultConfig);
+		return config;
+	};
+});

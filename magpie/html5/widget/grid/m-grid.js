@@ -1,4 +1,5 @@
 /**
+ * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
 /**
@@ -17,7 +18,7 @@
  * </code>
  * make example like http://purecss.io/grids/
  */
-define([ 'log!m-grid', 'module', 'magpie/util/config',
+define([ 'magpie/log!m-grid', 'module', 'magpie/util/config',
 		'magpie/dom/mediaQueries', 'css!./m-grid.css' ], //
 function(log, module, config, mediaQueries) {
 	
@@ -34,13 +35,14 @@ function(log, module, config, mediaQueries) {
 		  });
 		}
 
+	/*jshint -W004 */
 	var config = config(module, {
 		ths : [ 5, 24 ]
 	});
 
 	// sort grid ths config
 	config.ths = config.ths.sort(function(a, b) {
-		return a.size - b.size
+		return a.size - b.size;
 	});
 	var maxThs = config.ths[config.ths.length - 1];
 
@@ -48,7 +50,7 @@ function(log, module, config, mediaQueries) {
 	for (var i = 1; i <= maxThs; i++) {
 		for ( var thsIndex in config.ths) {
 			var ths = config.ths[thsIndex];
-			if (ths % i == 0) {
+			if (ths % i === 0) {
 				thsMap[i] = i;
 			}
 		}
@@ -60,7 +62,7 @@ function(log, module, config, mediaQueries) {
 	for ( var ths in thsMap) {
 		for (var i = 1; i <= ths; i++) {
 			var width = (i / ths * 100).toFixed(4) % 100;
-			if (width == 0) {
+			if (width === 0) {
 				width = 100;
 			}
 			var listForWidth = widthThsMap[width];
@@ -68,7 +70,7 @@ function(log, module, config, mediaQueries) {
 				listForWidth = [];
 				widthThsMap[width] = listForWidth;
 			}
-			listForWidth.push(i + '/' + ths)
+			listForWidth.push(i + '/' + ths);
 		}
 	}
 
@@ -80,7 +82,7 @@ function(log, module, config, mediaQueries) {
 		});
 	}
 	widthThsList = widthThsList.sort(function(a, b) {
-		return a.width - b.width
+		return a.width - b.width;
 	});
 
 	//
@@ -93,7 +95,7 @@ function(log, module, config, mediaQueries) {
 	// or push + poll
 	// var attributes = [ 'unit', 'push', 'poll', 'offset' ];
 	for (var i = 0; i < attributes.length; i++) {
-		attributeNameSet[attributes[i]] = {}
+		attributeNameSet[attributes[i]] = {};
 	}
 	var attributeScreenMap = {};
 	mediaQueries.screens.each(function(screen) {
@@ -120,9 +122,9 @@ function(log, module, config, mediaQueries) {
 	//
 	function cssPropertiesFor(attribute, percentageValue, isVertical) {
 		if (/unit.*/.test(attribute)) {
-			return '\n{' //
-			+ 'flex-basis:' + percentageValue + ';'//
-			+ '}\n';
+			return '\n{' + //
+			 			'flex-basis:' + percentageValue + ';' +//
+			 		'}\n';
 //			if (isVertical) {
 //				return '\n{' //
 //						+ 'height:' + percentageValue + ';'//
@@ -144,18 +146,18 @@ function(log, module, config, mediaQueries) {
 			// // + 'margin-top:' + percentageValue + ';' //
 			// + '}\n';
 			// }else{
-			return '\n{' //
+			return '\n{' + //
 			// + 'display: '
 					// + 'top:' + percentageValue + ';' //
 
 					// + 'margin-top:' + percentageValue + ';' //
 					// + 'margin-left:' + percentageValue + ';' //
-					+ '}\n';
+					 '}\n';
 			// }
 		} else if (/poll.*/.test(attribute)) {
 			// TODO
-			return '\n{' //
-					+ '}\n';
+			return '\n{' + //
+					 '}\n';
 		}
 	}
 	function cssSelectorListForThsList(attribute, thsList, isVertical) {
@@ -164,8 +166,8 @@ function(log, module, config, mediaQueries) {
 			var ths = thsList[thsListIndex];
 
 			var cssSelector = //
-			(isVertical ? 'm-grid[vertical]>' : '')//
-					+ 'm-grid-item[' + attribute + '="' + ths + '"]'//
+			(isVertical ? 'm-grid[vertical]>' : '') + //
+					 'm-grid-item[' + attribute + '="' + ths + '"]';
 			cssSelectorList.push(cssSelector);
 		}
 		return cssSelectorList;
@@ -179,25 +181,24 @@ function(log, module, config, mediaQueries) {
 			var isVertical = false;
 			var percentageValue = widthThs.width + "%";
 			cssForUnit += cssSelectorListForThsList(attribute,
-					widthThs.thsList, isVertical) //
-					+ cssPropertiesFor(attribute, percentageValue, isVertical);
+					widthThs.thsList, isVertical) + //
+					cssPropertiesFor(attribute, percentageValue, isVertical);
 			isVertical = true;
 			cssForUnit += cssSelectorListForThsList(attribute,
-					widthThs.thsList, isVertical) //
-					+ cssPropertiesFor(attribute, percentageValue, isVertical);
-			log.trace(cssForUnit)
+					widthThs.thsList, isVertical) + //
+					cssPropertiesFor(attribute, percentageValue, isVertical);
+			log.trace(cssForUnit);
 
 		}
 
 		if (attribute.startsWith('unit')) {
 			var cssSelector = 'm-grid-item[' + attribute + '="auto"]';
-			css += cssSelector //
-					+ '\n{'//
-//					+ 'flex: 1 1 100%;'//
-					+ 'flex: 1 1 auto;'//
-					+ 'flex: 1 1 auto;'//
-					
-					+ '}\n'//
+			css += cssSelector + //
+					'\n{' + //
+	//					'flex: 1 1 100%;' + //
+						'flex: 1 1 auto;' + //
+						'flex: 1 1 auto;' + //
+					'}\n';
 		}
 
 		if (screen) {
@@ -241,13 +242,12 @@ function(log, module, config, mediaQueries) {
 
 				var screen = attributeScreenMap[attribute];
 				var width = (valueDivideResult * 100).toFixed(4) % 100;
-				if (width == 0) {
+				if (width === 0) {
 					width = 100;
 				}
 
-				var ths = value
-				var cssSelector = 'm-grid-item[' + attribute + '="' + ths
-						+ '"]'//
+				var ths = value;
+				var cssSelector = 'm-grid-item[' + attribute + '="' + ths + '"]';
 						// isVertical =
 						// grid.getAttribute('direction')=='vertical';
 				var isVertical = grid.getAttribute('vertical') == 'true';
@@ -257,8 +257,8 @@ function(log, module, config, mediaQueries) {
 
 				var percentageValue = width + "%";
 				var css = '/*Magpie grid ' + attribute + '="' + ths + '"*/';
-				css += cssSelector //
-						+ cssPropertiesFor(attribute, percentageValue,
+				css += cssSelector + //
+						cssPropertiesFor(attribute, percentageValue,
 								isVertical);
 
 				if (screen) {
@@ -274,6 +274,6 @@ function(log, module, config, mediaQueries) {
 
 		attributeNameSet : attributeNameSet
 
-	}
+	};
 
-})
+});
