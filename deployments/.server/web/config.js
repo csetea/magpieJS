@@ -1,15 +1,9 @@
-window.less = { relativeUrls: true }
 require.config({
 
 	paths : {
 
-		domReady : '/lib/require/domReady',
-		text : '/lib/require/text',
-		css : '/lib/require/require-css/css',
-		less : 'magpie/dom/less',
-
+		magpie: '/magpie',
 		knockout: '/lib/knockout/knockout-3.2.0',
-		lessjs: '/lib/less/less.2.3.1.min',
 
 	},
 	
@@ -23,6 +17,6 @@ require.config({
 	         ])
 	},
 
-	waitSeconds : 1
+	waitSeconds : 5
 
 });

@@ -16,7 +16,7 @@ requirejs.config({
 	},
 
 	deps : [ //
- 		'magpie/config.node', //
+ 		'magpie/config', //
 	    'server.config.log', //
 	    'server.config', //
 		'magpie/server/appServer'

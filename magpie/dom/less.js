@@ -6,7 +6,7 @@
 define([ 'module','magpie/util/config', 'magpie/dom/inject' ], function(module,config, inject) {
 	/*jshint -W004 */ 
 	var	config = config(module,{
-		lessJsPath:'/lib/less/less.min.js'
+		lessJsPath:'//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js'
 //		baseUrl: r.
 	});
 
