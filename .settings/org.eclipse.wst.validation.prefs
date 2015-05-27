@@ -1,0 +1,17 @@
+DELEGATES_PREFERENCE=delegateValidatorList
+USER_BUILD_PREFERENCE=enabledBuildValidatorList
+USER_MANUAL_PREFERENCE=enabledManualValidatorList
+USER_PREFERENCE=overrideGlobalPreferencestruedisableAllValidationfalseversion1.2.501.v201304022101
+eclipse.preferences.version=1
+override=true
+suspend=false
+vals/org.eclipse.a.wst.html.webresources.core.WebResourcesValidator/global=FF01
+vals/org.eclipse.angularjs.core.HTMLAngularValidator/groups=0107include07111contentType136org.eclipse.wst.html.core.htmlsourceT07fileext04htmlF07fileext05xhtmlF07fileext03htmF07fileext04htplF07fileext03wmlF07fileext03ejsF0107exclude0104file112node_modulesF02
+vals/org.eclipse.angularjs.jsp.core.JSPAngularContentValidator/global=FF01
+vals/org.eclipse.jst.jsp.core.JSPContentValidator/global=FF01
+vals/org.eclipse.jst.jsp.core.TLDValidator/global=FF01
+vals/org.eclipse.wst.dtd.core.dtdDTDValidator/global=FF01
+vals/org.eclipse.wst.html.core.HTMLValidator/groups=0107include06111contentType136org.eclipse.wst.html.core.htmlsourceT07fileext04htmlF07fileext05xhtmlF07fileext03htmF07fileext04htplF07fileext03wmlF0107exclude0104file112node_modulesF02
+vals/org.eclipse.wst.xml.core.xml/global=FF03
+vals/org.eclipse.wst.xsd.core.xsd/global=FF02162org.eclipse.wst.xsd.core.internal.validation.eclipse.Validator
+vf.version=3
