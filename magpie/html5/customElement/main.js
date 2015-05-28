@@ -172,12 +172,12 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 		customElementDef.m_proto.m_customElementDef=customElementDef;
 		try{
 			if (customElementDef['extends']){
-				return document.registerElement(customElementDef.tag,{
+				return customElementDef.m_proto['magpie/html5/customElement']=document.registerElement(customElementDef.tag,{
 					prototype: customElementDef.m_proto,
 					'extends': customElementDef['extends'] 
 					});
 			}else{
-				return document.registerElement(customElementDef.tag,{
+				return customElementDef.m_proto['magpie/html5/customElement']=document.registerElement(customElementDef.tag,{
 					prototype: customElementDef.m_proto
 //					prototype: Object.create(
 //						      HTMLImageElement.prototype,
