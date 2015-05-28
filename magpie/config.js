@@ -1,4 +1,4 @@
-var _magpieRootUrl = require.toUrl('magpie');
+var _magpieRootUrl = require.toUrl('magpie').replace(/\?.*$/,'');
 require.config({
 
 	paths : {
