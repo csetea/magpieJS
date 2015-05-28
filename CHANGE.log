@@ -1,6 +1,7 @@
 0.2 -> 0.3
 removed modules:
-[-]  magpie/view/viewProxy
+[-] magpie/view/viewProxy
+[-] magpie/template -> magpie/resource/template -> removed
 few modules renamed and/or moved in new name space:
 [*] magpie/util/base64 -> magpie/crypt/base64 
 [*] magpie/idgenerator -> magpie/util/idgenerator 
@@ -11,9 +12,8 @@ few modules renamed and/or moved in new name space:
 [*] magpie/view/404 -> magpie/html5/widget/404 (converted to customElement)
 [*] magpie/view/router -> magpie/dom/router
 [*] magpie/knockout-enterkey -> magpie/extend/knockout/enterkey
-[*] magpie/resource -> magpie/resource/properties package
+[*] magpie/resource -> magpie/resource/properties package (newly implemented as loader plugin)
 [*] magpie/resourceLoader -> magpie/resource/properties package
-[*] magpie/template -> magpie/resource/template
 [*] magpie/ui/page100 -> magpie/dom/page100
 [*] magpie/ui/mediaQueries -> magpie/dom/mediaQueries
 [*] magpie/ui/visibility -> magpie/dom/visibility
