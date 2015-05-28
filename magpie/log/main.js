@@ -290,7 +290,7 @@ define( ['module', 'require' ],
 			var rootLog = createLogMixin('root');
 			var configLog = createLogMixin('magpie/log/log');
 			
-			
+			var requireConfig;
 			//
 			// apply as loader plugin
 			//
