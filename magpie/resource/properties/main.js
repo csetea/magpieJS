@@ -2,36 +2,48 @@
  * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
-//TODO doc config
-//		'magpie/resource/properties' : {
-//			defaultLocale : 'en',
-//			supportedLocales : [ 'en', 'de', 'hu' ],
-//			resourceDir : 'resources',
-//			resources : {
-//				msg : 'messages_{{langCode}}.properties',
-//				img : 'images.properties'
-//			}
-//		},
-
-define(['magpie/log!resource', 'magpie/resourceLoader!'], function(log,rl) {
+define([ 'magpie/log!magpie/resource/properties/main', 'magpie/util/config', 'module' ],
+			function(log, config, module) {
 	
-	
-	var r={
-			//TODO
-//			load : function(){
-//				
-//			}
+	// TODO doc config options
+	/*jshint -W004 */
+	var config =config(module,{
+		loader: 'text',
+		baseUri: ''
+	});
+		
+	var processProperties = function(text) {
+		var lines = text.split("\n");
+		var i, key;
+		var object = {};
+		lines.forEach(function(line) {
+			if (line.length && line.charAt(0) !== "#") {
+				i = line.indexOf("=");
+				key = line.substr(0, i).trim();
+				
+				//object[key] = (line.substr(i + 1).trim());
+				object[key] = unescape(
+					line.substr(i + 1).trim().replace(/\\u([\d\w]{4})/gi,
+						function (match, grp) {
+							return String.fromCharCode(parseInt(grp, 16)); 
+					} )
+				);
+			}
+		});
+		return object;
 	};
-	for(var _r in rl){
-		if (_r=='load'){
-			log.w('deprecated resource name, it will be omitted:',_r);
-		}else{
-			r[_r]=rl[_r];
+
+
+	return {
+		load : function(propertiesFileUrl, parentRequire, load) {
+			log.debug('load: ',propertiesFileUrl, 'baseUri:',config.baseUri);
+			parentRequire([config.loader+'!'+config.baseUri + propertiesFileUrl],function(propertiesFile){
+				load(processProperties(propertiesFile));
+			},function(err){
+				log.warn('cannot load properties file: ' + propertiesFileUrl,err);
+				load({});
+			});
 		}
-	}
+	};
 
-	log.t('resource inited with',r);
-
-	
-	return r;
 });

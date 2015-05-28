@@ -2,122 +2,177 @@
  * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
-//TODO doc config
-//		template : {
-//			preProcessing : function(text, callbackWithTextParamter) {
-//				require([ 'resource', 'mark' ], function(r, Mark) {
-//					callbackWithTextParamter(Mark.up(text, r))
-//				});
-//			}
-//		},
-define([ 'module', 'mapgie/resource/properties', 'mark', 'magpie/log!template' ], function(module, r, Mark, log) {
+define(
+		['magpie/log!resourceLoader', 'mark',
+				'require' ],
+		function( log, mark, require) {
 
-	var config = module.config();
+			var loadResource = function(loader, resource, locale) {
 
-	/**
-	 * Extract the templates from the template data
-	 */
-	function extract(templateText) {
-		var templates = {};
-		/**
-		 * @review Other Browser .splice(1) IE .splice(1, deleteCount) or
-		 *         .slice(1);
-		 * 
-		 */
-		templateText = Mark.up(templateText, r);
-		var chunks = templateText.split("=====").splice(1, 999);
+				log.t('loadResource', resource, locale);
 
-		if (chunks.length > 0) {
-			var i, key;
-			chunks.forEach(function(chunk) {
-				i = chunk.indexOf("\n");
-				key = chunk.substr(0, i).trim();
-				templates[key] = chunk.substr(i).trim();
-				// templates[key]=Mark.up(chunk.substr(i).trim(),r);
-			});
-		} else {
-			templates[0] = templateText;
-		}
-		return templates;
-	}
-	
-	/**
-	 * Compiles the template.
-	 */
-	function compile(templateText) {
-		var templates = this.extract(templateText);
-		var mainTemplate = '';
-		for (var firstTemplate in templates) {
-			mainTemplate = templates[firstTemplate];
-			break;
-		}
-		var compiled = Mark.up(mainTemplate, templates);
-		return compiled;
-	}
+				var rL = resolveResource(c.resources[resource], locale);
+				var resourceUri = c.resourceDir;
+				// resourceUri=require.toUrl(resourceUri);
+				log.d('resourceUri', resourceUri);
+				require(
+						[ 'text!' + resourceUri + '/' + rL ],
+						function(content) {
+							if (c.alwaysLoadDefault){
+								var rD = resolveResource(c.resources[resource],
+										c.defaultLocale);
+								require(
+										[ 'text!' + resourceUri + '/' + rD ],
+										function(contentDefault) {
+											loader.callback(resource, content, contentDefault);
+										},
+										function(errx) {
+											log.w('default locale resource file not found for resource:',
+													resource, '-', rD,'Skip forced default loading!');
+											loader.callback(resource, content);
+										});
+								
+							}else{
+								loader.callback(resource, content);
+							}
+						},
+						function(err) {
+							log.w('resource file not found for resource:',
+									resource, '-', rL);
+							var rD = resolveResource(c.resources[resource],
+									c.defaultLocale);
+							log.w('fallback to default locale, resource:',
+									resource, '-', rD);
+							require(
+									[ 'text!' + resourceUri + '/' + rD ],
+									function(content) {
+										loader.callback(resource, content);
+									},
+									function(errx) {
+										log.e('default locale resource file not found for resource:',
+												resource, '-', rD);
+										loader.callback(resource, '');
+									});
+						});
+			};
 
-	function compileTemplates(templates) {
-		var mainTemplate = '';
-		for (var firstTemplate in templates) {
-			mainTemplate = templates[firstTemplate];
-			break;
-		}
-		var compiled = Mark.up(mainTemplate, templates);
-		return compiled;
-	}
+			var processProperties = function(text) {
+				var lines = text.split("\n");
+				var i, key;
+				var msg = {};
+				lines.forEach(function(line) {
+					if (line.length && line.charAt(0) !== "#") {
+						i = line.indexOf("=");
+						key = line.substr(0, i).trim();
+						
+						//msg[key] = (line.substr(i + 1).trim());
+						msg[key] = unescape(
+							line.substr(i + 1).trim().replace(/\\u([\d\w]{4})/gi,
+								function (match, grp) {
+									return String.fromCharCode(parseInt(grp, 16)); 
+						    } )
+						);
+					}
+				});
+				return msg;
+			};
 
-	var createTemplateFunction = function(template) {
-		return function Template(context, options) {
-			if (!context) {
-				context = {};
-			}
-			if (!options) {
-				options = {};
-			}
+			// configuration holder object
+			var c = {};
+			c.resourceDir = c.resources = c.defaultLocale = c.supportedLocales = undefined;
+			c.init = function(config) {
+				/*jshint -W004 */ 
+				var config = config.config ? config.config.resource ? config.config.resource : {} : {};
+				this.resourceDir = config.resourceDir ? config.resourceDir
+						: 'www/resources';
+				if (!config.resourceDir) {
+					log.w('use default resourceDir', this.resourceDir);
+				}
+				this.resources = config.resources ? config.resources : {};
+				this.defaultLocale = config.defaultLocale;
+				this.supportedLocales = config.supportedLocales;
+				this.alwaysLoadDefault = config.alwaysLoadDefault;
+				// add the default locale to supported if not already contains
+				// it
+				if (this.supportedLocales && this.defaultLocale) {
+					if (this.supportedLocales.indexOf(this.defaultLocale) < 0) {
+						this.supportedLocales.push(this.defaultLocale);
+					}
+				}
+				// resolve default locale
+				if (!this.defaultLocale) {
+					if (this.supportedLocales && this.supportedLocales.length > 0) {
+						this.defaultLocale = this.supportedLocales[0];
+						log
+								.w(
+										'defaultLocale not set, choose first supported locale as default: ',
+										this.defaultLocale);
 
-			return Mark.up(template, context, options);
-		};
-	};
+					} else {
+						this.defaultLocale = 'en';
+						log
+								.w(
+										'supportedLocales not set, defaultLocale not set, set it to default: ',
+										this.defaultLocale);
+					}
+				}
+				
+				this.resolveLocale = config.resolveLocale?config.resolveLocale:resolveLocale;
 
-	/** Create template mixin */
-	var createTemplateMixin = function(text) {
-		var x = {};
-		x._text = text;
-		x._templates = extract(text);
-		x._main = compileTemplates(x._templates);
+				log.d('parsed config', this);
+			};
 
-		var template = createTemplateFunction(x._main);
-		template._main = x._main;
-		template._templates = x._templates;
+			return {
 
-		// create template function for each template
-		for (var t in x._templates) {
-			template[t] = createTemplateFunction(x._templates[t]);
-		}
+				load : function(param, parentRequire, load, config,
+						parentModule) {
+					if (!c.resourceDir) {
+						c.init(config);
+					}
 
-		return template;
-	};
+					var loader = {
+						resources : {},
+						loaded : 0,
+						callback : function(resource, content, contentDefault) {
+							this.loaded++;
+							this.resources[resource] = processProperties(content);
+							if (contentDefault){
+								var defaultValues = processProperties(contentDefault);
+								for( var p in defaultValues){
+									if (typeof this.resources[resource][p]==='undefined'){
+										this.resources[resource][p]=defaultValues[p];
+									}
+								}
+							}
+							if (this.counter == this.loaded) {
+								log.t('resources loaded ... ');
+								load(loader.resources);
+							}
+						}
+					};
+					var counter = 0;
+					for (var resource in c.resources) {
+						loader.resources[resource] = undefined;
+						counter++;
+					}
+					log.t('load', 'loader', loader);
+					loader.counter = counter;
 
-	return {
-		// Exports
-		extract : extract,
-		compile : compile,
+					if (!counter) {
+						log.w('empty resource.resources configuration entry !!!');
+						load();
+					}
 
-		load : function(param, parentRequire, onload, pconfig, parentModule) {
+					c.resolveLocale(function(locale) {
+						log.t('load', 'resolvedLocale', locale);
+						for (var resource in c.resources) {
+							loadResource(loader, resource, locale);
+						}
 
-			require([ 'text!' + param ], function(text) {
-				var callback = function(ctext) {
-					onload(createTemplateMixin(ctext));
-				};
+					});
 
-				if (config.preProcessing instanceof Function) {
-					config.preProcessing(text, callback);
-				} else {
-					callback(text);
 				}
 
-			});
-		}
+			};
 
-	};
-
-});
+		});

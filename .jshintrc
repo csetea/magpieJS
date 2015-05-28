@@ -89,5 +89,5 @@
 
     // Custom Globals
     "predef"      : ["define","require","requirejs","attribute"]        // additional predefined global variables
-    //"globals"       : ["define","require","requirejs","attribute"]        // additional predefined global variables
+    //"globals"       : ["define","require","requirejs","attribute","unescape"]        // additional predefined global variables
 }
