@@ -3,9 +3,8 @@
  * @license MIT
  * @see https://github.com/WebReflection/document-register-element
  */
-define(
-		[ 'require', 'module', 'magpie/util/config', '../../_ieVersion' ],
-		function(require, module, config, ieVersion) {
+define([ 'module', 'magpie/util/config', '../../_ieVersion' ],
+		function(module, config, ieVersion) {
 			/* jshint -W004 */
 			var config = config(
 					module,
@@ -19,41 +18,46 @@ define(
 							'es5-sham' : "//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.1.0/es5-sham.js"
 						}
 					});
-
-			if (ieVersion < 9) {
-				(function(f) {
-					window.setTimeout = f(window.setTimeout);
-					window.setInterval = f(window.setInterval);
-				})(function(f) {
-					return function(c, t) {
-						var a = [].slice.call(arguments, 2);
-						return f(function() {
-							c.apply(this, a);
-						}, t);
-					};
-				});
-			}
-
-			if (ieVersion == 9) {
-				require([ config.path.ie8 ]);
-			}
-
-			require([ config.path.dom4 ]);
-
-			if (ieVersion == 8) {
-				require([ config.path['dre-ie8-upfront-fix'] ]);
-			}
-
-			require([ config.path['document-register-element'] ]);
-
-			if (ieVersion == 8) {
-				require([ config.path['es5-shim'], config.path['es5-sham'] ]);
-			}
-
+			
 			return {
 				load : function(customElementPath, parentRequire, onload) {
-					onload();
+					if (ieVersion < 9) {
+						(function(f) {
+							window.setTimeout = f(window.setTimeout);
+							window.setInterval = f(window.setInterval);
+						})(function(f) {
+							return function(c, t) {
+								var a = [].slice.call(arguments, 2);
+								return f(function() {
+									c.apply(this, a);
+								}, t);
+							};
+						});
+					}
+					
+					
+					if (ieVersion == 8) {
+						parentRequire([ config.path.ie8],function(){
+							parentRequire([ config.path.dom4],function(){
+								parentRequire([ config.path['dre-ie8-upfront-fix']],function(){
+									parentRequire([ config.path['document-register-element']],function(){
+										parentRequire([ config.path['es5-shim'] ],function(){
+											parentRequire([ config.path['es5-sham'] ],function(){
+												onload();
+											});
+										});
+									});
+								});
+							});
+						});
+					}else{
+						parentRequire([ config.path.dom4],function(){
+							parentRequire([ config.path['document-register-element']],function(){
+								onload();
+							});
+						});
+						
+					}
 				}
 			};
-
-		});
+});

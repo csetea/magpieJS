@@ -7,7 +7,7 @@ define([ 'module','magpie/util/config', 'magpie/log!magpie/html5/customElement/_
 	
 	/*jshint -W004 */ 
 	var config =config(module,{
-		provider: 'magpie/html5/customElement/provider/WebReflection/document-register-element'
+		provider: 'magpie/html5/customElement/provider/WebReflection/document-register-element!'
 	});
 		
 	
@@ -63,13 +63,8 @@ define([ 'module','magpie/util/config', 'magpie/log!magpie/html5/customElement/_
 				if(!document.registerElement){
 					log.warn('try to load polyfill for document.registerElement:',config.provider);
 					require([config.provider],function(){
-						var timer=setInterval(function(){
-							if (document.registerElement){
 								log.warn('polyfilled: document.registerElement');
 								onload();
-								clearInterval(timer);
-							} 
-						}, 300);
 					});
 				}else{
 					onload();
