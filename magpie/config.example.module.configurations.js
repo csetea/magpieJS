@@ -1,4 +1,3 @@
-var _magpieRootUrl = require.toUrl('magpie');
 require.config({
 	config : {
 		
