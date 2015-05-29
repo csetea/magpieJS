@@ -15,7 +15,7 @@ require.config({
 		
 		'magpie/html5/customElement/_registerElement':{
 //			provider: 'lib/polymer/webcomponentsjs-0.5.1-1/webcomponents-lite.min.js'
-			provider: 'magpie/html5/customElement/provider/WebReflection/document-register-element'
+			provider: 'magpie/html5/customElement/provider/WebReflection/document-register-element!'
 		},
 		
 		'magpie/html5/customElement/main':{
