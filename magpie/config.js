@@ -1,15 +1,6 @@
 var _magpieRootUrl = require.toUrl('magpie').replace(/\?.*$/,'');
 require.config({
 
-	paths : {
-
-		domReady :	_magpieRootUrl + '../../lib/require/domReady',
-		text :		_magpieRootUrl +  '../../lib/require/text',
-		css :		_magpieRootUrl + '../../lib/require/require-css/css',
-		less : 		_magpieRootUrl+ '/dom/less',
-
-	},
-
 	packages : [ 
 		{
 			name : 'magpie',
@@ -33,7 +24,6 @@ require.config({
 			main : 'main'
 		}
 	]
-	
 
 
 });
