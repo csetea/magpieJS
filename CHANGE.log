@@ -5,7 +5,7 @@ removed modules:
 few modules renamed and/or moved in new name space:
 [*] magpie/util/base64 -> magpie/crypt/base64 
 [*] magpie/idgenerator -> magpie/util/idgenerator 
-[*] magpie/view/customElement -> magpie/html5/customElement package
+[*] magpie/view/customElement -> magpie/html5/customElement package (ie8+ support)
 [*] magpie/view/grid -> magpie/html5/widget/grid
 [*] magpie/view/m-source -> magpie/html5/widget/m-source
 [*] magpie/view/m-view -> magpie/html5/widget/m-inject (+ added customElement casting mechanism)
@@ -27,5 +27,5 @@ few modules renamed and/or moved in new name space:
 [*][*] mapgie/util/config: new support deep merge
 
 [+] magpie/server/appServer 
-[+] JSHint validation on JS files
+[+] JSHint validation on JS files 
 
