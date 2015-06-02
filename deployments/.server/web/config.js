@@ -2,9 +2,12 @@ require.config({
 
 	paths : {
 
-		magpie: '/magpie',
-		knockout: '/lib/knockout/knockout-3.2.0',
+		text :		'lib/require/text',
+		less : 		'magpie/dom/less',
 
+		magpie: '/magpie',
+
+		knockout: '/lib/knockout/knockout-3.2.0'
 	},
 	
 	

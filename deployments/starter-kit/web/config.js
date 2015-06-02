@@ -1,10 +1,11 @@
 require.config({
 
 	paths : {
-
-		magpie: '/magpie',
-
+		text: '/lib/require/text',
+		less: 'magpie/dom/less',
+		css :	'lib/require/require-css/css',
 		
+		magpie: '/magpie'
 	},
 	
 	
