@@ -1,7 +1,6 @@
 TODO
 ===========
-[x] execute JSHint on project, semicolon ..
-[o] magpieJS 0.3 version
+[o] create magpieJS 0.3 branch
 
 [ ] create gh-pages branch for prject home page on GitHub
 	http(s)://<username>.github.io/<projectname>
