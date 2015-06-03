@@ -21,6 +21,7 @@ require.config({
 			templateLoaderPlugin: 'text',
 			strictDefinition: false,
 		},
+		
 		'magpie/dom/less':{
 			lessJsPath:'lib/less/less.min.js'
 		}
