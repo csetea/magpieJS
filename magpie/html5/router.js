@@ -18,7 +18,7 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 //		mergeHashPath: false,
 //		handlers: []
 		handlers: [
-		           function(ctx, next){	if (log.isTrace){log.trace('reached the last handler, ctx:',ctx);}}]
+		           function(ctx, next){	if (log.isTrace){log.trace('reached the last handler, ctx:',ctx);}next();}]
 	});
 
 	var router={
@@ -45,8 +45,9 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 		};
 	
 	
-	page( function(ctx){
-		  ctx.query = qs.parse(location.search.slice(1));
+	page( function(ctx, _next){
+		  ctx.query = qs.parse(ctx.querystring);
+		  ctx.hashQuery={};
 		  ctx.hashPathname =ctx.hash.replace(/\?.*/,function(hashQuerystring){
 			  ctx.hashQuerystring=hashQuerystring;
 			  hashQuerystring = hashQuerystring.replace(/\?/,'');
@@ -67,10 +68,19 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 			  var handler = config.handlers[handlerIndex];
 			  if (handler){
 				  handlerIndex++;
-				  handler(ctx, next);
+				  if (handlerIndex == config.handlers.length){
+					  // at least do not break page.js callback
+					  handler(ctx, _next);  
+				  }else{
+					  handler(ctx, next);
+				  }
+			  }else{
+				  // at least do not break page.js callback
+				  _next();
 			  }
 		  };
 		  next();
+		  
 	});
 
 		
