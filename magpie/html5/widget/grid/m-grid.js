@@ -192,6 +192,7 @@ function(log, module, config, mediaQueries) {
 		}
 
 		if (attribute.startsWith('unit')) {
+			//FIXME maybe add '*' too as alternative shortened of 'auto'
 			var cssSelector = 'm-grid-item[' + attribute + '="auto"]';
 			css += cssSelector + //
 					'\n{' + //
