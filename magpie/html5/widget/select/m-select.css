@@ -1,0 +1,81 @@
+m-select{
+//	display: inline-block;
+//	display: inline-flex;
+	display: block;
+	position: relative;
+	line-height: 1.6em;
+	
+	z-index:1;
+	position: relative;
+}
+
+
+m-select .display>.result,
+m-select[selection] .display>.placeholder{
+	height: 0px;
+	overflow: hidden;
+	width:100%;
+}
+
+
+m-select[selection] .display>.result,
+m-select .display>.placeholder{
+	height: initial;
+	overflow: inherit;
+}
+
+m-select .list{
+	width:100%;
+	position: relative;
+	overflow-y: hidden;
+	height: 0px !important;	
+}
+
+m-select[opened] .list{
+	position: absolute;
+	height:initial;
+	overflow-y: visible;
+}
+
+m-option,
+m-select .list{
+	background: hsla(0, 0%, 100%, 1);
+}
+
+
+
+
+.result>m-option{
+	background: inherit;
+}
+
+m-select .display{
+	z-index:100;
+}
+
+m-select .display{
+	text-indent: 1ex;
+	width: auto;
+}
+
+m-select .display>.fake-select{
+	position: absolute;    
+	top:0;
+	z-index: -1;
+	width: 100%;
+	height: 100%;
+}
+
+
+m-option{
+	display: block;
+	white-space: nowrap;
+
+	padding-left:1ex;
+	padding-right:1ex;
+}
+
+
+m-option[selected]{ 
+	background: hsla(0, 0%, 79%, 1);
+}
