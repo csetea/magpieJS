@@ -42,9 +42,11 @@ function(log) {
 			
 			displayEl.onclick= function(){
 					if (_this.hasAttribute("opened")){
+						//FIX width after close
+						_this.style.width='';
 						_this.blur();
 					}else{
-						//FIXME Fix width before open
+						//FIX width on open
 						_this.style.width=_this.offsetWidth+'px';
 						// open
 						_this.setAttribute("opened","true");
@@ -74,7 +76,7 @@ function(log) {
 					placeholderEl.appendChild(child);
 				}else if (child.hasAttribute && child.hasAttribute('result')){
 					displayResultEl.appendChild(child);
-				}else{
+				}else {
 					listEl.appendChild(child);		
 				}
 				
@@ -93,6 +95,8 @@ function(log) {
 		update: function(){
 			var selection = this.selection();
 			var selectionLength= selection.length;
+			//FIX width on update
+			this.style.width='';
 			if (selectionLength >0){
 				
 				this.setAttribute('selection',selectionLength);

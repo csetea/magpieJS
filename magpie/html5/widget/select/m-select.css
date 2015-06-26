@@ -54,7 +54,6 @@ m-select .display{
 }
 
 m-select .display{
-	text-indent: 1ex;
 	width: auto;
 }
 
@@ -67,15 +66,23 @@ m-select .display>.fake-select{
 }
 
 
+m-option[selected]{ 
+	background: hsla(0, 0%, 79%, 1);
+}
+
 m-option{
 	display: block;
 	white-space: nowrap;
-
-	padding-left:1ex;
-	padding-right:1ex;
+	padding-left:1em;
+	padding-right:2em;
+	text-indent: 0em;
 }
 
-
-m-option[selected]{ 
-	background: hsla(0, 0%, 79%, 1);
+m-select .placeholder,
+m-select .result{
+	white-space: nowrap;
+	min-wdith: 80%;
+	text-indent: 1em;
+	text-align:left;
+	margin-right: 2em;
 }
