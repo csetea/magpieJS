@@ -2,6 +2,12 @@
  * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
+// TODO 
+// m-option default
+// m-option-group ?
+// DONE
+// m-option disabled
+// m-option prevent
 define([ 'magpie/log!magpie/html5/widget/select/m-select',  
 		'css!./m-select.css' ], //
 function(log) {
@@ -53,7 +59,22 @@ function(log) {
 					}
 			};
 
-			this.addEventListener('blur',function(){
+			this.addEventListener('blur',function(event){
+				var relatedTarget = event.relatedTarget;
+				if (relatedTarget){
+					var findOptionEl = function(rt){
+						if (rt.localName == 'm-option'){
+							return rt;
+						}else{
+							return findOptionEl(rt.parentNode);
+						}
+					};
+					var mOptionEl = findOptionEl(relatedTarget);
+					if (mOptionEl.hasAttribute('prevent')){
+						// breek, keep m-select in opened state
+						return true;
+					}
+				}
 				_this.removeAttribute("opened");
 			});
 
@@ -90,6 +111,14 @@ function(log) {
 			listContainerEl.appendChild(listEl);
 //			displayEl.appendChild(listEl);
 			
+		},
+		
+		close: function(){
+			this.removeAttribute("opened");
+		},
+		
+		open: function(){
+			this.setAttribute("opened","true");
 		},
 		
 		update: function(){

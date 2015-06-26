@@ -12,28 +12,33 @@ function(log) {
 		
 		 
 		
-		select: function(mSelectEl, mOptionEl){
-			var selected =  !mOptionEl.hasAttribute('selected');
-			var multiple = mSelectEl.hasAttribute('multiple');
-			var oldSelection = mSelectEl.selection();
-			if (!multiple){
-				forEach.call(mSelectEl.querySelectorAll('m-option'), function( optionEl ){
-					optionEl.removeAttribute('selected'); 
+		select: function(mSelectEl, mOptionEl, event){
+			
+			if (mOptionEl.hasAttribute('disabled')){
+				mSelectEl.blur();
+			} else if (mOptionEl.hasAttribute('prevent')){
+				// ...
+			}else{
+				var selected =  !mOptionEl.hasAttribute('selected');
+				var multiple = mSelectEl.hasAttribute('multiple');
+				var oldSelection = mSelectEl.selection();
+				if (!multiple){
+					forEach.call(mSelectEl.querySelectorAll('m-option'), function( optionEl ){
+						optionEl.removeAttribute('selected'); 
+					});
+				}
+				if (selected){
+					mOptionEl.setAttribute('selected','true');		
+				}else{
+					mOptionEl.removeAttribute('selected');
+				}
+				mSelectEl.fire('selectionChanged', {
+					oldSelection: oldSelection,
+					newSelection: mSelectEl.selection(),
+					source: mOptionEl,
+					selected: selected
 				});
 			}
-			if (selected){
-				mOptionEl.setAttribute('selected','true');		
-			}else{
-				mOptionEl.removeAttribute('selected');
-			}
-			mSelectEl.fire('selectionChanged', {
-				oldSelection: oldSelection,
-				newSelection: mSelectEl.selection(),
-				source: mOptionEl,
-				selected: selected
-			});
-			
-
 		},
 
 		createdCallback : function() {

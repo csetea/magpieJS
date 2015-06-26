@@ -78,6 +78,11 @@ m-option{
 	text-indent: 0em;
 }
 
+m-option[disabled]:hover{
+	background: inherit!important;
+	cursor: default!important;
+}
+
 m-select .placeholder,
 m-select .result{
 	white-space: nowrap;
