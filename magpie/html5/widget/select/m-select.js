@@ -27,12 +27,12 @@ function(log) {
 			fakeSelectEl.contentEditable=false;
 			var placeholderEl = document.createElement('div');
 			placeholderEl.innerHTML=this.hasAttribute('placeholder')?this.getAttribute('placeholder'):'empty';
-			placeholderEl.setAttribute('class','placeholder');
+			placeholderEl.setAttribute('placeholder','');
 			placeholderEl.contentEditable=false;
 			displayEl.appendChild(placeholderEl);
 			
 			var displayResultEl = document.createElement('div');
-			displayResultEl.setAttribute('class','result');
+			displayResultEl.setAttribute('result','');
 			this._displayResultEl=displayResultEl;
 			displayEl.appendChild(displayResultEl);
 			
@@ -102,10 +102,12 @@ function(log) {
 			while (this.firstChild) {
 				var child= this.removeChild(this.firstChild);
 				if (child.hasAttribute && child.hasAttribute('placeholder')){
-					placeholderEl.removeChild(placeholderEl.firstChild);
-					placeholderEl.appendChild(child);
+//					placeholderEl.removeChild(placeholderEl.firstChild);
+//					placeholderEl.appendChild(child);
+					displayEl.replaceChild( child, placeholderEl);
 				}else if (child.hasAttribute && child.hasAttribute('result')){
-					displayResultEl.appendChild(child);
+						displayEl.replaceChild( child, displayResultEl);
+//					displayResultEl.appendChild(child);
 				}else {
 					listEl.appendChild(child);		
 				}

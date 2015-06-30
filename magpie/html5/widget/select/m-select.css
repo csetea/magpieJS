@@ -1,6 +1,5 @@
 m-select{
 //	display: inline-block;
-//	display: inline-flex;
 	display: block;
 	position: relative;
 	line-height: 1.6em;
@@ -10,16 +9,14 @@ m-select{
 }
 
 
-m-select .display>.result,
-m-select[selection] .display>.placeholder{
+m-select [result],
+m-select[selection] [placeholder]{
 	height: 0px;
 	overflow: hidden;
-	width:100%;
 }
 
-
-m-select[selection] .display>.result,
-m-select .display>.placeholder{
+m-select[selection] [result],
+m-select [placeholder]{
 	height: initial;
 	overflow: inherit;
 }
@@ -43,7 +40,7 @@ m-select .list{
 }
 
 
-m-select .display>.result>m-option{
+m-select .display>[result]>m-option{
 	background: inherit;
 }
 
@@ -63,7 +60,6 @@ m-select .display>.fake-select{
 	width: 100%;
 	height: 100%;
 }
-
 m-select .display>.fake-select-overlayout{
 	opacity: 0;
 }
@@ -73,24 +69,29 @@ m-option[selected]{
 	background: hsla(0, 0%, 79%, 1);
 }
 
+m-option[disabled]:hover{
+	background: inherit!important;
+	cursor: default!important;
+}
+
+m-select [placeholder],
+m-select [result]{
+	white-space: nowrap;
+	text-align:left;
+	padding-left:1em;
+	width: auto;
+}
+
+m-select [placeholder] m-option,
+m-select [result] m-option{
+	padding-left: 0em;
+	padding-right: 0em;	
+}
+
 m-option{
 	display: block;
 	white-space: nowrap;
 	padding-left:1em;
 	padding-right:2em;
 	text-indent: 0em;
-}
-
-m-option[disabled]:hover{
-	background: inherit!important;
-	cursor: default!important;
-}
-
-m-select .placeholder,
-m-select .result{
-	white-space: nowrap;
-	min-wdith: 80%;
-	text-indent: 1em;
-	text-align:left;
-	margin-right: 2em;
 }
