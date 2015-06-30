@@ -102,12 +102,9 @@ function(log) {
 			while (this.firstChild) {
 				var child= this.removeChild(this.firstChild);
 				if (child.hasAttribute && child.hasAttribute('placeholder')){
-//					placeholderEl.removeChild(placeholderEl.firstChild);
-//					placeholderEl.appendChild(child);
 					displayEl.replaceChild( child, placeholderEl);
 				}else if (child.hasAttribute && child.hasAttribute('result')){
 						displayEl.replaceChild( child, displayResultEl);
-//					displayResultEl.appendChild(child);
 				}else {
 					listEl.appendChild(child);		
 				}
@@ -120,8 +117,6 @@ function(log) {
 			
 			this.appendChild(listContainerEl);
 			listContainerEl.appendChild(listEl);
-//			displayEl.appendChild(listEl);
-			
 		},
 		
 		close: function(){
@@ -151,10 +146,6 @@ function(log) {
 						var _this=this;
 						selection.forEach(function(el){
 							var clone = el.cloneNode(true);
-//							clone.addEventListener('click',function(event){
-////								event.stopImmediatePropagation();
-//							});
-							
 							clone.removeAttribute('selected');
 							_this._displayResultEl.appendChild( clone);
 						});
