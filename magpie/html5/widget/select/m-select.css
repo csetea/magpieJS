@@ -43,9 +43,7 @@ m-select .list{
 }
 
 
-
-
-.result>m-option{
+m-select .display>.result>m-option{
 	background: inherit;
 }
 
@@ -57,12 +55,17 @@ m-select .display{
 	width: auto;
 }
 
+m-select .display>.fake-select-overlayout,
 m-select .display>.fake-select{
 	position: absolute;    
 	top:0;
 	z-index: -1;
 	width: 100%;
 	height: 100%;
+}
+
+m-select .display>.fake-select-overlayout{
+	opacity: 0;
 }
 
 

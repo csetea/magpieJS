@@ -24,6 +24,7 @@ function(log) {
 			displayEl.setAttribute('class','display');
 			var fakeSelectEl = document.createElement('select');
 			fakeSelectEl.setAttribute('class','fake-select');
+			fakeSelectEl.contentEditable=false;
 			var placeholderEl = document.createElement('div');
 			placeholderEl.innerHTML=this.hasAttribute('placeholder')?this.getAttribute('placeholder'):'empty';
 			placeholderEl.setAttribute('class','placeholder');
@@ -42,28 +43,36 @@ function(log) {
 			
 			displayEl.appendChild(fakeSelectEl);
 			
+			var fakeSelectOverlayoutEl = document.createElement('div');
+			fakeSelectOverlayoutEl.contentEditable=false;
+			fakeSelectOverlayoutEl.setAttribute('class','fake-select-overlayout');
+			displayEl.appendChild(fakeSelectOverlayoutEl);
+			
 			this.contentEditable=true;
 			displayEl.contentEditable=false;
 			
 			
-			displayEl.onclick= function(){
-					if (_this.hasAttribute("opened")){
-						//FIX width after close
-						_this.style.width='';
-						_this.blur();
-					}else{
-						//FIX width on open
-						_this.style.width=_this.offsetWidth+'px';
-						// open
-						_this.setAttribute("opened","true");
-					}
+			displayEl.onclick = function(event){
+				if (_this.hasAttribute("opened")){
+					//FIX width after close
+					_this.style.width='';
+					if(event)
+						event.stopImmediatePropagation();
+					_this.blur();
+					_this.removeAttribute("opened");
+				}else{
+					//FIX width on open
+					_this.style.width=_this.offsetWidth+'px';
+					// open
+					_this.setAttribute("opened","true");
+				}
 			};
-
+			
 			this.addEventListener('blur',function(event){
 				var relatedTarget = event.relatedTarget;
-				if (relatedTarget){
+				if (relatedTarget && relatedTarget.localName){
 					var findOptionEl = function(rt){
-						if (rt.localName == 'm-option'){
+						if (rt.localName && rt.localName == 'm-option'){
 							return rt;
 						}else{
 							return findOptionEl(rt.parentNode);
