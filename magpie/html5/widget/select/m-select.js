@@ -72,14 +72,16 @@ function(log) {
 				var relatedTarget = event.relatedTarget;
 				if (relatedTarget && relatedTarget.localName){
 					var findOptionEl = function(rt){
-						if (rt.localName && rt.localName == 'm-option'){
+						if (rt == null){
+							return null;
+						}else if (rt.localName && rt.localName == 'm-option'){
 							return rt;
 						}else{
 							return findOptionEl(rt.parentNode);
 						}
 					};
 					var mOptionEl = findOptionEl(relatedTarget);
-					if (mOptionEl.hasAttribute('prevent')){
+					if (mOptionEl && mOptionEl.hasAttribute('prevent')){
 						// breek, keep m-select in opened state
 						return true;
 					}
