@@ -20,39 +20,38 @@ function(log) {
 		
 		createdCallback : function() {
 			var _this=this;
-			var displayEl = document.createElement('div');
-			displayEl.setAttribute('class','display');
+			this._displayEl = document.createElement('div');
+			this._displayEl.setAttribute('class','display');
 			var fakeSelectEl = document.createElement('select');
 			fakeSelectEl.setAttribute('class','fake-select');
 			fakeSelectEl.contentEditable=false;
-			var placeholderEl = document.createElement('div');
-			placeholderEl.innerHTML=this.hasAttribute('placeholder')?this.getAttribute('placeholder'):'empty';
-			placeholderEl.setAttribute('placeholder','');
-			placeholderEl.contentEditable=false;
-			displayEl.appendChild(placeholderEl);
+			this._placeholderEl = document.createElement('div');
+			this._placeholderEl.innerHTML=this.hasAttribute('placeholder')?this.getAttribute('placeholder'):'empty';
+			this._placeholderEl.setAttribute('placeholder','');
+			this._placeholderEl.contentEditable=false;
+			this._displayEl.appendChild(this._placeholderEl);
 			
-			var displayResultEl = document.createElement('div');
-			displayResultEl.setAttribute('result','');
-			this._displayResultEl=displayResultEl;
-			displayEl.appendChild(displayResultEl);
+			this._displayResultEl = document.createElement('div');
+			this._displayResultEl.setAttribute('result','');
+			this._displayEl.appendChild(this._displayResultEl);
 			
 			var selectionEl=this.querySelector('m-select-selection');
 			if (selectionEl){
-				displayEl.appendChild(selectionEl);	
+				this._displayEl.appendChild(selectionEl);	
 			}
 			
-			displayEl.appendChild(fakeSelectEl);
+			this._displayEl.appendChild(fakeSelectEl);
 			
 			var fakeSelectOverlayoutEl = document.createElement('div');
 			fakeSelectOverlayoutEl.contentEditable=false;
 			fakeSelectOverlayoutEl.setAttribute('class','fake-select-overlayout');
-			displayEl.appendChild(fakeSelectOverlayoutEl);
+			this._displayEl.appendChild(fakeSelectOverlayoutEl);
 			
 			this.contentEditable=true;
-			displayEl.contentEditable=false;
+			this._displayEl.contentEditable=false;
 			
 			
-			displayEl.onclick = function(event){
+			this._displayEl.onclick = function(event){
 				if (_this.hasAttribute("opened")){
 					//FIX width after close
 					_this.style.width='';
@@ -91,34 +90,14 @@ function(log) {
 
 			
 			
-			var listEl = document.createElement('div');
-			listEl.childNodes=this.childNodes;
-			listEl.setAttribute('class','list');
-			listEl.contentEditable=false;
+			this._listEl = document.createElement('div');
+			this._listEl.childNodes=this.childNodes;
+			this._listEl.setAttribute('class','list');
+			this._listEl.contentEditable=false;
 
-			var listContainerEl = document.createElement('div');
-			listContainerEl.setAttribute('class','list-container');
-
-			
-			
-			while (this.firstChild) {
-				var child= this.removeChild(this.firstChild);
-				if (child.hasAttribute && child.hasAttribute('placeholder')){
-					displayEl.replaceChild( child, placeholderEl);
-				}else if (child.hasAttribute && child.hasAttribute('result')){
-						displayEl.replaceChild( child, displayResultEl);
-				}else {
-					listEl.appendChild(child);		
-				}
-				
-			}
-			
-			this._resultTemplatePresent = this._displayResultEl.querySelector('*');
-			
-			this.appendChild(displayEl);
-			
-			this.appendChild(listContainerEl);
-			listContainerEl.appendChild(listEl);
+			this._listContainerEl = document.createElement('div');
+			this._listContainerEl.setAttribute('class','list-container');
+			this._listContainerEl.appendChild(this._listEl);
 		},
 		
 		close: function(){
@@ -172,6 +151,24 @@ function(log) {
 		},
 		
 		attachedCallback: function(){
+			var _this=this;
+			while (this.firstChild) {
+				var child= this.removeChild(this.firstChild);
+				if (child.hasAttribute && child.hasAttribute('placeholder')){
+					_this._displayEl.replaceChild( child, _this._placeholderEl);
+				}else if (child.hasAttribute && child.hasAttribute('result')){
+					_this._displayEl.replaceChild( child, _this._displayResultEl);
+				}else {
+					_this._listEl.appendChild(child);		
+				}
+				
+			}
+			
+			this._resultTemplatePresent = this._displayResultEl.querySelector('*');
+			
+			this.appendChild(_this._displayEl);
+			this.appendChild(_this._listContainerEl);
+			
 			this.update();
 		},
 		
