@@ -2,10 +2,14 @@ m-select{
 //	display: inline-block;
 	display: block;
 	position: relative;
-	line-height: 1.6em;
-	
 	z-index:1;
 	position: relative;
+}
+
+m-select>.display,
+m-select [placeholder],
+m-select [result]{
+	height: 100%;
 }
 
 
