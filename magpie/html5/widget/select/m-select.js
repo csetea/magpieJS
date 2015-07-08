@@ -3,11 +3,11 @@
  * @license MIT
  */
 // TODO 
-// m-option default
 // m-option-group ?
 // DONE
 // m-option disabled
 // m-option prevent
+// m-option default
 define([ 'magpie/log!magpie/html5/widget/select/m-select',  
 		'css!./m-select.css' ], //
 function(log) {
@@ -175,13 +175,18 @@ function(log) {
 		selection: function(){
 			var selection=[];
 			
-			var childs = this.querySelectorAll('m-option');
+			var childs = this.querySelectorAll('m-option[selected]');
 			forEach.call(childs, function( el ){
-				if (el.hasAttribute('selected')){
 					selection.push(el);
-				}
 			});
 			
+			if (selection.length == 0){
+				var defaultEl= this.querySelector('m-option[default]');
+				if (defaultEl){
+					defaultEl.setAttribute('selected','true');
+					selection.push(defaultEl);
+				}
+			}
 			
 			return selection;
 		}
