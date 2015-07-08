@@ -53,6 +53,27 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 		}
 	}
 	
+	function addDefaultCreatedCallBackImplementation(customElementDef){
+		//
+		// concept: inject template and call 'created' callback method
+		//
+		customElementDef.m_proto.createdCallback= function(){
+			// FIXME maybe express like next () solution??? for createdCallback instead of  instanceInitializationBlocks callback 
+			if (customElementDef.m_proto.instanceInitializationBlocks instanceof Function){
+//				 customElementDef.m_proto.initCallback();
+				this.instanceInitializationBlocks = customElementDef.m_proto.instanceInitializationBlocks;
+				this.instanceInitializationBlocks (this);
+			}
+			log.trace('create default createdCallback impl. to inject template into custom element');
+			
+			inject(this, this.template, customElementDef.append == true);
+			
+			if (this.created instanceof Function){
+				this.created(this);
+			}
+		};
+	}
+	
 	function _checkCustomElementDef(customElementDef, callbackFn){
 		if (customElementDef instanceof Function){
 			customElementDef=new customElementDef();
@@ -124,37 +145,17 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 				}
 			}
 		}
+		
 		// add default createdCallback impl
 		if (!customElementDef.m_proto.createdCallback){
 			if ('template' in customElementDef.m_proto){
-				//
-				// concept: inject template and call 'created' callback method
-				//
-				customElementDef.m_proto.createdCallback= function(){
-					log.trace('create default createdCallback impl. to inject template into custom element');
-					inject(this, this.template, this.append);
-					
-//					if (this.bind instanceof Function){
-//						this.bind(this);
-//					}
-					
-					if (this.created instanceof Function){
-						this.created(this);
-					}
-				};
+				addDefaultCreatedCallBackImplementation(customElementDef);
 			}else{
 				log.debug('load template for '+customElementDef.tag+':',config.templateLoaderPlugin+'!'+customElementDef.m_customElementPath+'.html');
 					require([config.templateLoaderPlugin+'!'+customElementDef.m_customElementPath+'.html'],function(template){
 	
 						customElementDef.m_proto.template=customElementDef.template=template;
-						customElementDef.m_proto.createdCallback= function(){
-							log.trace('create default createdCallback impl. to inject template into custom element');
-							inject(this, this.template, this.append);
-								
-							if (this.created instanceof Function){
-								this.created(this);
-							}
-						};
+						addDefaultCreatedCallBackImplementation(customElementDef);
 						
 						callbackFn(customElementDef);
 					}, function(err){
@@ -179,13 +180,6 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 			}else{
 				return customElementDef.m_proto['magpie/html5/customElement']=document.registerElement(customElementDef.tag,{
 					prototype: customElementDef.m_proto
-//					prototype: Object.create(
-//						      HTMLImageElement.prototype,
-//						      {
-//						        createdCallback: {
-//						          value: function () {}}})
-//					});
-//				return 'he?';
 				});
 			}
 		}catch(e){
