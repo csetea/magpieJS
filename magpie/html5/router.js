@@ -44,7 +44,24 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 				}
 			},
 
-			ctx:null
+			ctx:null,
+			
+			visitHashQuery: function (){
+				var paramMap = this.ctx.hashQuery;
+				var hash='?';
+				var index= 0;
+				for(p in paramMap){
+					if (index>0){
+						hash+='&'
+					}
+					if (paramMap[p]!=null && paramMap[p] !=''){
+						hash+=p+'='+paramMap[p];	
+					}
+					index++;
+				}
+				window.location.hash= hash;
+
+			}
 		};
 	
 	
@@ -86,6 +103,7 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 		  
 	});
 
+	config.init();
 		
 	
 	if (config.autoStart){
