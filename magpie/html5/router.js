@@ -51,13 +51,14 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 				var hash='?';
 				var index= 0;
 				for(p in paramMap){
-					if (index>0){
-						hash+='&'
-					}
-					if (paramMap[p]!=null && paramMap[p] !=''){
+					var ignore = paramMap[p]==null || paramMap[p] ==''; 
+					if (!ignore){
+						if (index>0){
+							hash+='&'
+						}
 						hash+=p+'='+paramMap[p];	
+						index++;
 					}
-					index++;
 				}
 				window.location.hash= hash;
 
