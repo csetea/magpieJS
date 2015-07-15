@@ -61,16 +61,10 @@ define(['magpie/log!magpie/dom/inject' ], function(log) {
 		}
 		
 		log.trace('temp.innerHTML/innerText: '+x);
-//		injectHTMLElement(el, temp.content, append);
-		if (document.importNode){
+		try{
 			var importNode = document.importNode(temp.content, true);
 			injectHTMLElement(el, importNode, append);
-//		}else{
-//			injectHTMLElement(el, temp.content, append);
-		}else{
-//			log.error('document.importNode not polyfilled:'+' '+x);
-			// TODO or reamin to ie9+ ant not ie8+?
-
+		}catch(e){
 			var clone = temp.cloneNode(true);
 			injectHTMLElement(el, clone, append);
 		}
