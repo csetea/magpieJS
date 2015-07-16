@@ -18,6 +18,8 @@ function(log) {
 	return {
 		tag : 'm-select',
 		
+		_openCounter: 0, 
+		
 		createdCallback : function() {
 			var _this=this;
 			this._displayEl = document.createElement('div');
@@ -65,7 +67,12 @@ function(log) {
 				event.preventDefault();
 			};
 			
-			this.onblur=this._listEl.onblur=function(event){
+//			this.contentEditable=true;
+			this.onblur = function(){
+				_this._listEl.blur();
+				console.log('blupp')
+			}
+			this._listEl.onblur=function(event){
 				var relatedTarget = event.relatedTarget;
 				if (relatedTarget && relatedTarget.localName){
 					var findOptionEl = function(rt){
@@ -83,7 +90,7 @@ function(log) {
 						return true;
 					}
 				}
-				_this.removeAttribute("opened");
+				_this.close();
 			};
 
 			this._displayEl.onmousedown = function(event){
@@ -93,14 +100,12 @@ function(log) {
 					if(event){
 						event.stopImmediatePropagation();
 					}
-					_this.blur();
-					_this.removeAttribute("opened");
+					_this.close();
 				}else{
 					//FIX width on open
 					_this.style.minWidth=_this.offsetWidth+'px';
 					// open
-					_this.setAttribute("opened","true");
-//					_this._listEl.focus();
+					_this.open();
 				}
 			};
 			
@@ -113,14 +118,31 @@ function(log) {
 			this._listContainerEl = document.createElement('div');
 			this._listContainerEl.setAttribute('class','list-container');
 			this._listContainerEl.appendChild(this._listEl);
-			this._listEl.appendChild(this._listElContentWrapper);
+//			this._listEl.appendChild(this._listElContentWrapper);
 		},
 		
 		close: function(){
+			this._listEl.blur();
+			this._listEl.style.display="none";
+			setTimeout(function(){if (this._listEl){this._listEl.style.display="inherit";}},5);
+			
 			this.removeAttribute("opened");
 		},
 		
 		open: function(){
+			this.style.minWidth=this.offsetWidth+'px';
+			if (this._openCounter == 0){
+				[].forEach.call(this._listEl.childNodes, function(child){
+					if (child instanceof HTMLElement){
+						// ZT
+						if (child.contentEditable !== true){
+							child.contentEditable=false;	
+						}
+					}
+				});
+			}
+			this.openCounter++;
+			this._listEl.style.display="inherit";
 			this.setAttribute("opened","true");
 		},
 		
@@ -160,7 +182,7 @@ function(log) {
 			this.update();
 			
 			if (!this.hasAttribute('multiple')){
-				this.blur();
+				this.close();
 			}
 			
 			
@@ -175,7 +197,8 @@ function(log) {
 				}else if (child.hasAttribute && child.hasAttribute('result')){
 					_this._displayEl.replaceChild( child, _this._displayResultEl);
 				}else {
-					_this._listElContentWrapper.appendChild(child);
+					_this._listEl.appendChild(child);
+//					_this._listElContentWrapper.appendChild(child);
 				}
 				
 			}

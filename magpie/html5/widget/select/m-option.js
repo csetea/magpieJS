@@ -61,7 +61,13 @@ function(log) {
 				
 				var _this=this;
 				this._EventListener=function(event){
-					_this.select(_this._m_select, _this ,event);
+					if (this.parentNode !==null && this.parentNode.hasAttribute('result') ){
+						// do nothing,
+						// this is a copy from original m-option element in result holder	
+					}else{
+						_this.select(_this._m_select, _this ,event);	
+					}
+					
 				}; 
 				this.addEventListener('click',this._EventListener);
 			} 
