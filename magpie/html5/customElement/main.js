@@ -2,7 +2,7 @@
  * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
-
+//TODO doc >=ie9
 // Module for handling custom element registrations
 define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/customElement', 'magpie/dom/inject','./_ieVersion', './_registerElement!' ], function(module,config, require, log, inject, ieVersion) {
 	
@@ -12,6 +12,16 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 		templateLoaderPlugin:'text',
 		strictDefinition: false
 	});
+
+//	if (ieVersion < 9) {
+//		require(['jquery'],function($){
+//			HTMLElement.prototype.querySelector=function(selector){
+//				log.warn('$('+selector+'):',$(selector).data);
+//				var result = $(selector);
+//				return result ;
+//			};
+//		});
+//	}
 
 	
 	//FIXME handle erroros with throw? errors['call? ????
@@ -86,6 +96,7 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 			return false;
 		}else{
 			if (ieVersion < 9) {
+//				log.warn('createElement:',customElementDef.tag);
 				document.createElement(customElementDef.tag);
 			}
 		}

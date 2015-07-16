@@ -1,10 +1,17 @@
+
 m-select{
 //	display: inline-block;
 	display: block;
 	position: relative;
 	z-index:1;
-	position: relative;
+	height: 100%;
 }
+
+m-select .display>.fake-select,
+m-select{
+	min-height: 1.3em;
+}
+
 
 m-select>.display,
 m-select [placeholder],
@@ -29,7 +36,7 @@ m-select .list{
 	width:100%;
 	position: relative;
 	overflow-y: hidden;
-	height: 0px !important;	
+	height: 0!important;	
 }
 
 m-select[opened] .list{
@@ -67,6 +74,7 @@ m-select .display>.fake-select{
 m-select .display>.fake-select-overlayout{
 	opacity: 0;
 }
+
 
 
 m-option[selected]{ 

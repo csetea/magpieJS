@@ -47,27 +47,25 @@ function(log) {
 			fakeSelectOverlayoutEl.setAttribute('class','fake-select-overlayout');
 			this._displayEl.appendChild(fakeSelectOverlayoutEl);
 			
-			this.contentEditable=true;
 			this._displayEl.contentEditable=false;
 			
+			fakeSelectEl.onmousedown = function(event){
+				event.preventDefault();
+			}
 			
-			this._displayEl.onclick = function(event){
-				if (_this.hasAttribute("opened")){
-					//FIX width after close
-					_this.style.width='';
-					if(event)
-						event.stopImmediatePropagation();
-					_this.blur();
-					_this.removeAttribute("opened");
-				}else{
-					//FIX width on open
-					_this.style.width=_this.offsetWidth+'px';
-					// open
-					_this.setAttribute("opened","true");
-				}
+			this._listElContentWrapper = document.createElement('div');
+			this._listElContentWrapper.setAttribute('class','list-content-wrapper');
+			this._listElContentWrapper.contentEditable=false;
+			this._listEl = document.createElement('div');
+			this._listEl.childNodes=this.childNodes;
+			this._listEl.setAttribute('class','list');
+			this._listEl.contentEditable=true;
+			
+			this._listEl.onkeydown = function(event){
+				event.preventDefault();
 			};
 			
-			this.addEventListener('blur',function(event){
+			this.onblur=this._listEl.onblur=function(event){
 				var relatedTarget = event.relatedTarget;
 				if (relatedTarget && relatedTarget.localName){
 					var findOptionEl = function(rt){
@@ -86,18 +84,36 @@ function(log) {
 					}
 				}
 				_this.removeAttribute("opened");
-			});
+			};
 
+			this._displayEl.onmousedown = function(event){
+				if (_this.hasAttribute("opened")){
+					//FIX width after close
+					_this.style.minWidth='';
+					if(event){
+						event.stopImmediatePropagation();
+					}
+					_this.blur();
+					_this.removeAttribute("opened");
+				}else{
+					//FIX width on open
+					_this.style.minWidth=_this.offsetWidth+'px';
+					// open
+					_this.setAttribute("opened","true");
+//					_this._listEl.focus();
+				}
+			};
 			
-			
-			this._listEl = document.createElement('div');
-			this._listEl.childNodes=this.childNodes;
-			this._listEl.setAttribute('class','list');
-			this._listEl.contentEditable=false;
+			this._displayEl.onmouseup = function(event){
+				if (_this.hasAttribute("opened")){
+					_this._listEl.focus();
+				}
+			}
 
 			this._listContainerEl = document.createElement('div');
 			this._listContainerEl.setAttribute('class','list-container');
 			this._listContainerEl.appendChild(this._listEl);
+			this._listEl.appendChild(this._listElContentWrapper);
 		},
 		
 		close: function(){
@@ -111,8 +127,8 @@ function(log) {
 		update: function(){
 			var selection = this.selection();
 			var selectionLength= selection.length;
-			//FIX width on update
-			this.style.width='';
+			//FIX width on update ??
+//			this.style.width='';
 			if (selectionLength >0){
 				
 				this.setAttribute('selection',selectionLength);
@@ -159,7 +175,7 @@ function(log) {
 				}else if (child.hasAttribute && child.hasAttribute('result')){
 					_this._displayEl.replaceChild( child, _this._displayResultEl);
 				}else {
-					_this._listEl.appendChild(child);		
+					_this._listElContentWrapper.appendChild(child);
 				}
 				
 			}
@@ -168,6 +184,7 @@ function(log) {
 			
 			this.appendChild(_this._displayEl);
 			this.appendChild(_this._listContainerEl);
+			
 			
 			this.update();
 		},
@@ -180,7 +197,7 @@ function(log) {
 					selection.push(el);
 			});
 			
-			if (selection.length == 0){
+			if (selection.length === 0){
 				var defaultEl= this.querySelector('m-option[default]');
 				if (defaultEl){
 					defaultEl.setAttribute('selected','true');
