@@ -17,6 +17,7 @@ function(log) {
 			if (mOptionEl.hasAttribute('disabled')){
 				mSelectEl.blur();
 			} else if (mOptionEl.hasAttribute('prevent')){
+				mSelectEl.preventClose=true;
 				// ...
 			}else{
 				var selected =  !mOptionEl.hasAttribute('selected');
@@ -63,13 +64,16 @@ function(log) {
 				this._EventListener=function(event){
 					if (this.parentNode !==null && this.parentNode.hasAttribute('result') ){
 						// do nothing,
-						// this is a copy from original m-option element in result holder	
+						// this is a copy from original m-option element in result holder
+//					}else if( this.hasAttribute('prevent')){
+//						// prevent
 					}else{
+						
 						_this.select(_this._m_select, _this ,event);	
 					}
 					
 				}; 
-				this.addEventListener('click',this._EventListener);
+				this.onclick = this._EventListener;
 			} 
 		}
 		

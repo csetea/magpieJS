@@ -53,7 +53,7 @@ function(log) {
 			
 			fakeSelectEl.onmousedown = function(event){
 				event.preventDefault();
-			}
+			};
 			
 			this._listElContentWrapper = document.createElement('div');
 			this._listElContentWrapper.setAttribute('class','list-content-wrapper');
@@ -64,7 +64,11 @@ function(log) {
 			this._listEl.contentEditable=true;
 			
 			this._listEl.onkeydown = function(event){
-				event.preventDefault();
+				 var target = event.target || event.srcElement;
+				 if ( target == _this._listEl){
+					 event.preventDefault();	 
+				 }
+//				
 			};
 			
 //			this.contentEditable=true;
@@ -93,7 +97,7 @@ function(log) {
 				_this.close();
 			};
 
-			this._displayEl.onmousedown = function(event){
+			this._displayEl.onclick = function(event){
 				if (_this.hasAttribute("opened")){
 					//FIX width after close
 					_this.style.minWidth='';
@@ -122,11 +126,16 @@ function(log) {
 		},
 		
 		close: function(){
-			this._listEl.blur();
-			this._listEl.style.display="none";
-			setTimeout(function(){if (this._listEl){this._listEl.style.display="inherit";}},5);
-			
-			this.removeAttribute("opened");
+			console.log('warn close :|')
+//			if (this.preventClose == true){
+//				this.preventClose = false;
+//			}else{
+				this._listEl.blur();
+				this._listEl.style.display="none";
+				setTimeout(function(){if (this._listEl){this._listEl.style.display="inherit";}},5);
+				
+				this.removeAttribute("opened");
+//			}
 		},
 		
 		open: function(){
@@ -182,6 +191,7 @@ function(log) {
 			this.update();
 			
 			if (!this.hasAttribute('multiple')){
+				log.warn('fire ',stateObject, ' to close')
 				this.close();
 			}
 			
