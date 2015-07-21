@@ -31,7 +31,7 @@ function(log, grid) {
 
 		attributeChangedCallback : function(name, previousValue, value) {
 			if (grid.attributeNameSet[name]) {
-				checkThsDefinition(attribute, value, this);
+				checkThsDefinition(name, value, this);
 			}
 		}
 	};
