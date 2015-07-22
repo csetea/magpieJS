@@ -67,7 +67,7 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 	
 	
 	page( function(ctx, _next){
-		  ctx.query = qs.parse(ctx.querystring);
+		  ctx.query = qs.parse(window.location.search);
 		  ctx.hashQuery={};
 		  ctx.hashPathname =ctx.hash.replace(/\?.*/,function(hashQuerystring){
 			  ctx.hashQuerystring=hashQuerystring;
