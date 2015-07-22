@@ -143,6 +143,7 @@ function(log) {
 			this.openCounter++;
 			this._listEl.style.display="inherit";
 			this.setAttribute("opened","true");
+			this._listEl.focus();
 		},
 		
 		update: function(){
