@@ -94,8 +94,7 @@ function(log) {
 			};
 
 			this._displayEl.onclick = function(event){
-				if (_this.hasAttribute("opened")){
-					//FIX width after close
+				if (_this._openStateOnMousedown){
 					_this.style.minWidth='';
 					if(event){
 						event.stopImmediatePropagation();
@@ -109,10 +108,8 @@ function(log) {
 				}
 			};
 			
-			this._displayEl.onmouseup = function(event){
-				if (_this.hasAttribute("opened")){
-					_this._listEl.focus();
-				}
+			this._displayEl.onmousedown = function(event){
+				_this._openStateOnMousedown = _this.hasAttribute("opened");
 			}
 
 			this._listContainerEl = document.createElement('div');
