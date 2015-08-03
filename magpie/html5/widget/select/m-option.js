@@ -64,11 +64,11 @@ function(log) {
 						// do nothing,
 						// this is a copy from original m-option element in result holder
 					}else{
-						
 						_this.select(_this._m_select, _this ,event);	
 					}
 				}; 
-				this.onlcick = this._EventListener;
+				
+				this.addEventListener( 'click',this._EventListener);
 			} 
 		}
 		
