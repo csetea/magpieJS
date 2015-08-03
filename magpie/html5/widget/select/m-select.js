@@ -13,7 +13,17 @@ define([ 'magpie/log!magpie/html5/widget/select/m-select',
 function(log) {
 	
 	var forEach = Array.prototype.forEach;
-	
+
+	var findOptionEl = function(rt){
+		if (rt == null){
+			return null;
+		}else if (rt.localName && rt.localName == 'm-option'){
+			return rt;
+		}else{
+			return findOptionEl(rt.parentNode);
+		}
+	};
+
 
 	return {
 		tag : 'm-select',
@@ -72,23 +82,16 @@ function(log) {
 			this.onblur = function(){
 				_this._listEl.blur();
 			}
+			this._listEl.onmousedown=function(event){
+				var relatedTarget = event.target || event.srcElement;
+				_this._sourceOptionEl = findOptionEl(relatedTarget);
+			}
+
 			this._listEl.onblur=function(event){
-				var relatedTarget = event.relatedTarget;
-				if (relatedTarget && relatedTarget.localName){
-					var findOptionEl = function(rt){
-						if (rt == null){
-							return null;
-						}else if (rt.localName && rt.localName == 'm-option'){
-							return rt;
-						}else{
-							return findOptionEl(rt.parentNode);
-						}
-					};
-					var mOptionEl = findOptionEl(relatedTarget);
-					if (mOptionEl && mOptionEl.hasAttribute('prevent')){
-						// breek, keep m-select in opened state
-						return true;
-					}
+				var mOptionEl = _this._sourceOptionEl;
+				if (mOptionEl && mOptionEl.hasAttribute('prevent')){
+					// breek, keep m-select in opened state
+					return true;
 				}
 				_this.close();
 			};
@@ -109,6 +112,7 @@ function(log) {
 			};
 			
 			this._displayEl.onmousedown = function(event){
+				_this._sourceOptionEl=null;
 				_this._openStateOnMousedown = _this.hasAttribute("opened");
 			}
 
