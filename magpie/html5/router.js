@@ -2,7 +2,7 @@
  * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
-// Based on pagejs, context extended with 
+// Based on pagejs, context extended with
 //* query (object that contains the query parameteres)
 //* hashPathname (analog 'pathname')
 //* hashQuerystring (analog 'querystring')
@@ -32,7 +32,7 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 							callback(router);
 						}
 					});
-					
+
 				}else{
 					page.start();
 					window.onhashchange = function(){
@@ -45,18 +45,18 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 			},
 
 			ctx:null,
-			
+
 			visitHashQuery: function (){
 				var paramMap = this.ctx.hashQuery;
 				var hash='?';
 				var index= 0;
 				for(p in paramMap){
-					var ignore = paramMap[p]==null || paramMap[p] ==''; 
+					var ignore = paramMap[p]==null || paramMap[p] =='';
 					if (!ignore){
 						if (index>0){
 							hash+='&'
 						}
-						hash+=p+'='+paramMap[p];	
+						hash+=p+'='+paramMap[p];
 						index++;
 					}
 				}
@@ -64,25 +64,25 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 
 			}
 		};
-	
-	
+
+
 	page( function(ctx, _next){
-		  ctx.query = qs.parse(window.location.search);
+		  ctx.query = qs.parse(window.location.search.replace( /^\?/ , ''));
 		  ctx.hashQuery={};
 		  ctx.hashPathname =ctx.hash.replace(/\?.*/,function(hashQuerystring){
 			  ctx.hashQuerystring=hashQuerystring;
 			  hashQuerystring = hashQuerystring.replace(/\?/,'');
-			  ctx.hashQuery = qs.parse(hashQuerystring);  
+			  ctx.hashQuery = qs.parse(hashQuerystring);
 			  return '';
 		  });
-		  
+
 		  if (log.isTrace){
 			  log.trace(ctx);
 		  }
 		  ctx.log = log;
-		  
+
 		  router.ctx=ctx;
-		  
+
 		  // simple lazy implementation of Express style middle ware next callback chain
 		  var handlerIndex = 0;
 		  var next = function (){
@@ -91,7 +91,7 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 				  handlerIndex++;
 				  if (handlerIndex == config.handlers.length){
 					  // at least do not break page.js callback
-					  handler(ctx, _next);  
+					  handler(ctx, _next);
 				  }else{
 					  handler(ctx, next);
 				  }
@@ -101,17 +101,17 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 			  }
 		  };
 		  next();
-		  
+
 	});
 
 	config.init();
-		
-	
+
+
 	if (config.autoStart){
 		router.start();
 	}
-	
-	
+
+
 	return router;
-	
+
 });
