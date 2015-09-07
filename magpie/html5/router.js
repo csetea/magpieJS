@@ -21,6 +21,10 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 		           function(ctx, next){	if (log.isTrace){log.trace('reached the last handler, ctx:',ctx);}next();}]
 	});
 
+	function hashHandler(){
+		page(window.location.hash);
+	};
+
 	var router={
 			start: function(callback){
 				if (ieVersion == 8 || ieVersion == 9){
@@ -35,9 +39,7 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 
 				}else{
 					page.start();
-					window.onhashchange = function(){
-						page(window.location.hash);
-					};
+					window.onhashchange = hashHandler;
 					if (callback instanceof Function){
 						callback(router);
 					}
@@ -46,7 +48,7 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 
 			ctx:null,
 
-			visitHashQuery: function (){
+			visitHashQuery: function ( ignoreHandlers){
 				var paramMap = this.ctx.hashQuery;
 				var hash='?';
 				var index= 0;
@@ -60,7 +62,22 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 						index++;
 					}
 				}
+				var oldHash = window.location.hash;
+				if (ignoreHandlers){
+					window.onhashchange = function(){
+						log.debug('ignore hash change');
+					};
+				}
 				window.location.hash= hash;
+				if (ignoreHandlers){
+					window.onhashchange = function(){
+						log.debug('hash change ignored');
+						window.onhashchange = hashHandler;
+					};
+					setTimeout(function(){
+						window.onhashchange = hashHandler;
+					},2000);
+				}
 
 			}
 		};
