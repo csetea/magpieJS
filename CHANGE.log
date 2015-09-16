@@ -3,7 +3,6 @@
 [*] magpie/html5/router 
 [*][*] bugfix: callback page.js next
 [*][*] listen hash change
-[*][*] call init function after start ???
 [+][+] visitHashQuery: ignoreHandlers parameter
 [*][*] hashhQuery parameter bugfix
 [+] magpie/extend/knockout/stopBinding
