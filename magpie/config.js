@@ -11,8 +11,16 @@ require.config({
 			name : 'magpie/log',
 			location : _magpieRootUrl + '/log',
 		}, {
+			name : 'magpie/dom/grid',
+			location : _magpieRootUrl + '/dom/grid',
+			main : 'dom-grid'
+		}, {
 			name : 'magpie/html5/widget/grid',
 			location : _magpieRootUrl + '/html5/widget/grid',
+			main : 'main'
+		}, {
+			name : 'magpie/html5/widget/select',
+			location : _magpieRootUrl + '/html5/widget/select',
 			main : 'main'
 		}, {
 			name : 'magpie/resource/properties',
