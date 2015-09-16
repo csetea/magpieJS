@@ -1,34 +1,13 @@
 {
- "name": "RadInselWH",
- "verson": "dev-0",
- "description": "Start up Rad Insel WareHouse server",
- "main": "boostrap.js",
  "dependencies": {
 	"requirejs": "latest",
-	"hidstream": "latest",
 	"restify": "latest",
-	"mongodb": "latest",
 	"http": "latest",
 	"connect": "latest",
 	"serve-static": "latest",
 	
 	"ws": "latest",
 
-	"socket.io": "latest",
-	"passport.socketio":"latest",
-	"express": "latest",
-
-
-	"bcryptjs": "^0.7.12",
-   "morgan": "^1.3.2",
-   "body-parser": "^1.9.0",
-   "cookie-parser": "^1.3.3",
-   "method-override": "^2.2.0",
-   "express-session": "^1.8.2",
-   "orchestrate": "^0.3.11",
-   "passport": "^0.2.1",
-   "passport-facebook": "^1.0.3",
-   "passport-google": "^0.3.0",
-   "passport-local": "^1.0.0"
+	"express": "latest"
  }
 }
