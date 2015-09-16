@@ -4,11 +4,12 @@
 [*][*] bugfix: callback page.js next
 [*][*] listen hash change
 [*][*] call init function after start ???
-[+][+] visitHashQuery: ignoreHandlers parameter 
+[+][+] visitHashQuery: ignoreHandlers parameter
+[*][*] hashhQuery parameter bugfix
 [+] magpie/extend/knockout/stopBinding
-[+] magpie/html5/widget/select: enhanced select/dropdown box widget, tag name: 'm-select' 
 [+] magpie/extend/knockout/drag (dnd support)
 [+] magpie/extend/knockout/drop (dnd support)
+[+] magpie/html5/widget/select: enhanced select/dropdown box widget, tag name: 'm-select' 
 [-] magpie/dom/router (removed: cleanup)
 [+] magpie/dom/grid Static (but configurable), CSS attributer selector based fast grid system.
 	Note: magpie/html5/widget/grid Dynamic, HTML5 customElement + flex container based grid system.    
