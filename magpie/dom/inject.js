@@ -2,7 +2,6 @@
  * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
-// TODO move in dom ?
 define(['magpie/log!magpie/dom/inject' ], function(log) {
 	
 	/* POLYFILL template element */
@@ -53,7 +52,6 @@ define(['magpie/log!magpie/dom/inject' ], function(log) {
 		 
 		var temp = document.createElement('template');
 		var x;
-//		log.error('temp: '+temp)
 		if (!temp.innerText){
 			x= temp.innerHTML = html;	
 		}else{
@@ -75,12 +73,6 @@ define(['magpie/log!magpie/dom/inject' ], function(log) {
 				// for IE8 and below
 		var xHTMLElement = typeof HTMLElement !== "undefined" ? HTMLElement : Element;
 
-		if (!(el instanceof xHTMLElement)){
-			el = document.querySelector('#viewContainer');
-			//TODO extend el handling with configuration and error handling/fallback? 
-		}
-		
-		
 		if (typeof stringHtmlOrHTMLElement === 'string'){
 			injectString(el, stringHtmlOrHTMLElement, append);
 		}else if (stringHtmlOrHTMLElement instanceof xHTMLElement){
