@@ -18,6 +18,9 @@
  * </code>
  * make example like http://purecss.io/grids/
  */
+
+//FIXME align -> m-align? 'align' is already defined/reserved in dom 
+
 define([ 'magpie/log!m-grid', 'module', 'magpie/util/config',
 		'magpie/dom/mediaQueries', 'css!./m-grid.css' ], //
 function(log, module, config, mediaQueries) {
