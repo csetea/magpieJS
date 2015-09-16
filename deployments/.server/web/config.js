@@ -7,7 +7,7 @@ require.config({
 
 		magpie: '/magpie',
 
-		knockout: '/lib/knockout/knockout-3.2.0'
+		knockout: '/lib/knockout/knockout-3.3.0'
 	},
 	
 	
