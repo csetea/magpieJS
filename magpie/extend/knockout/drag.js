@@ -16,6 +16,7 @@ function(ko) {
 			});
 			element.addEventListener('dragstart',function(event){
 				element.classList.add('drag');
+				event.dataTransfer.setData('text/x-plain', 'FireFox fix');
 				var allBindings = allBindingsAccessor();
 				allBindings.drag.call(viewModel,event,element);
 				return true;
