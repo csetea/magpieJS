@@ -8,10 +8,10 @@ function(log) {
 	var forEach = Array.prototype.forEach;
 
 	function findParent(el, tagName){
-		if (el.parentNode.localName == tagName){
-			return el.parentNode;
-		} else if (el.parentNode == document.body){
+		if (!el.parentNode || el.parentNode == document.body){
 			return null;
+		} else  if (el.parentNode.localName == tagName){
+			return el.parentNode;
 		}
 		return findParent(el.parentNode, tagName);
 	}
