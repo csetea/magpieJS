@@ -2,16 +2,16 @@
  * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
-// TODO 
+// TODO
 // m-option-group ?
 // DONE
 // m-option disabled
 // m-option prevent
 // m-option default
-define([ 'magpie/log!magpie/html5/widget/select/m-select',  
+define([ 'magpie/log!magpie/html5/widget/select/m-select',
 		'css!./m-select.css' ], //
 function(log) {
-	
+
 	var forEach = Array.prototype.forEach;
 
 	var findOptionEl = function(rt){
@@ -27,9 +27,9 @@ function(log) {
 
 	return {
 		tag : 'm-select',
-		
-		_openCounter: 0, 
-		
+
+		_openCounter: 0,
+
 		createdCallback : function() {
 			var _this=this;
 			this._displayEl = document.createElement('div');
@@ -42,43 +42,41 @@ function(log) {
 			this._placeholderEl.setAttribute('placeholder','');
 			this._placeholderEl.contentEditable=false;
 			this._displayEl.appendChild(this._placeholderEl);
-			
+
 			this._displayResultEl = document.createElement('div');
 			this._displayResultEl.setAttribute('result','');
 			this._displayEl.appendChild(this._displayResultEl);
-			
+
 			var selectionEl=this.querySelector('m-select-selection');
 			if (selectionEl){
-				this._displayEl.appendChild(selectionEl);	
+				this._displayEl.appendChild(selectionEl);
 			}
-			
+
 			this._displayEl.appendChild(fakeSelectEl);
-			
+
 			var fakeSelectOverlayoutEl = document.createElement('div');
 			fakeSelectOverlayoutEl.contentEditable=false;
 			fakeSelectOverlayoutEl.setAttribute('class','fake-select-overlayout');
 			this._displayEl.appendChild(fakeSelectOverlayoutEl);
-			
+
 			this._displayEl.contentEditable=false;
-			
+
 			fakeSelectEl.onmousedown = function(event){
 				event.preventDefault();
 			};
-			
+
 			this._listEl = document.createElement('div');
 			this._listEl.childNodes=this.childNodes;
 			this._listEl.setAttribute('class','list');
 			this._listEl.contentEditable=true;
-			
+
 			this._listEl.onkeydown = function(event){
 				 var target = event.target || event.srcElement;
 				 if ( target == _this._listEl){
-					 event.preventDefault();	 
+					 event.preventDefault();
 				 }
-//				
 			};
-			
-//			this.contentEditable=true;
+
 			this.onblur = function(){
 				_this._listEl.blur();
 			}
@@ -110,7 +108,7 @@ function(log) {
 					_this.open();
 				}
 			};
-			
+
 			this._displayEl.onmousedown = function(event){
 				_this._sourceOptionEl=null;
 				_this._openStateOnMousedown = _this.hasAttribute("opened");
@@ -120,40 +118,49 @@ function(log) {
 			this._listContainerEl.setAttribute('class','list-container');
 			this._listContainerEl.appendChild(this._listEl);
 		},
-		
+
 		close: function(){
 			this._listEl.blur();
 			this._listEl.style.display="none";
 			setTimeout(function(){if (this._listEl){this._listEl.style.display="inherit";}},5);
-				
+
 			this.removeAttribute("opened");
 		},
-		
+
 		open: function(){
+			var _this=this;
 			this.style.minWidth=this.offsetWidth+'px';
 			if (this._openCounter == 0){
 				[].forEach.call(this._listEl.childNodes, function(child){
 					if (child instanceof HTMLElement){
-						// ZT
-						if (child.contentEditable !== true){
-							child.contentEditable=false;	
+						if (child != _this._FirefFoxContentEditableFixTrap){
+							if (child.contentEditable !== true){
+								child.contentEditable=false;
+
+								//FIXME on by FireFox browser
+								var _FirefFoxContentEditableFix = document.createElement('div');
+								_FirefFoxContentEditableFix.setAttribute('class','moz-FF-cE-fix');
+								_FirefFoxContentEditableFix.contentEditable=true;
+								child.appendChild(_FirefFoxContentEditableFix);
+							}
 						}
 					}
 				});
 			}
+
 			this.openCounter++;
 			this._listEl.style.display="inherit";
 			this.setAttribute("opened","true");
 			this._listEl.focus();
 		},
-		
+
 		update: function(){
 			var selection = this.selection();
 			var selectionLength= selection.length;
 			//FIX width on update ??
 //			this.style.width='';
 			if (selectionLength >0){
-				
+
 				this.setAttribute('selection',selectionLength);
 
 				if (!this._resultTemplatePresent){
@@ -171,25 +178,25 @@ function(log) {
 						});
 					}
 				}
-				
+
 			}else{
 				this.removeAttribute('selection');
 			}
 		},
-		
+
 		fire: function(event, stateObject){
 			log.trace('fire:',stateObject);
 
 			this.update();
-			
+
 			if (!this.hasAttribute('multiple')){
 				log.warn('fire ',stateObject, ' to close')
 				this.close();
 			}
-			
-			
+
+
 		},
-		
+
 		attachedCallback: function(){
 			var _this=this;
 			while (this.firstChild) {
@@ -199,28 +206,29 @@ function(log) {
 				}else if (child.hasAttribute && child.hasAttribute('result')){
 					_this._displayEl.replaceChild( child, _this._displayResultEl);
 				}else {
+					// TODO XXX
 					_this._listEl.appendChild(child);
 				}
-				
+
 			}
-			
+
 			this._resultTemplatePresent = this._displayResultEl.querySelector('*');
-			
+
 			this.appendChild(_this._displayEl);
 			this.appendChild(_this._listContainerEl);
-			
-			
+
+
 			this.update();
 		},
-		
+
 		selection: function(){
 			var selection=[];
-			
+
 			var childs = this.querySelectorAll('m-option[selected]');
 			forEach.call(childs, function( el ){
 					selection.push(el);
 			});
-			
+
 			if (selection.length === 0){
 				var defaultEl= this.querySelector('m-option[default]');
 				if (defaultEl){
@@ -228,10 +236,10 @@ function(log) {
 					selection.push(defaultEl);
 				}
 			}
-			
+
 			return selection;
 		}
-		
+
 
 
 	};
