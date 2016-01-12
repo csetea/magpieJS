@@ -88,10 +88,24 @@ function(log) {
 			this._listEl.onblur=function(event){
 				var mOptionEl = _this._sourceOptionEl;
 				if (mOptionEl && mOptionEl.hasAttribute('prevent')){
-					// breek, keep m-select in opened state
-					return true;
+					setTimeout(function(){
+						var focusedEl = _this.querySelector(':focus')
+						if (!focusedEl){
+							_this.close();
+						}else{
+							focusedEl.addEventListener('blur', function(event2){
+								setTimeout(function(){
+									if (!_this.querySelector(':focus')){
+										_this.close();
+									}
+								},50)
+
+							});
+						}
+					},50)
+				}else{
+					_this.close();
 				}
-				_this.close();
 			};
 
 			this._displayEl.onclick = function(event){
