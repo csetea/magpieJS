@@ -139,7 +139,7 @@ function(log) {
 					if (IE.isTheBrowser){
 						setTimeout(function(){
 							_this.close();
-						},100)
+						},300)
 					}else{
 						_this.close();
 					}
