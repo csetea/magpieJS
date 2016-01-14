@@ -3,38 +3,10 @@
  * @license MIT
  */
 define(['magpie/log!magpie/dom/inject' ], function(log) {
-	
-	/* POLYFILL template element */
-//	(function templatePolyfill(d) {
-//		if('content' in d.createElement('template')) {
-//			return false;
-//		}
-//
-//		var qPlates = d.getElementsByTagName('template'),
-//			plateLen = qPlates.length,
-//			elPlate,
-//			qContent,
-//			contentLen,
-//			docContent;
-//
-//		for(var x=0; x<plateLen; ++x) {
-//			elPlate = qPlates[x];
-//			qContent = elPlate.childNodes;
-//			contentLen = qContent.length;
-//			docContent = d.createDocumentFragment();
-//
-//			while(qContent[0]) {
-//				docContent.appendChild(qContent[0]);
-//			}
-//
-//			elPlate.content = docContent;
-//		}
-//	})(document);
-	
-	
-	
-	
-	
+
+
+	var templateTagSupported = typeof document.createElement('template').content !== 'undefined';
+
 
 	function injectHTMLElement(el, htmlElement, append){
 		log.trace('inject HTMLElement');
@@ -46,28 +18,33 @@ define(['magpie/log!magpie/dom/inject' ], function(log) {
 		}
 		el.appendChild(htmlElement);
 	}
-	
+
 	function injectString(el, html, append){
 		log.trace('inject stringHtml');
-		 
+
 		var temp = document.createElement('template');
 		var x;
 		if (!temp.innerText){
-			x= temp.innerHTML = html;	
+			x= temp.innerHTML = html;
 		}else{
 			x= temp.innerText = html;
 		}
-		
 		log.trace('temp.innerHTML/innerText: '+x);
-		try{
+
+		if(templateTagSupported){
 			var importNode = document.importNode(temp.content, true);
 			injectHTMLElement(el, importNode, append);
-		}catch(e){
-			var clone = temp.cloneNode(true);
-			injectHTMLElement(el, clone, append);
+		} else {
+			// temp = temp.cloneNode(true);
+			for (var i=0, length=temp.childNodes.length; i< length; i++){
+				if (temp.childNodes[i]){
+					injectHTMLElement(el, temp.childNodes[i], i==0 ? append: true);
+				}
+			}
 		}
+
 	}
-	
+
 	function inject(el, stringHtmlOrHTMLElement, append){
 		log.debug('inject',arguments);
 				// for IE8 and below
@@ -82,13 +59,13 @@ define(['magpie/log!magpie/dom/inject' ], function(log) {
 		}else{
 			log.warn('unecpected type', stringHtmlOrHTMLElement);
 		}
-		
+
 
 	}
-	
+
 	inject.css = function(css){
 			var head = document.head || document.getElementsByTagName('head')[0];
-			
+
 			var style = document.createElement('style');
 			style.type = 'text/css';
 			if (style.styleSheet) {
@@ -99,8 +76,8 @@ define(['magpie/log!magpie/dom/inject' ], function(log) {
 
 			injectHTMLElement(head,style,true);
 	};
-	
-	return inject; 
-	
-	
+
+	return inject;
+
+
 });
