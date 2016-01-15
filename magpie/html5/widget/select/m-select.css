@@ -1,10 +1,9 @@
 
 m-select{
-//	display: inline-block;
-	display: block;
+	display: inline-block;
 	position: relative;
 	z-index:1;
-	height: 100%;
+	vertical-align: middle;
 }
 
 m-select .display>.fake-select,
@@ -26,25 +25,23 @@ m-select[selection] [placeholder]{
 	overflow: hidden;
 }
 
-m-select[selection] [result],
-m-select [placeholder]{
-	height: initial;
-	overflow: inherit;
-}
-
-m-select .list-container{
-		height: 0;
+m-select[selection] [result]{
+	height: 100%;
 }
 
 m-select .moz-FF-cE-fix{
 		display: none;
 }
 
+m-select .list-container,
+m-select .list{
+		height: 0px!important;
+}
+
 m-select .list{
 	width:100%;
 	position: relative;
 	overflow-y: hidden;
-	height: 0!important;
 }
 
 m-select[opened] .list{
