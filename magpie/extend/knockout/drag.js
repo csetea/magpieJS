@@ -16,7 +16,11 @@ function(ko) {
 			});
 			element.addEventListener('dragstart',function(event){
 				element.classList.add('drag');
-				event.dataTransfer.setData('text', '' + new Date().getTime());
+				if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
+					event.dataTransfer.setData('text/html', new Date().getTime());
+				}else{
+					event.dataTransfer.setData('text', '' + new Date().getTime());
+				}
 				var allBindings = allBindingsAccessor();
 				allBindings.drag.call(viewModel,event,element);
 				return true;
