@@ -8,6 +8,12 @@
 // m-option disabled
 // m-option prevent
 // m-option default
+// m-appearance-select
+// m-appearance-no-select
+// m-appearance-select-none
+// m-appearance=["select"]
+// m-appearance=["select-none"]
+// m-appearance=["no-select"]
 define([ 'magpie/log!magpie/html5/widget/select/m-select',
 		'css!./m-select.css' ], //
 function(log) {
@@ -66,9 +72,6 @@ function(log) {
 			var _this=this;
 			this._displayEl = document.createElement('div');
 			this._displayEl.setAttribute('class','display');
-			var fakeSelectEl = document.createElement('select');
-			fakeSelectEl.setAttribute('class','fake-select');
-			fakeSelectEl.contentEditable=false;
 			this._placeholderEl = document.createElement('div');
 			this._placeholderEl.innerHTML=this.hasAttribute('placeholder')?this.getAttribute('placeholder'):'empty';
 			this._placeholderEl.setAttribute('placeholder','');
@@ -84,18 +87,27 @@ function(log) {
 				this._displayEl.appendChild(selectionEl);
 			}
 
-			this._displayEl.appendChild(fakeSelectEl);
+			this._adjustWidth = false;
+			var mAppearance =this.getAttribute('m-appearance');
+			if (mAppearance != "no-select"){
+				this._adjustWidth = true;
+				var fakeSelectEl = document.createElement('select');
+				fakeSelectEl.setAttribute('class','fake-select');
+				fakeSelectEl.contentEditable=false;
+				this._displayEl.appendChild(fakeSelectEl);
 
-			var fakeSelectOverlayoutEl = document.createElement('div');
-			fakeSelectOverlayoutEl.contentEditable=false;
-			fakeSelectOverlayoutEl.setAttribute('class','fake-select-overlayout');
-			this._displayEl.appendChild(fakeSelectOverlayoutEl);
+				var fakeSelectOverlayoutEl = document.createElement('div');
+				fakeSelectOverlayoutEl.contentEditable=false;
+				fakeSelectOverlayoutEl.setAttribute('class','fake-select-overlayout');
+				this._displayEl.appendChild(fakeSelectOverlayoutEl);
+
+				fakeSelectEl.onmousedown = function(event){
+					event.preventDefault();
+				};
+			}
+
 
 			this._displayEl.contentEditable=false;
-
-			fakeSelectEl.onmousedown = function(event){
-				event.preventDefault();
-			};
 
 			this._listEl = document.createElement('div');
 			this._listEl.childNodes=this.childNodes;
@@ -148,14 +160,18 @@ function(log) {
 
 			this._displayEl.onclick = function(event){
 				if (_this._openStateOnMousedown){
-					_this.style.minWidth='';
+					if (_this._adjustWidth){
+						_this.style.minWidth='';
+					}
 					if(event){
 						event.stopImmediatePropagation();
 					}
 					_this.close();
 				}else{
 					//FIX width on open
-					_this.style.minWidth=_this.offsetWidth+'px';
+					if (_this._adjustWidth){
+						_this.style.minWidth=_this.offsetWidth+'px';
+					}
 					// open
 					_this.open();
 				}
@@ -181,7 +197,9 @@ function(log) {
 
 		open: function(){
 			var _this=this;
-			this.style.minWidth=this.offsetWidth+'px';
+			if (_this._adjustWidth){
+				this.style.minWidth=this.offsetWidth+'px';
+			}
 			if (this._openCounter == 0){
 				[].forEach.call(this._listEl.childNodes, function(child){
 					if (child instanceof HTMLElement){

@@ -115,3 +115,14 @@ m-option{
 	padding-right:2em;
 	text-indent: 0em;
 }
+
+m-select[m-appearance="no-select"] .display>.fake-select-overlayout,
+m-select[m-appearance="no-select"] .display>.fake-select{
+	display: none;
+}
+
+m-select[m-appearance="select-none"] .display>.fake-select{
+	-webkit-appearance:none;
+	-moz-appearance:none;
+	appearance:none;
+}
