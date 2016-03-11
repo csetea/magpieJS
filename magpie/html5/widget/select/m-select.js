@@ -229,6 +229,10 @@ function(log) {
 			var selectionLength= selection.length;
 			//FIX width on update ??
 //			this.style.width='';
+
+			var selectionChangedEvent = new Event('change');
+ 			this.dispatchEvent(selectionChangedEvent);
+
 			if (selectionLength >0){
 
 				this.setAttribute('selection',selectionLength);
