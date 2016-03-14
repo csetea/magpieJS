@@ -8,9 +8,6 @@
 // m-option disabled
 // m-option prevent
 // m-option default
-// m-appearance-select
-// m-appearance-no-select
-// m-appearance-select-none
 // m-appearance=["select"]
 // m-appearance=["select-none"]
 // m-appearance=["no-select"]
