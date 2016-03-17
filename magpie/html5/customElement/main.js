@@ -4,8 +4,8 @@
  */
 //TODO doc >=ie9
 // Module for handling custom element registrations
-define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/customElement', 'magpie/dom/inject','./_ieVersion', './_registerElement!' ], function(module,config, require, log, inject, ieVersion) {
-	
+define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/customElement', 'magpie/dom/inject','./_ieVersion', './_registerElement!' ], function(module,config, require, log, inject, ieVersion, documentRegisterElement) {
+
 	// TODO doc config options
 	/*jshint -W004 */
 	var config =config(module,{
@@ -13,21 +13,16 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 		strictDefinition: false
 	});
 
-//	if (ieVersion < 9) {
-//		require(['jquery'],function($){
-//			HTMLElement.prototype.querySelector=function(selector){
-//				log.warn('$('+selector+'):',$(selector).data);
-//				var result = $(selector);
-//				return result ;
-//			};
-//		});
-//	}
+	//
+	// Callback function definitions
+	//
+	var callbacks=['createdCallback','attachedCallback','detachedCallback','attributeChangedCallback'];
 
-	
+
 	//FIXME handle erroros with throw? errors['call? ????
 	function _checkTagName(customElementDef) {
 		var validTagName=/^[a-zA-Z][\w\_\.\:]*\-[\w\_\-\.\:]*$/g;
-		
+
 		if (!('tag' in customElementDef)){
 			if (config.strictDefinition){
 				log.error('missing mandantory field in customElementDef: tag');
@@ -42,48 +37,48 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 					log.error('Module name can not be set as tag name while does not fit to custom element tag name convention: ',validTagName);
 					return false;
 				}
-				
+
 				customElementDef.tag = moduleName;
 				return true;
 			}
 		}else{
 			if (typeof customElementDef.tag !== 'string'){
 				log.error('wrong type of tag, it must be string, but current type is:', typeof customElementDef.tag, customElementDef);
-				return false; 
+				return false;
 			}
-			
+
 			if (!validTagName.test(customElementDef.tag)){
 				log.error('invalid tag value:',customElementDef.tag);
 				log.error(customElementDef.tag + ' does not fit to custom element tag name convention:',validTagName);
 				log.debug('Note: tag name must contain a dash(-) character');
 				return false;
 			}
-			
+
 			return true;
 		}
 	}
-	
+
 	function addDefaultCreatedCallBackImplementation(customElementDef){
 		//
 		// concept: inject template and call 'created' callback method
 		//
 		customElementDef.m_proto.createdCallback= function(){
-			// FIXME maybe express like next () solution??? for createdCallback instead of  instanceInitializationBlocks callback 
+			// FIXME maybe express like next () solution??? for createdCallback instead of  instanceInitializationBlocks callback
 			if (customElementDef.m_proto.instanceInitializationBlocks instanceof Function){
 //				 customElementDef.m_proto.initCallback();
 				this.instanceInitializationBlocks = customElementDef.m_proto.instanceInitializationBlocks;
 				this.instanceInitializationBlocks (this);
 			}
 			log.trace('create default createdCallback impl. to inject template into custom element');
-			
+
 			inject(this, this.template, customElementDef.append == true);
-			
+
 			if (this.created instanceof Function){
 				this.created(this);
 			}
 		};
 	}
-	
+
 	function _checkCustomElementDef(customElementDef, callbackFn){
 		if (customElementDef instanceof Function){
 			customElementDef=new customElementDef();
@@ -100,15 +95,15 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 				document.createElement(customElementDef.tag);
 			}
 		}
-		
-		//	
+
+		//
 		// Check prototype
 		//
 		var prototype = customElementDef.prototype;
-		
+
 		// for IE8 and below
 		var xHTMLElement = typeof HTMLElement !== "undefined" ? HTMLElement : Element;
-		
+
 		if (!( prototype == xHTMLElement.prototype ||
 				( xHTMLElement instanceof Function && prototype instanceof xHTMLElement)
 				)){
@@ -122,7 +117,7 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 		}
 
 		customElementDef.m_proto=Object.create(prototype);
-		//	
+		//
 		// Check extends
 		//
 		if ('extends' in customElementDef){
@@ -130,19 +125,13 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 				log.error('extends property must be string',customElementDef);
 			}
 		}
-			
-		
-		//
-		// Check callback function definitions
-		//
-		var callbacks=['createdCallback','attachedCallback','detachedCallback','attributeChangedCallback'];
-		
+
 		// add custom attributes and properties to proto
 		for(var p in customElementDef){
 			customElementDef.m_proto[p]=customElementDef[p];
 		}
 		//
-		// Check callback definitions 
+		// Check callback definitions
 		//
 		for (var i=0; i< callbacks.length; i++){
 			var callback = callbacks[i];
@@ -156,7 +145,7 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 				}
 			}
 		}
-		
+
 		// add default createdCallback impl
 		if (!customElementDef.m_proto.createdCallback){
 			if ('template' in customElementDef.m_proto){
@@ -164,29 +153,45 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 			}else{
 				log.debug('load template for '+customElementDef.tag+':',config.templateLoaderPlugin+'!'+customElementDef.m_customElementPath+'.html');
 					require([config.templateLoaderPlugin+'!'+customElementDef.m_customElementPath+'.html'],function(template){
-	
+
 						customElementDef.m_proto.template=customElementDef.template=template;
 						addDefaultCreatedCallBackImplementation(customElementDef);
-						
+
 						callbackFn(customElementDef);
 					}, function(err){
 						//...
 					});
 				return;
 			}
-			
+
 		}
 		callbackFn(customElementDef);
 	}
-	
+
 	function _registerElement(customElementDef){
 		log(customElementDef.tag,'proto',customElementDef.m_proto);
 		customElementDef.m_proto.m_customElementDef=customElementDef;
+
+		if (customElementDef.m_proto.attachedCallback &&  documentRegisterElement.polyfill !== false){
+			// add delay to callback
+			// (In outher case if underlying DOM contains customElement wich is referenced by
+			// current element then itt will not appears in DOM structor correctly
+			// - can't be accessed and is not alredy decorated with custom fields and methods -
+			//  at current time)
+			var attachedCallback = customElementDef.m_proto.attachedCallback;
+			customElementDef.m_proto.attachedCallback = function(el){
+				var _this = this;
+				setTimeout(function(){
+					attachedCallback.call(_this,_this);
+				},1);
+			}
+		}
+
 		try{
 			if (customElementDef['extends']){
 				return customElementDef.m_proto['magpie/html5/customElement']=document.registerElement(customElementDef.tag,{
 					prototype: customElementDef.m_proto,
-					'extends': customElementDef['extends'] 
+					'extends': customElementDef['extends']
 					});
 			}else{
 				return customElementDef.m_proto['magpie/html5/customElement']=document.registerElement(customElementDef.tag,{
@@ -199,7 +204,7 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 	}
 
 	return {
-		
+
 		config: config,
 		//
 		// loader plugin for customElement definitions
@@ -208,13 +213,13 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 			log.info('Load customElement definition:',customElementPath);
 			parentRequire([customElementPath],function(customElementDef){
 				customElementDef.m_customElementPath=customElementPath;
-				_checkCustomElementDef(customElementDef, 
+				_checkCustomElementDef(customElementDef,
 					function(customElementDef){
 						onload( _registerElement(customElementDef));
 					});
 				});
-		
+
 		}
 		};
-	
+
 });
