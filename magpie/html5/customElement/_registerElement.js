@@ -3,7 +3,31 @@
  * @license MIT
  */
 // cares document.registerElement polyfill
-define([ 'module','magpie/util/config', 'magpie/log!magpie/html5/customElement/_registerElement'], function(module, config, log) {
+define([ 'module','magpie/util/config', 'magpie/log!magpie/html5/customElement/_registerElement', 'require'], function(module, config, log, require) {
+
+
+	if (!require.isBrowser){
+		// Fake document for r.js optimization
+		document={
+			createElement: function(){
+				return {
+					getElementsByTagName: function(){return{
+
+					}},
+
+				}
+
+			},
+
+			registerElement:function(){return{}},
+
+			getElementsByTagName: function(){return{}},
+
+			querySelector: function(){return{}},
+			querySelectorAll: function(){return{}},
+
+		}
+	}
 
 	/*jshint -W004 */
 	var config =config(module,{
@@ -60,7 +84,7 @@ define([ 'module','magpie/util/config', 'magpie/log!magpie/html5/customElement/_
 		// loader plugin for customElement definitions
 		//
 		load: function(customElementPath, parentRequire, onload) {
-				if(!document.registerElement){
+				if(require.isBrowser && !document.registerElement){
 					log.warn('try to load polyfill for document.registerElement:',config.provider);
 					require([config.provider],function(){
 								log.warn('polyfilled: document.registerElement');

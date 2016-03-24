@@ -6,6 +6,10 @@
 // Module for handling custom element registrations
 define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/customElement', 'magpie/dom/inject','./_ieVersion', './_registerElement!' ], function(module,config, require, log, inject, ieVersion, documentRegisterElement) {
 
+	if (documentRegisterElement.polyfill){
+		require(['css!magpie/html5/customElement/polyfill.css']);
+	}
+
 	// TODO doc config options
 	/*jshint -W004 */
 	var config =config(module,{
@@ -153,12 +157,14 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 			}else{
 				log.debug('load template for '+customElementDef.tag+':',config.templateLoaderPlugin+'!'+customElementDef.m_customElementPath+'.html');
 					require([config.templateLoaderPlugin+'!'+customElementDef.m_customElementPath+'.html'],function(template){
+						if (template != null && template != undefined){
+							customElementDef.m_proto.template=customElementDef.template=template;
+							addDefaultCreatedCallBackImplementation(customElementDef);
 
-						customElementDef.m_proto.template=customElementDef.template=template;
-						addDefaultCreatedCallBackImplementation(customElementDef);
-
-						callbackFn(customElementDef);
+							callbackFn(customElementDef);
+						}
 					}, function(err){
+						log.warn('ignore default template load logic for: ' + customElementDef.tag);
 						//...
 					});
 				return;
@@ -172,18 +178,34 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 		log(customElementDef.tag,'proto',customElementDef.m_proto);
 		customElementDef.m_proto.m_customElementDef=customElementDef;
 
-		if (customElementDef.m_proto.attachedCallback &&  documentRegisterElement.polyfill !== false){
-			// add delay to callback
-			// (In outher case if underlying DOM contains customElement wich is referenced by
-			// current element then itt will not appears in DOM structor correctly
-			// - can't be accessed and is not alredy decorated with custom fields and methods -
-			//  at current time)
-			var attachedCallback = customElementDef.m_proto.attachedCallback;
-			customElementDef.m_proto.attachedCallback = function(el){
-				var _this = this;
-				setTimeout(function(){
-					attachedCallback.call(_this,_this);
-				},1);
+		if (documentRegisterElement.polyfill !== false){
+			if (customElementDef.m_proto.createdCallback){
+				var createdCallback = customElementDef.m_proto.createdCallback;
+				customElementDef.m_proto.createdCallback = function(el){
+					var _this = this;
+					// for 'smoother' display between customElement createion and interne DOM evaluation
+					// in case of polyfill
+					_this.setAttribute('m-html5-ce-polyfill',true)
+					_this._this=_this;
+					createdCallback.call(_this,_this);
+					setTimeout(function(){
+						_this._this.removeAttribute('m-html5-ce-polyfill');
+					},0);
+				}
+			}
+			if (customElementDef.m_proto.attachedCallback){
+				// add delay to callback
+				// (In outher case if underlying DOM contains customElement wich is referenced by
+				// current element then itt will not appears in DOM structor correctly
+				// - can't be accessed and is not alredy decorated with custom fields and methods -
+				//  at current time)
+				var attachedCallback = customElementDef.m_proto.attachedCallback;
+				customElementDef.m_proto.attachedCallback = function(el){
+					var _this = this;
+					setTimeout(function(){
+						attachedCallback.call(_this,_this);
+					},0);
+				}
 			}
 		}
 
@@ -212,12 +234,16 @@ define([ 'module','magpie/util/config','require', 'magpie/log!magpie/html5/custo
 		load: function(customElementPath, parentRequire, onload) {
 			log.info('Load customElement definition:',customElementPath);
 			parentRequire([customElementPath],function(customElementDef){
-				customElementDef.m_customElementPath=customElementPath;
-				_checkCustomElementDef(customElementDef,
-					function(customElementDef){
-						onload( _registerElement(customElementDef));
-					});
-				});
+				if (parentRequire.isBrowser){
+					customElementDef.m_customElementPath=customElementPath;
+					_checkCustomElementDef(customElementDef,
+						function(customElementDef){
+							onload( _registerElement(customElementDef));
+						});
+				}else{
+					onload({});
+				}
+			});
 
 		}
 		};

@@ -9,18 +9,18 @@
 //TODO made logEvent object extensiable e.g.
 // use of https://github.com/stacktracejs/stacktrace.js/tree/stable
 // insted own caller line resolution? - but that can be done with filters too :)
-define( ['module', 'require' ],
-		function(module, require) {
-	
+define( ['module', 'require', './defaultConsoleLogger' ],
+		function(module, require, defaultConsoleLogger) {
+
 	// string.trim() polyfill
 	if(typeof String.prototype.trim !== 'function') {
 		  String.prototype.trim = function() {
-		    return this.replace(/^\s+|\s+$/g, ''); 
+		    return this.replace(/^\s+|\s+$/g, '');
 		  };
 		}
-	
-			
-			
+
+
+
 			//
 			// Configurations
 			//
@@ -28,7 +28,7 @@ define( ['module', 'require' ],
 				 'magpie/log/log' : {
 					 level : 'error'
 				 },
-					 
+
 				root : {
 					level: 'info'
 				}
@@ -88,13 +88,13 @@ define( ['module', 'require' ],
 				}
 				return configSection[property];
 			};
-			
+
 			var resolveLogConfig = function(log, property, defaultValue) {
 				log[property]= resolveLogConfigValue(log.logName, property, defaultValue);
 				configLog.debug('resolved '+property+' for '+log.logName + ' value:', log[property]);
 				return log[property];
 			};
-			
+
 			//
 			// helper functions [[
 			//
@@ -116,7 +116,7 @@ define( ['module', 'require' ],
 					}
 				}
 			};
-			
+
 			var setPropertyFn = function(log, configProperty, propertyInsideConfigObject, configObject, defaultConfigObject) {
 				if (typeof configObject === 'string') {
 					require([ configObject ],function(xconfigObject){
@@ -134,92 +134,89 @@ define( ['module', 'require' ],
 
 
 			var initLog = function(log, onload) {
-				require(
-						[ './defaultConsoleLogger' ],
-						function(defaultConsoleLogger) {
-							//
-							// resolve log resolveCallerLine
-							//
-							var resolveCallerLine = resolveLogConfig(log, 'resolveCallerLine',
-									true);
-							
-							//
-							// resolve log filter
-							//
-							var filter = resolveLogConfig(log,
-									'filter');
-							setPropertyFn(log, 'filter', 'filter', filter);
-						
+					//
+					// resolve log resolveCallerLine
+					//
+					var resolveCallerLine = resolveLogConfig(log, 'resolveCallerLine',
+							true);
 
-							//
-							// resolve log logger
-							//
-							var logger = resolveLogConfig(log,
-									'logger', defaultConsoleLogger, setPropertyCallback);
-							
-							setPropertyFn(log, 'logger', 'log', logger, defaultConsoleLogger);
-							
+					//
+					// resolve log filter
+					//
+					var filter = resolveLogConfig(log,
+							'filter');
+					setPropertyFn(log, 'filter', 'filter', filter);
 
-							//
-							// resolve log level
-							//
-							var level = resolveLogConfig(log, 'level',
-									LoggerLevel.INFO);
-							
-							if (level) {
-								if (level instanceof Array) {
-									// threshold only specified levels 
-									for (var il = 0; il < level.length; il++) {
-										if (typeof level[il] === 'string') {
-											level[il] = level[il].toUpperCase();
-											for (var i = 0; i < LoggerLevel.levelRank.length; i++) {
-												var l = LoggerLevel.levelRank[i];
-												log['is' +
-														l.charAt(0) +
-														l.substr(1)
-																.toLowerCase()] = l == level[il];
-											}
-										}
-									}
-								} else if (typeof level === 'string') {
-									// threshold specified level and up 
-									level = level.toUpperCase();
-									var found = false;
-									/*jshint -W004 */ 
+
+					//
+					// resolve log logger
+					//
+					var logger = resolveLogConfig(log,
+							'logger', defaultConsoleLogger, setPropertyCallback);
+
+					setPropertyFn(log, 'logger', 'log', logger, defaultConsoleLogger);
+
+
+					//
+					// resolve log level
+					//
+					var level = resolveLogConfig(log, 'level',
+							LoggerLevel.INFO);
+
+					if (level) {
+						if (level instanceof Array) {
+							// threshold only specified levels
+							for (var il = 0; il < level.length; il++) {
+								if (typeof level[il] === 'string') {
+									level[il] = level[il].toUpperCase();
 									for (var i = 0; i < LoggerLevel.levelRank.length; i++) {
 										var l = LoggerLevel.levelRank[i];
-										log['is' + l.charAt(0) +
-												l.substr(1).toLowerCase()] = found ? true //
-												: found = l == level;
+										log['is' +
+												l.charAt(0) +
+												l.substr(1)
+														.toLowerCase()] = l == level[il];
 									}
 								}
 							}
-							
-							if (onload)
-								onload(log);
+						} else if (typeof level === 'string') {
+							// threshold specified level and up
+							level = level.toUpperCase();
+							var found = false;
+							/*jshint -W004 */
+							for (var i = 0; i < LoggerLevel.levelRank.length; i++) {
+								var l = LoggerLevel.levelRank[i];
+								log['is' + l.charAt(0) +
+										l.substr(1).toLowerCase()] = found ? true //
+										: found = l == level;
+							}
+						}
+					}
 
-						});
+					log.inited = true;
 			};
-			
-			
+
+
 			var fireLogEvent = function FireLogEvent(logMixin, level, logEntries, timeStamp) {
 				var logEvent = {
 					timeStamp : timeStamp,
 					level : level,
 					logName : logMixin.logName,
 					logEntries : logEntries,
-					callerLine: 
-						logMixin.resolveCallerLine ?
-								(new Error().stack ?
-									new Error().stack.replace(/[\s\S]*FireLogEvent([^\n]+\n){2}/,'').replace(/\n.*/g,'').replace(/.*\s(\()?/,'').replace(/\)$/,'')
-//									:'unsupported "new Error().stack" caller line can not be resolved')
-									: undefined)
-//								new Error().stack.replace(/[\s\S]*FireLogEvent([^\n]+\n){2}/,'').replace(/\n.*/g,'').replace(/.*\s(\()?/,'').replace(/\)$/,'') //
-//								new Error().stack.replace(/[\s\S]*\/log\.js.*\n/,'').replace(/\n[\s\S]*/,'').replace(/[\s\S]*http/,'http');
-								: undefined,
-					preventLogging: false
+					preventLogging: false,
+					callerLine: undefined
 //					asdfhellothisiscodexDmeow:3
 				};
+
+				if (logMixin.resolveCallerLine){
+					var err = new Error()
+					// logEvent.callerLine = err;
+					if (err.stack){
+						logEvent.callerLine = err.stack.toString();
+						logEvent.callerLine = err.stack.replace(/Error.*\n/,'').replace(/.*:\d+:\d+.*\n/m,'').replace(/.*:\d+:\d+.*\n/m,'').replace(/\n.*/g,'').replace(/.*\s(\()?/,'').replace(/\)$/,'').replace(/.*@/,'');
+
+					}
+				}
+
 				//
 				// execute filter
 				//
@@ -229,7 +226,7 @@ define( ['module', 'require' ],
 					preventLogging = (false == logMixin.filter.filter(logEvent));
 					/* jshint ignore:end */
 				}
-				
+
 				//
 				// call log if loggin is not prevent
 				//
@@ -282,33 +279,36 @@ define( ['module', 'require' ],
 
 				log.logName = logName;
 
-				initLog(log, onload);
+				// initLog(log, onload);
 
 				return log;
 			}
 
-			var rootLog = createLogMixin('root');
 			var configLog = createLogMixin('magpie/log/log');
-			
+			var rootLog = createLogMixin('root');
+			initLog(configLog);
+			initLog(rootLog);
+
 			var requireConfig;
 			//
 			// apply as loader plugin
 			//
 			rootLog.load = function(logName, parentRequire, onload, config) {
-
 				requireConfig = config;
 				var log, logger;
 				logName = logName.trim();
 				if (logName) {
-					createLogMixin(logName, logger, onload);
+					var log = createLogMixin(logName, logger, onload);
+					initLog(log);
+					onload(log);
 				} else {
 					log = rootLog;
 					onload(log);
 				}
-				
+
 			};
 			rootLog.version= '1.0';
 			rootLog.LoggerLevel=LoggerLevel;
-			
+
 			return rootLog;
 		});

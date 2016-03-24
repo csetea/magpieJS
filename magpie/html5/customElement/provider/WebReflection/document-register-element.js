@@ -5,6 +5,7 @@
  */
 define([ 'module', 'magpie/util/config', '../../_ieVersion' ],
 		function(module, config, ieVersion) {
+
 			/* jshint -W004 */
 			var config = config(
 					module,
@@ -18,7 +19,9 @@ define([ 'module', 'magpie/util/config', '../../_ieVersion' ],
 							'es5-sham' : "//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.1.0/es5-sham.js"
 						}
 					});
-			
+
+			console.info(module.id,config)
+
 			return {
 				load : function(customElementPath, parentRequire, onload) {
 					if (ieVersion < 9) {
@@ -34,8 +37,8 @@ define([ 'module', 'magpie/util/config', '../../_ieVersion' ],
 							};
 						});
 					}
-					
-					
+
+
 					if (ieVersion == 8) {
 						parentRequire([ config.path.ie8],function(){
 							parentRequire([ config.path.dom4],function(){
@@ -56,7 +59,7 @@ define([ 'module', 'magpie/util/config', '../../_ieVersion' ],
 								onload();
 							});
 						});
-						
+
 					}
 				}
 			};
