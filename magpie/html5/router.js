@@ -18,19 +18,20 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 //		mergeHashPath: false,
 //		handlers: []
 		handlers: [
-		           function(ctx, next){	if (log.isTrace){log.trace('reached the last handler, ctx:',ctx);}next();}]
+		           function(ctx, next){	ctx.handled = true;if (log.isTrace){log.trace('reached the last handler, set it to handled, ctx:',ctx);}next();}]
 	});
 
-	function hashHandler(){
-		page(window.location.hash);
+	function hashHandler(hashchangeEvent){
+		page(hashchangeEvent.newURL);
 	};
 
 	var router={
+			config: config,
+
 			start: function(callback){
 				if (ieVersion == 8 || ieVersion == 9){
 					// polyfill hisotry api
-					//TODO configurable config?path?shim? history impl provider ....
-					require([ 'lib/HTML5-History-API/history.min'],function(){
+					require([ 'HTML5-History-API'],function(){
 						page.start();
 						if (callback instanceof Function){
 							callback(router);
@@ -39,7 +40,7 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 
 				}else{
 					page.start();
-					window.onhashchange = hashHandler;
+					// window.onhashchange = hashHandler;
 					if (callback instanceof Function){
 						callback(router);
 					}
@@ -48,7 +49,7 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 
 			ctx:null,
 
-			visitHashQuery: function ( ignoreHandlers){
+			visitHashQuery: function (){
 				var paramMap = this.ctx.hashQuery;
 				var hash='?';
 				var index= 0;
@@ -63,22 +64,7 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 					}
 				}
 				var oldHash = window.location.hash;
-				if (ignoreHandlers){
-					window.onhashchange = function(){
-						log.debug('ignore hash change');
-					};
-				}
 				window.location.hash= hash;
-				if (ignoreHandlers){
-					window.onhashchange = function(){
-						log.debug('hash change ignored');
-						window.onhashchange = hashHandler;
-					};
-					setTimeout(function(){
-						window.onhashchange = hashHandler;
-					},2000);
-				}
-
 			}
 		};
 
