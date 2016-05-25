@@ -69,10 +69,6 @@ function(log) {
 		_openCounter: 0,
 
 		createdCallback : function() {
-			if (this.className == "select x"){
-				log.warn('createdCallback')
-			}
-
 			var _this=this;
 			this._displayEl = document.createElement('div');
 			this._displayEl.setAttribute('class','display');
@@ -220,21 +216,10 @@ function(log) {
 
 		attachedCallback: function(){
 			var _this=this;
-			if (this.className == "select x"){
-				log.warn('attachedCallback', this.getAttribute("inited"))
-
-
-			}
-
-
 			if (this.getAttribute("inited") != "true"){
 				while (this.firstChild) {
 					var child= this.removeChild(this.firstChild);
 					if (child.hasAttribute && child.hasAttribute('placeholder')){
-						if (this.className == "select x"){
-							log.warn('attachedCallback placeholder',child)
-						}
-
 						_this._displayEl.replaceChild( child, _this._placeholderEl);
 					}else if (child.hasAttribute && child.hasAttribute('result')){
 						_this._displayEl.replaceChild( child, _this._displayResultEl);
