@@ -69,6 +69,10 @@ function(log) {
 		_openCounter: 0,
 
 		createdCallback : function() {
+			if (this.className == "select x"){
+				log.warn('createdCallback')
+			}
+
 			var _this=this;
 			this._displayEl = document.createElement('div');
 			this._displayEl.setAttribute('class','display');
@@ -122,64 +126,7 @@ function(log) {
 			};
 
 			this.onblur = function(){
-				_this._listEl.blur();
-			}
-			this._listEl.onmousedown=function(event){
-				var relatedTarget = event.target || event.srcElement;
-				_this._sourceOptionEl = findOptionEl(relatedTarget);
-			}
-
-			this._listEl.onblur=function(event){
-				var mOptionEl = _this._sourceOptionEl;
-				if (mOptionEl && mOptionEl.hasAttribute('prevent')){
-					setTimeout(function(){
-						var focusedEl = _this.querySelector(':focus')
-						if (!focusedEl){
-							_this.close();
-						}else{
-							focusedEl.addEventListener('blur', function(event2){
-								setTimeout(function(){
-									if (!_this.querySelector(':focus')){
-										_this.close();
-									}
-								},50)
-
-							});
-						}
-					},50)
-				}else{
-					if (IE.isTheBrowser){
-						setTimeout(function(){
-							_this.close();
-						},300)
-					}else{
-						_this.close();
-					}
-				}
-			};
-
-			this._displayEl.onclick = function(event){
-				if (_this._openStateOnMousedown){
-					if (_this._adjustWidth){
-						_this.style.minWidth='';
-					}
-					if(event){
-						event.stopImmediatePropagation();
-					}
-					_this.close();
-				}else{
-					//FIX width on open
-					if (_this._adjustWidth){
-						_this.style.minWidth=_this.offsetWidth+'px';
-					}
-					// open
-					_this.open();
-				}
-			};
-
-			this._displayEl.onmousedown = function(event){
-				_this._sourceOptionEl=null;
-				_this._openStateOnMousedown = _this.hasAttribute("opened");
+				_this.querySelector('.list-container>.list').blur();
 			}
 
 			this._listContainerEl = document.createElement('div');
@@ -273,23 +220,97 @@ function(log) {
 
 		attachedCallback: function(){
 			var _this=this;
-			while (this.firstChild) {
-				var child= this.removeChild(this.firstChild);
-				if (child.hasAttribute && child.hasAttribute('placeholder')){
-					_this._displayEl.replaceChild( child, _this._placeholderEl);
-				}else if (child.hasAttribute && child.hasAttribute('result')){
-					_this._displayEl.replaceChild( child, _this._displayResultEl);
-				}else {
-					// TODO XXX
-					_this._listEl.appendChild(child);
-				}
+			if (this.className == "select x"){
+				log.warn('attachedCallback', this.getAttribute("inited"))
+
 
 			}
 
-			this._resultTemplatePresent = this._displayResultEl.querySelector('*');
 
-			this.appendChild(_this._displayEl);
-			this.appendChild(_this._listContainerEl);
+			if (this.getAttribute("inited") != "true"){
+				while (this.firstChild) {
+					var child= this.removeChild(this.firstChild);
+					if (child.hasAttribute && child.hasAttribute('placeholder')){
+						if (this.className == "select x"){
+							log.warn('attachedCallback placeholder',child)
+						}
+
+						_this._displayEl.replaceChild( child, _this._placeholderEl);
+					}else if (child.hasAttribute && child.hasAttribute('result')){
+						_this._displayEl.replaceChild( child, _this._displayResultEl);
+					}else {
+						// TODO XXX
+						_this._listEl.appendChild(child);
+					}
+
+				}
+
+				this._resultTemplatePresent = this._displayResultEl.querySelector('*');
+
+				this.appendChild(_this._displayEl);
+				this.appendChild(_this._listContainerEl);
+				this.setAttribute("inited","true")
+			}
+
+			this._displayEl = this.querySelector('.display');
+			this._displayEl.onclick = function(event){
+				if (_this._openStateOnMousedown){
+					if (_this._adjustWidth){
+						_this.style.minWidth='';
+					}
+					if(event){
+						event.stopImmediatePropagation();
+					}
+					_this.close();
+				}else{
+					//FIX width on open
+					if (_this._adjustWidth){
+						_this.style.minWidth=_this.offsetWidth+'px';
+					}
+					// open
+					_this.open();
+				}
+			};
+
+			this._displayEl.onmousedown = function(event){
+				_this._sourceOptionEl=null;
+				_this._openStateOnMousedown = _this.hasAttribute("opened");
+			}
+
+			this._listEl = _this.querySelector('.list-container>.list');
+			this._listEl.onmousedown=function(event){
+			var relatedTarget = event.target || event.srcElement;
+				_this._sourceOptionEl = findOptionEl(relatedTarget);
+			}
+
+			this._listEl.onblur=function(event){
+			var mOptionEl = _this._sourceOptionEl;
+			if (mOptionEl && mOptionEl.hasAttribute('prevent')){
+				setTimeout(function(){
+					var focusedEl = _this.querySelector(':focus')
+					if (!focusedEl){
+						_this.close();
+					}else{
+						focusedEl.addEventListener('blur', function(event2){
+							setTimeout(function(){
+								if (!_this.querySelector(':focus')){
+									_this.close();
+								}
+							},50)
+
+						});
+					}
+				},50)
+			}else{
+				if (IE.isTheBrowser){
+					setTimeout(function(){
+						_this.close();
+					},300)
+				}else{
+					_this.close();
+				}
+			}
+			};
 
 
 			this.update();
