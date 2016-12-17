@@ -7,10 +7,10 @@ require.config({
 
 		magpie: '/magpie',
 
-		knockout: '/lib/knockout/knockout-3.3.0'
+		knockout: '/lib/knockout/knockout-3.4.0'
 	},
-	
-	
+
+
 	deps : [ 'magpie/config'],
 
 	callback: function(){
