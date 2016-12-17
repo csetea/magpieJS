@@ -1,5 +1,7 @@
 TODO
 ===========
+[ ] maybe outsource each module in new repository
+[ ] [] outsourcve server bundle in new repository
 [ ] html5 customElement createdCallback(this, next) -> node.js express like next() instead of instanceInitializationBlocks()
 [ ] collection util package, Set, Map ... Stream ?
 [x] create magpieJS 0.3 branch
@@ -20,4 +22,3 @@ Note:
 [ ][ ] maybe a good description/abstract :)
 		" AMD modular technology stack for front- and back-end js development"
 		"HTML5 preferred for new web developments"
-		

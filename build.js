@@ -1,64 +1,70 @@
+// https://github.com/less/less-plugin-clean-css
+// lessc --clean-css=" --advanced" monitoring.less monitoring.css
+
+
 //r.js -o build.js
 //node node_modules/requirejs/bin/r.js -o build.js
+//
+// as example t ouse rjs in node
+// https://gist.githubusercontent.com/millermedeiros/2640928/raw/dba1bbc4476dace769cdad7bc063e9bcabc453d8/build.js
+var _requirejs = require('requirejs');
 
-({
+
+function mixIn(target, objects){
+    var i = 1,
+        key, cur;
+    while(cur = arguments[i++]){
+        for(key in cur){
+            if(Object.prototype.hasOwnProperty.call(cur, key)){
+                target[key] = cur[key];
+            }
+        }
+    }
+    return target;
+}
+
+function rjs(opts, callback){
+    var buildConfig = mixIn( opts, BASE_JS_SETTINGS);
+    console.info('buildConfig:',buildConfig.out)
+    _requirejs.optimize( buildConfig, function(){
+        console.info('build completed for:',buildConfig.out)
+        _nOptimizedModules += 1;
+        if (typeof callback === 'function') {
+            callback.apply(null, Array.prototype.slice.call(arguments));
+        }
+    });
+}
+
+var BASE_JS_SETTINGS = {
 	logLevel: 0,
-
 	baseUrl: './',
 
-	mainConfigFile: 'magpie/config.js',
-
 	paths:{
-		knockout : "lib/knockout/knockout-3.4.0",
+		knockout : "node_modules/knockout/build/output/knockout-latest",
 
-        page: 'lib/page/page',
-        'page/query': 'lib/page/query/qs',
-        'HTML5-History-API': 'lib/HTML5-History-API/history',
+        css :	    'node_modules/require-css/css.min',
+		'css-builder' :	    'node_modules/require-css/css-builder',
+        normalize :	    'node_modules/require-css/normalize',
 
+        page: 'node_modules/page/page',
+        'page/query': 'node_modules/qs/dist/qs',
 
+        'HTML5-History-API': 'node_modules/html5-history-api/history',
 
-		domReady :	'lib/require/domReady',
-		text :		'lib/require/text',
-		css :	'./lib/require-css-0.1.8/css',
-		less : 		'magpie/dom/less',
+		less : 		'magpie/dom/less'
 
 
 	},
 
 
-	include: [
-			//
-			'magpie',
-			'magpie/crypt/base64',
-			'magpie/dom/grid',
-			'magpie/dom/inject',
-			'magpie/dom/mediaQueries',
-			"magpie/html5/customElement",
-			'magpie/html5/widget/select',
-			"magpie/html5/router",
-			'magpie/log',
-			'magpie/resource/properties',
-			"magpie/util/config",
-
-			//
-			// bundles that extends 3th party library functions:
-			// 'magpie/dom/extend/knockout',
-
-		],
-	exclude: [
-			'page',
-			'page/query',
-			'lib/HTML5-History-API/history.min',
-	],
-	fileExclusionRegExp:	/(^\.|lib|build.js|server|page|.*\.md)/,
-
+    // fileExclusionRegExp:	/(^\.|lib|build.js|server|page|.*\.md)/,
 
 	findNestedDependencies: true,
 
-	out: "dist/magpie.b.js",
+	mainConfigFile: 'magpie/config.js',
 
-	// optimize: 'none',
-	// optimize: "uglify",
+
+    // optimize: "none",
 	optimize: "uglify2",
 	generateSourceMaps: true,
 
@@ -116,6 +122,90 @@
         // warnings: true,
         // mangle: false  //reduce names of local variables and functions usually to single-letters
     },
+}
+
+// BASE_JS_SETTINGS.paths
+
+var MagpieModules = {
+        Core: [
+            'magpie',
+            'magpie/crypt/base64',
+            'magpie/dom/grid',
+            'magpie/dom/inject',
+            'magpie/dom/less',
+            'magpie/dom/mediaQueries',
+            "magpie/html5/customElement",
+            'magpie/html5/widget/select',
+            "magpie/html5/router",
+            'magpie/log',
+            'magpie/resource/properties',
+            "magpie/util/config",
+            "magpie/util/idgenerator"
+        ],
+        Extend: [
+            //
+            // bundles that extends 3th party library functions:
+            //
+            'magpie/extend/knockout',
+        ],
+
+        VendorMap:{
+            'magpie/extend/knockout':[
+                'knockout'
+            ],
+            "magpie/html5/router":[
+                'page',
+                'page/query',
+                'HTML5-History-API'
+            ]
+        }
+
+}
+MagpieModules.vendors = [];
+
+for (var module in MagpieModules.VendorMap){
+    MagpieModules.vendors = MagpieModules.vendors.concat(MagpieModules.VendorMap[module]);
+}
 
 
+var fs = require('fs-extra');
+fs.removeSync('dist');
+
+rjs({
+    out: "dist/magpie.min.js",
+	include: MagpieModules.Core,
+	exclude: MagpieModules.vendors
+});
+
+rjs({
+    out: "dist/magpie.full.min.js",
+	include: MagpieModules.Core.concat(MagpieModules.Extend),
+	exclude: MagpieModules.vendors
+});
+
+rjs({
+    out: "dist/magpie.full.vendors.min.js",
+	include: MagpieModules.vendors
+});
+
+rjs({
+    out: "dist/magpie.full.include.vendors.min.js",
+	include: MagpieModules.Core.concat(MagpieModules.Extend)
+});
+
+for (var module in MagpieModules.VendorMap){
+    rjs({
+        out: "dist/" + module.replace(/\//g,'.') +".vendor.min.js",
+    	include: MagpieModules.VendorMap[module]
+    });
+}
+fs.removeSync('dist/magpie');
+fs.mkdirsSync('dist/magpie/html5/customElement');
+
+var ncp = require('ncp');
+ncp('magpie/html5/customElement/provider', 'dist/magpie/html5/customElement/provider',function (err) {
+ if (err) {
+   return console.error(err);
+ }
+ console.log('copy magpie/html5/customElement/provider to "dist" folder done');
 });

@@ -1,20 +1,35 @@
 {
-  "dependencies": {
-    "baggage-loader": "^0.2.4",
-    "connect": "latest",
-    "escape-html": "latest",
-    "express": "latest",
-    "fs-extra": "^0.26.7",
-    "http": "latest",
-    "loader-utils": "^0.2.12",
-    "requirejs": "latest",
-    "restify": "latest",
-    "serve-static": "latest",
-    "source-map": "^0.5.3",
-    "ws": "latest"
-  },
-  "devDependencies": {
-    "null-loader": "^0.1.1",
-    "required-loader": "^0.2.1"
-  }
+    "name": "MagpieJS",
+    "description": "MagpieJS build script",
+    "homepage": "https://github.com/csetea/magpieJS",
+    "version": "0.3.2",
+    "license": "MIT",
+    "author": {
+        "name": "Csete András",
+        "email":"csetea@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/csetea/magpieJS.git"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "requirejs": "latest",
+        "ncp": "latest"
+    },
+    "scripts":{
+        "install": "node build.js"
+    },
+    "optionalDependencies":{
+        "knockout": "latest",
+        "requirejs_text": "requirejs/text#latest",
+        "requirejs_domReady": "requirejs/domReady#latest",
+        "require-css": "latest",
+        "page": "visionmedia/page.js",
+        "page_query": "ljharb/qs",
+        "html5-history-api": "latest",
+        "less": "latest",
+        "webcomponents": "webcomponents/webcomponentsjs",
+        "document-register-element": "latest"
+    }
 }
