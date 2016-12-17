@@ -8,7 +8,7 @@ require.config({
 
 	// path:{
 	// 	magpie: '../'
-	// }
+	// },
 
 	packages : [
 		{
@@ -38,6 +38,10 @@ require.config({
 		}, {
 			name : 'magpie/html5/customElement',
 			location :  'magpie/html5/customElement',
+			main : 'main'
+		},{
+			name : 'magpie/html5/customElement/provider/WebReflection/document-register-element',
+			location :  'magpie/html5/customElement/provider/WebReflection/document-register-element',
 			main : 'main'
 		},{
 			name : 'magpie/extend/knockout',
