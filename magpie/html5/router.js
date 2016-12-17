@@ -40,7 +40,6 @@ define([ 'magpie/log!magpie/html5/router', 'module', 'magpie/util/config', 'page
 
 				}else{
 					page.start();
-					// window.onhashchange = hashHandler;
 					if (callback instanceof Function){
 						callback(router);
 					}

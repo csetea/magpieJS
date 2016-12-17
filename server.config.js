@@ -13,7 +13,9 @@ requirejs.config({
 			// distribute magpie
 			'magpie',
 			// distribute common libraries
-			'lib' ]
+			'lib',
+			'dist'
+		 	]
 		}
 	}
 });
