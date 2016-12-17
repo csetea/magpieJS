@@ -1,3 +1,26 @@
+0.3.1 -> 0.3.2
+[*] r.js optimalization and build
+[*] magpie/html5/widget/select/m-select: 
+		blur fixes,
+		bugfix: do not reprocess child node if already initialized,
+		IE fix: use CustomEvent instead of Event
+		'change' event support
+		m-appearance* attribute support
+		fix: IE increase wait time before blur
+		fix: IE click - add timeout to perform click events under the selection
+[*] magpie/html5/widget/select/m-option:		
+		fix: find 'm-select' parent until body level
+		fix findParent()
+		
+[*] magpie/resource/porperties: undefined/null check
+[*] magpie/html5/router: fix: double listen on hashchange
+[+] magpie/extend/knockout extensions bundle as package
+[*][*] magpie/extend/knockout/drag: fix for IE and FireFox
+[*] magpie/html5/customElement: 
+		fix for customElement reference in at 'attachedCallback' in child DOM in
+[*] magpie/dom/inject fix: <template> supported, IE
+
+
 0.3 -> 0.3.1
 
 [*] magpie/html5/router 
