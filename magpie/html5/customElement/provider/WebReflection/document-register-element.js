@@ -3,8 +3,31 @@
  * @license MIT
  * @see https://github.com/WebReflection/document-register-element
  */
-define([ 'module', 'magpie/util/config', '../../_ieVersion' ],
-		function(module, config, ieVersion) {
+define([ 'module', 'magpie/util/config', 'magpie/html5/customElement/_ieVersion', 'require' ],
+		function(module, config, ieVersion, require) {
+
+			if (!require.isBrowser){
+				// Fake document for r.js optimization
+				document={
+					createElement: function(){
+						return {
+							getElementsByTagName: function(){return{
+
+							}},
+
+						}
+
+					},
+
+					registerElement:function(){return{}},
+
+					getElementsByTagName: function(){return{}},
+
+					querySelector: function(){return{}},
+					querySelectorAll: function(){return{}},
+
+				}
+			}
 
 			/* jshint -W004 */
 			var config = config(
@@ -19,8 +42,6 @@ define([ 'module', 'magpie/util/config', '../../_ieVersion' ],
 							'es5-sham' : "//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.1.0/es5-sham.js"
 						}
 					});
-
-			console.info(module.id,config)
 
 			return {
 				load : function(customElementPath, parentRequire, onload) {

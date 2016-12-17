@@ -2,8 +2,30 @@
  * @URL https://github.com/csetea/magpieJS
  * @license MIT
  */
-define(['magpie/log!magpie/dom/inject' ], function(log) {
+ define(['magpie/log!magpie/dom/inject', 'require'], function(log, require) {
 
+ 	if (!require.isBrowser){
+ 		// Fake document for r.js optimization
+ 		document={
+ 			createElement: function(){
+ 				return {
+ 					getElementsByTagName: function(){return{
+
+ 					}},
+
+ 				}
+
+ 			},
+
+ 			registerElement:function(){return{}},
+
+ 			getElementsByTagName: function(){return{}},
+
+ 			querySelector: function(){return{}},
+ 			querySelectorAll: function(){return{}},
+
+ 		}
+ 	}
 
 	var templateTagSupported = typeof document.createElement('template').content !== 'undefined';
 
