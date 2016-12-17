@@ -1,13 +1,20 @@
 {
- "dependencies": {
-	"requirejs": "latest",
-	"restify": "latest",
-	"http": "latest",
-	"connect": "latest",
-	"serve-static": "latest",
-	
-	"ws": "latest",
-
-	"express": "latest"
- }
+  "dependencies": {
+    "baggage-loader": "^0.2.4",
+    "connect": "latest",
+    "escape-html": "latest",
+    "express": "latest",
+    "fs-extra": "^0.26.7",
+    "http": "latest",
+    "loader-utils": "^0.2.12",
+    "requirejs": "latest",
+    "restify": "latest",
+    "serve-static": "latest",
+    "source-map": "^0.5.3",
+    "ws": "latest"
+  },
+  "devDependencies": {
+    "null-loader": "^0.1.1",
+    "required-loader": "^0.2.1"
+  }
 }
