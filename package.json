@@ -8,6 +8,7 @@
         "name": "Csete András",
         "email":"csetea@gmail.com"
     },
+    "main": "magpie/main.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/csetea/magpieJS.git"
