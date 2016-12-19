@@ -212,3 +212,12 @@ ncp('magpie/html5/customElement/provider', 'dist/magpie/html5/customElement/prov
  }
  console.log('copy magpie/html5/customElement/provider to "dist" folder done');
 });
+
+
+console.log('put requirejs in lib folder')
+if (fs.existsSync('lib/requirejs')) {
+    fs.mkdirsSync('lib/requirejs');
+}
+ncp(''+require.resolve('requirejs/require.js'), 'lib/requirejs/require.js', function(err){
+
+})

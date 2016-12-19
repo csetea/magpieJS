@@ -2,13 +2,13 @@
     "name": "magpie",
     "description": "MagpieJS build script",
     "homepage": "https://github.com/csetea/magpieJS",
-    "version": "0.3.2",
+    "version": "0.3.2.dev",
     "license": "MIT",
     "author": {
         "name": "Csete András",
         "email":"csetea@gmail.com"
     },
-    "main": "magpie/main.js",
+    "main": "dist/magpie.full.include.vendors.min.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/csetea/magpieJS.git"
@@ -16,6 +16,7 @@
     "license": "MIT",
     "dependencies": {
         "requirejs": "latest",
+        "uglify-js": "latest",
         "fs-extra": "latest",
         "ncp": "latest"
 
@@ -25,7 +26,8 @@
         "fs": "latest"
     },
     "scripts":{
-        "install": "node build.js"
+        "install": "node build.js",
+        "postinstall": "uglifyjs lib/requirejs/require.js -mc --comments -o lib/requirejs/require.min.js --source-map lib/requirejs/require.min.js.map"
     },
     "optionalDependencies":{
         "knockout": "latest",
