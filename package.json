@@ -2,7 +2,7 @@
     "name": "magpie",
     "description": "MagpieJS build script",
     "homepage": "https://github.com/csetea/magpieJS",
-    "version": "0.3.2.dev",
+    "version": "0.3.2",
     "license": "MIT",
     "author": {
         "name": "Csete András",
@@ -15,30 +15,25 @@
     },
     "license": "MIT",
     "dependencies": {
-        "requirejs": "latest",
-        "uglify-js": "latest",
-        "fs-extra": "latest",
-        "ncp": "latest"
-
-        ,"express": "latest",
-        "serve-static": "latest",
-        "http": "latest",
-        "fs": "latest"
+        "requirejs": "2.3.2",
+        "uglify-js": "2.7.5",
+        "fs-extra": "1.0.0",
+        "ncp": "2.0.0"
     },
     "scripts":{
         "install": "node build.js",
         "postinstall": "uglifyjs lib/requirejs/require.js -mc --comments -o lib/requirejs/require.min.js --source-map lib/requirejs/require.min.js.map"
     },
     "optionalDependencies":{
-        "knockout": "latest",
-        "text": "requirejs/text#latest",
-        "domReady": "requirejs/domReady#latest",
-        "require-css": "latest",
-        "page": "visionmedia/page.js",
-        "qs": "ljharb/qs",
-        "html5-history-api": "latest",
-        "less": "latest",
-        "webcomponents": "webcomponents/webcomponentsjs",
-        "document-register-element": "latest"
+        "knockout": "3.4.1",
+        "text": "requirejs/text#2.0.15",
+        "domReady": "requirejs/domReady#2.0.1",
+        "require-css": "0.1.8",
+        "page": "visionmedia/page.js#1.7.1",
+        "qs": "ljharb/qs#v6.3.0",
+        "html5-history-api": "4.2.7",
+        "less": "2.7.1",
+        "webcomponents": "webcomponents/webcomponentsjs#v0.7.23",
+        "document-register-element": "1.3.0"
     }
 }
