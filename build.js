@@ -1,12 +1,3 @@
-// https://github.com/less/less-plugin-clean-css
-// lessc --clean-css=" --advanced" monitoring.less monitoring.css
-
-
-//r.js -o build.js
-//node node_modules/requirejs/bin/r.js -o build.js
-//
-// as example t ouse rjs in node
-// https://gist.githubusercontent.com/millermedeiros/2640928/raw/dba1bbc4476dace769cdad7bc063e9bcabc453d8/build.js
 var _requirejs = require('requirejs');
 var fs = require('fs-extra');
 var ncp = require('ncp');
