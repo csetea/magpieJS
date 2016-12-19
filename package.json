@@ -2,7 +2,7 @@
     "name": "magpie",
     "description": "MagpieJS build script",
     "homepage": "https://github.com/csetea/magpieJS",
-    "version": "0.3.2.dev",
+    "version": "0.3.3-dev",
     "license": "MIT",
     "author": {
         "name": "Csete András",
