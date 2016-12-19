@@ -8,6 +8,8 @@
 // as example t ouse rjs in node
 // https://gist.githubusercontent.com/millermedeiros/2640928/raw/dba1bbc4476dace769cdad7bc063e9bcabc453d8/build.js
 var _requirejs = require('requirejs');
+var fs = require('fs-extra');
+var ncp = require('ncp');
 
 
 function mixIn(target, objects){
@@ -35,21 +37,26 @@ function rjs(opts, callback){
     });
 }
 
+var libDir =  '';
+if (fs.existsSync('node_modules')) {
+    libDir += 'node_modules/';
+}
+
 var BASE_JS_SETTINGS = {
 	logLevel: 0,
 	baseUrl: './',
 
 	paths:{
-		knockout : "node_modules/knockout/build/output/knockout-latest",
+		knockout : libDir + 'knockout/build/output/knockout-latest',
 
-        css :	    'node_modules/require-css/css.min',
-		'css-builder' :	    'node_modules/require-css/css-builder',
-        normalize :	    'node_modules/require-css/normalize',
+        css :	    libDir + 'require-css/css.min',
+		'css-builder' :	    libDir + 'require-css/css-builder',
+        normalize :	    libDir + 'require-css/normalize',
 
-        page: 'node_modules/page/page',
-        'page/query': 'node_modules/qs/dist/qs',
+        page: libDir + 'page/page',
+        'page/query': libDir + 'qs/dist/qs',
 
-        'HTML5-History-API': 'node_modules/html5-history-api/history',
+        'HTML5-History-API': libDir + 'html5-history-api/history',
 
 		less : 		'magpie/dom/less'
 
@@ -168,7 +175,6 @@ for (var module in MagpieModules.VendorMap){
 }
 
 
-var fs = require('fs-extra');
 fs.removeSync('dist');
 
 rjs({
@@ -202,7 +208,6 @@ for (var module in MagpieModules.VendorMap){
 fs.removeSync('dist/magpie');
 fs.mkdirsSync('dist/magpie/html5/customElement');
 
-var ncp = require('ncp');
 ncp('magpie/html5/customElement/provider', 'dist/magpie/html5/customElement/provider',function (err) {
  if (err) {
    return console.error(err);
