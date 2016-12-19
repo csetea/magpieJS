@@ -47,20 +47,18 @@ var BASE_JS_SETTINGS = {
 	baseUrl: './',
 
 	paths:{
-		knockout : libDir + 'knockout/build/output/knockout-latest',
+		knockout : require.resolve('knockout').replace(/\.js/,''),
 
-        css :	    libDir + 'require-css/css.min',
-		'css-builder' :	    libDir + 'require-css/css-builder',
-        normalize :	    libDir + 'require-css/normalize',
+        css :	    require.resolve('require-css/css.min.js').replace(/\.js/,''),
+		'css-builder' :	    require.resolve('require-css/css-builder.js').replace(/\.js/,''),
+        normalize :	    require.resolve('require-css/normalize.js').replace(/\.js/,''),
 
-        page: libDir + 'page/page',
-        'page/query': libDir + 'qs/dist/qs',
+        page: require.resolve('page/page.js').replace(/\.js/,''),
+        'page/query': require.resolve('qs/dist/qs.js').replace(/\.js/,''),
 
-        'HTML5-History-API': libDir + 'html5-history-api/history',
+        'HTML5-History-API': require.resolve('html5-history-api/history').replace(/\.js/,''),
 
 		less : 		'magpie/dom/less'
-
-
 	},
 
 
