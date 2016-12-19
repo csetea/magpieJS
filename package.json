@@ -15,7 +15,13 @@
     "license": "MIT",
     "dependencies": {
         "requirejs": "latest",
+        "fs-extra": "latest",
         "ncp": "latest"
+
+        ,"express": "latest",
+        "serve-static": "latest",
+        "http": "latest",
+        "fs": "latest"
     },
     "scripts":{
         "install": "node build.js"
