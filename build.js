@@ -204,7 +204,7 @@ for (var module in MagpieModules.VendorMap){
     });
 }
 fs.removeSync('dist/magpie');
-fs.mkdirsSync('dist/magpie/html5/customElement');
+fs.mkdirsSync('dist/magpie/html5/customElement/provider');
 
 ncp('magpie/html5/customElement/provider', 'dist/magpie/html5/customElement/provider',function (err) {
  if (err) {
@@ -215,9 +215,10 @@ ncp('magpie/html5/customElement/provider', 'dist/magpie/html5/customElement/prov
 
 
 console.log('put requirejs in lib folder')
-if (fs.existsSync('lib/requirejs')) {
-    fs.mkdirsSync('lib/requirejs');
+if (!fs.existsSync('lib/requirejs')) {
+    fs.removeSync('lib/requirejs');
 }
+fs.mkdirsSync('lib/requirejs');
 ncp(''+require.resolve('requirejs/require.js'), 'lib/requirejs/require.js', function(err){
 
 })
