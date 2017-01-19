@@ -40,10 +40,6 @@ require.config({
 			location :  'magpie/html5/customElement',
 			main : 'main'
 		},{
-			name : 'magpie/html5/customElement/provider/WebReflection/document-register-element',
-			location :  'magpie/html5/customElement/provider/WebReflection/document-register-element',
-			main : 'main'
-		},{
 			name : 'magpie/extend/knockout',
 			location :  'magpie/extend/knockout',
 			main : 'main'

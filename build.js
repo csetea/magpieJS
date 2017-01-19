@@ -194,16 +194,6 @@ for (var module in MagpieModules.VendorMap){
     	include: MagpieModules.VendorMap[module]
     });
 }
-fs.removeSync('dist/magpie');
-fs.mkdirsSync('dist/magpie/html5/customElement/provider');
-
-ncp('magpie/html5/customElement/provider', 'dist/magpie/html5/customElement/provider',function (err) {
- if (err) {
-   return console.error(err);
- }
- console.log('copy magpie/html5/customElement/provider to "dist" folder done');
-});
-
 
 console.log('put requirejs in lib folder')
 if (!fs.existsSync('lib/requirejs')) {

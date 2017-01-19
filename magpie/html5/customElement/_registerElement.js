@@ -3,7 +3,7 @@
  * @license MIT
  */
 // cares document.registerElement polyfill
-define([ 'module','magpie/util/config', 'magpie/log!magpie/html5/customElement/_registerElement', 'require'], function(module, config, log, require) {
+define([ 'module','magpie/util/config', 'magpie/log!magpie/html5/customElement/_registerElement', 'require', 'magpie/html5/customElement/provider/WebReflection/document-register-element'], function(module, config, log, require) {
 
 
 	if (!require.isBrowser){
