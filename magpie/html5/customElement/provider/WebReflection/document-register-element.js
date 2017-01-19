@@ -34,12 +34,12 @@ define([ 'module', 'magpie/util/config', 'magpie/html5/customElement/_ieVersion'
 					module,
 					{
 						path : {
-							ie8 : "//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.3/ie8.js",
-							dom4 : "//cdnjs.cloudflare.com/ajax/libs/dom4/1.3.1/dom4.js",
-							'dre-ie8-upfront-fix' : "//cdnjs.cloudflare.com/ajax/libs/document-register-element/0.3.0/dre-ie8-upfront-fix.js",
-							'document-register-element' : "//cdnjs.cloudflare.com/ajax/libs/document-register-element/0.3.0/document-register-element.js",
-							'es5-shim' : "//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.1.0/es5-shim.js",
-							'es5-sham' : "//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.1.0/es5-sham.js"
+							ie8 : "//cdnjs.cloudflare.com/ajax/libs/ie8/0.4.1/ie8.js",
+							dom4 : "//cdnjs.cloudflare.com/ajax/libs/dom4/1.8.3/dom4.js",
+							'dre-ie8-upfront-fix' : "//cdnjs.cloudflare.com/ajax/libs/document-register-element/1.3.0/dre-ie8-upfront-fix.js",
+							'document-register-element' : "//cdnjs.cloudflare.com/ajax/libs/document-register-element/1.3.0/document-register-element.js",
+							'es5-shim' : "//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js",
+							'es5-sham' : "//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-sham.min.js"
 						}
 					});
 
