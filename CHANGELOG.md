@@ -1,3 +1,8 @@
+0.3.2 -> 0.3.3
+
+include document-register-element loader in builded versions instead of separated file
+[*] magpie/html5/customElement/provider/WebReflection/document-register-element cdn update
+
 0.3.1 -> 0.3.2
 
 package.json for npm install build and dependency management
