@@ -4,6 +4,7 @@
  */
 // TODO check: https://code.google.com/p/crypto-js to include in magpie
 // and maybe reuse
+//@deprecated
 define(
 		[],
 		function() {
@@ -38,7 +39,7 @@ define(
 			function _utf8_decode(utftext) {
 				var string = "";
 				var i = 0;
-				
+
 				var c = 0, c1 = 0, c2 = 0;
 
 				while (i < utftext.length) {
