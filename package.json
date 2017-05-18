@@ -16,7 +16,7 @@
     "license": "MIT",
     "dependencies": {
         "requirejs": "latest",
-        "uglify-js": "latest",
+        "uglify-js": "2.7.5",
         "fs-extra": "latest",
         "ncp": "latest"
     },
