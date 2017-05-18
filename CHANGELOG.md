@@ -1,7 +1,7 @@
 0.3.3 -> 0.3.3-1
 
 [*] magpie/html5/widget/select/m-select: selection list width fix
-[d] magpie/crypt/base64: @deprecated
+[*] magpie/crypt/base64: deprecated
 
 0.3.2 -> 0.3.3
 
