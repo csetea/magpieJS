@@ -189,7 +189,6 @@ function(log) {
 
 		close: function(){
 			this._listEl.blur();
-			this._listEl.style.display="none";
 			setTimeout(function(){if (this._listEl){this._listEl.style.display="inherit";}},5);
 
 			this.removeAttribute("opened");
