@@ -21,7 +21,7 @@
     },
     "scripts": {
         "install": "node build.js",
-        "postinstall": "node_modules/uglify-js/bin/uglifyjs lib/requirejs/require.js -mc --comments -o lib/requirejs/require.min.js --source-map includeSources"
+        "postinstall": "uglifyjs lib/requirejs/require.js -mc --comments -o lib/requirejs/require.min.js --source-map includeSources"
     },
     "optionalDependencies": {
         "document-register-element": "1.14.10",
